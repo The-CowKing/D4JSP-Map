@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>D4JSP — Sanctuary Map</title>
+
+  <!-- Google Fonts: Cinzel + Barlow Condensed -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Barlow+Condensed:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Leaflet CSS from CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <div id="map"></div>
+
+  <!-- Left sidebar: layer controls -->
+  <div id="layer-panel">
+    <div class="panel-header">
+      <span class="panel-title">SANCTUARY</span>
+      <span class="panel-subtitle">Layer Controls</span>
+    </div>
+    <div id="layer-list"></div>
+    <div class="panel-footer">
+      <button id="btn-all-on" class="panel-btn">All On</button>
+      <button id="btn-all-off" class="panel-btn">All Off</button>
+    </div>
+  </div>
+
+  <!-- Search panel: top right -->
+  <div id="search-panel">
+    <div id="search-container">
+      <span class="search-icon">&#9906;</span>
+      <input id="search-input" type="text" placeholder="Search locations... [/]" autocomplete="off" spellcheck="false" />
+      <button id="search-clear" title="Clear">&#10005;</button>
+    </div>
+    <div id="search-results"></div>
+  </div>
+
+  <!-- Coordinate display: bottom left -->
+  <div id="coords-display">
+    <span id="coords-text">Hover map for coordinates</span>
+  </div>
+
+  <!-- Leaflet JS from CDN -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

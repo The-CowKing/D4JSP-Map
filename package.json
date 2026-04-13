@@ -1,0 +1,17 @@
+{
+  "name": "d4jsp-map",
+  "version": "1.0.0",
+  "description": "Diablo 4 Interactive Map for D4JSP",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4",
+    "fuse.js": "^7.0.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}

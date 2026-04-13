@@ -1,0 +1,1442 @@
+[
+  {
+    "id": -2072166062,
+    "name": "Forgotten Overlook",
+    "description": "Max Obols +5",
+    "x": 218.117,
+    "y": -174.479,
+    "lat": -139.34045874018366,
+    "lng": 54.61386551048025
+  },
+  {
+    "id": -2072166064,
+    "name": "Caldeum Bazaar",
+    "description": "Dexterity +2",
+    "x": 75.2424,
+    "y": -235.692,
+    "lat": -132.04970985929543,
+    "lng": 57.53111388231443
+  },
+  {
+    "id": -2072166063,
+    "name": "Residential District",
+    "description": "Strength +2",
+    "x": 233.89,
+    "y": -530.696,
+    "lat": -127.17856496513257,
+    "lng": 41.325034262518045
+  },
+  {
+    "id": 499609294,
+    "name": "Central Plateau",
+    "description": "Dexterity +2",
+    "x": 434.132,
+    "y": -414.831,
+    "lat": -138.47105287959155,
+    "lng": 38.3107819594741
+  },
+  {
+    "id": 499609297,
+    "name": "Eastern Basin",
+    "description": "Willpower +2",
+    "x": 670.104,
+    "y": -245.91,
+    "lat": -152.93529855953233,
+    "lng": 35.915477182444846
+  },
+  {
+    "id": 499609296,
+    "name": "Hakan&#39;s Oasis",
+    "description": "Strength +2",
+    "x": 522.183,
+    "y": -175.871,
+    "lat": -150.15307120058776,
+    "lng": 43.70179847819432
+  },
+  {
+    "id": 499609295,
+    "name": "Central Plateau",
+    "description": "Intelligence +2",
+    "x": 487.797,
+    "y": -295.142,
+    "lat": -144.6638861604842,
+    "lng": 40.66939857367197
+  },
+  {
+    "id": 499609298,
+    "name": "Central Plateau",
+    "description": "Max Obols +5",
+    "x": 564.19,
+    "y": -401.458,
+    "lat": -143.59492813087914,
+    "lng": 34.142370781301395
+  },
+  {
+    "id": 484284436,
+    "name": "Dimmed Grotto",
+    "description": "Dexterity +2",
+    "x": 197.846,
+    "y": -784.736,
+    "lat": -116.81571294294413,
+    "lng": 33.53742691627008
+  },
+  {
+    "id": 484284439,
+    "name": "Blistering Strand",
+    "description": "Willpower +2",
+    "x": 546.078,
+    "y": -706.667,
+    "lat": -132.04472998597635,
+    "lng": 23.8862252268612
+  },
+  {
+    "id": 484284438,
+    "name": "Scorched Gulch",
+    "description": "Strength +2",
+    "x": 522.391,
+    "y": -617.731,
+    "lat": -134.37566079083211,
+    "lng": 27.90952704045634
+  },
+  {
+    "id": 484284440,
+    "name": "Jagged Coast",
+    "description": "Max Obols +5",
+    "x": 357.361,
+    "y": -828.63,
+    "lat": -120.94611418416201,
+    "lng": 26.27092008727803
+  },
+  {
+    "id": 484284437,
+    "name": "Dahlgur Oasis",
+    "description": "Intelligence +2",
+    "x": 343.793,
+    "y": -591.877,
+    "lat": -128.91909142031474,
+    "lng": 35.21329361027904
+  },
+  {
+    "id": 2063319201,
+    "name": "Omath&#39;s Redoubt",
+    "description": "Willpower +2",
+    "x": 436.702,
+    "y": -175.839,
+    "lat": -147.10052317158934,
+    "lng": 46.75663281919006
+  },
+  {
+    "id": -667390008,
+    "name": "Pallid Oasis",
+    "description": "Willpower +2",
+    "x": 283.612,
+    "y": 59.2163,
+    "lat": -150.02862080832313,
+    "lng": 60.6225899454291
+  },
+  {
+    "id": -667390009,
+    "name": "Pallid Oasis",
+    "description": "Strength +2",
+    "x": 353.937,
+    "y": 15.5681,
+    "lat": -150.9816128065909,
+    "lng": 56.5510540934163
+  },
+  {
+    "id": -667390010,
+    "name": "Bleak Dunes",
+    "description": "Intelligence +2",
+    "x": 198.125,
+    "y": -111.896,
+    "lat": -140.86196365075102,
+    "lng": 57.56374384135066
+  },
+  {
+    "id": 874186454,
+    "name": "Moordaine Lodge",
+    "description": "Willpower +2",
+    "x": -2215.45,
+    "y": -376.861,
+    "lat": -45.17480525693199,
+    "lng": 134.3198816614107
+  },
+  {
+    "id": -114739611,
+    "name": "The Cursed Scarps",
+    "description": "Dexterity +2",
+    "x": -2074.9,
+    "y": -1179.91,
+    "lat": -21.507939446174348,
+    "lng": 100.61110487508333
+  },
+  {
+    "id": -114739609,
+    "name": "Stormbreak Cove",
+    "description": "Strength +2",
+    "x": -2095.22,
+    "y": -1021.08,
+    "lat": -26.45601873904586,
+    "lng": 107.01099228622995
+  },
+  {
+    "id": -114739608,
+    "name": "Writhing Brook",
+    "description": "Dexterity +2",
+    "x": -1685.49,
+    "y": -1102.5,
+    "lat": -38.18444204886188,
+    "lng": 89.46533388832503
+  },
+  {
+    "id": -114739610,
+    "name": "The Cursed Scarps",
+    "description": "Intelligence +2",
+    "x": -1861.57,
+    "y": -1136.03,
+    "lat": -30.69641302150805,
+    "lng": 94.55773662602502
+  },
+  {
+    "id": 771419740,
+    "name": "The Ancients&#39; Woods",
+    "description": "Dexterity +2",
+    "x": -1538.78,
+    "y": -1100.77,
+    "lat": -43.48725693756188,
+    "lng": 84.28612274197819
+  },
+  {
+    "id": 771419741,
+    "name": "The Ancients&#39; Woods",
+    "description": "Intelligence +2",
+    "x": -1387.25,
+    "y": -918.555,
+    "lat": -55.40983814902229,
+    "lng": 85.38230217380087
+  },
+  {
+    "id": 771419742,
+    "name": "The Ancients&#39; Woods",
+    "description": "Dexterity +2",
+    "x": -1197.94,
+    "y": -1057.96,
+    "lat": -57.19262565252926,
+    "lng": 73.639410795877
+  },
+  {
+    "id": 409043511,
+    "name": "Wraithstead",
+    "description": "Strength +2",
+    "x": -1872.02,
+    "y": -323.573,
+    "lat": -59.34701030284474,
+    "lng": 123.95495766897471
+  },
+  {
+    "id": 409043510,
+    "name": "The Unhallowed Pit",
+    "description": "Dexterity +2",
+    "x": -1720.38,
+    "y": -347.102,
+    "lat": -63.92359961978249,
+    "lng": 117.69728600878415
+  },
+  {
+    "id": 409043512,
+    "name": "Wealaf Rise",
+    "description": "Dexterity +2",
+    "x": -1610.56,
+    "y": -436.087,
+    "lat": -64.66790134577327,
+    "lng": 110.59525074909669
+  },
+  {
+    "id": 430533470,
+    "name": "Old Forest Clearing",
+    "description": "Dexterity +2",
+    "x": -1639.85,
+    "y": -873.122,
+    "lat": -48.009081937439746,
+    "lng": 96.02912129077696
+  },
+  {
+    "id": 430533471,
+    "name": "Shadow Wood",
+    "description": "Intelligence +2",
+    "x": -1596.56,
+    "y": -772.335,
+    "lat": -53.15603465044988,
+    "lng": 98.0831225549617
+  },
+  {
+    "id": 430533472,
+    "name": "Greenglen Meadows",
+    "description": "Strength +2",
+    "x": -1594.46,
+    "y": -482.314,
+    "lat": -63.59165569667691,
+    "lng": 108.36870437636695
+  },
+  {
+    "id": -507610809,
+    "name": "Ancestor Heights",
+    "description": "Intelligence +2",
+    "x": -2087.68,
+    "y": -923.333,
+    "lat": -30.217252039952314,
+    "lng": 110.23351332277645
+  },
+  {
+    "id": -507610807,
+    "name": "Wailing Coast",
+    "description": "Strength +2",
+    "x": -2020.9,
+    "y": -740.247,
+    "lat": -39.143371313597655,
+    "lng": 114.38838524709028
+  },
+  {
+    "id": -507610808,
+    "name": "Bronagh Expanse",
+    "description": "Willpower +2",
+    "x": -1836.03,
+    "y": -667.2,
+    "lat": -48.35710149177626,
+    "lng": 110.39366233346118
+  },
+  {
+    "id": 2122483559,
+    "name": "The Cursed Bay",
+    "description": "Strength +2",
+    "x": -2095.81,
+    "y": -1237.2,
+    "lat": -18.714351974493297,
+    "lng": 99.31147939912736
+  },
+  {
+    "id": 1063112133,
+    "name": "Razor Shoals",
+    "description": "Strength +2",
+    "x": -2104.13,
+    "y": -553.17,
+    "lat": -42.853162594565234,
+    "lng": 124.04473113849305
+  },
+  {
+    "id": 1063112134,
+    "name": "Fiabre",
+    "description": "Willpower +2",
+    "x": -2207.46,
+    "y": -417.085,
+    "lat": -44.023289930050055,
+    "lng": 132.59750280770697
+  },
+  {
+    "id": 1063112135,
+    "name": "Torvstrath",
+    "description": "Willpower +2",
+    "x": -1906.9,
+    "y": -536.609,
+    "lat": -50.490552097866626,
+    "lng": 117.59057954103594
+  },
+  {
+    "id": -1614656335,
+    "name": "Outlaws Grove",
+    "description": "Willpower +2",
+    "x": -1263.13,
+    "y": -745.823,
+    "lat": -66.01446766492349,
+    "lng": 87.11889903023773
+  },
+  {
+    "id": -1614656337,
+    "name": "The Witan Wolds",
+    "description": "Dexterity +2",
+    "x": -1435.12,
+    "y": -747.292,
+    "lat": -59.817883403410306,
+    "lng": 93.21052728162556
+  },
+  {
+    "id": -1614656336,
+    "name": "Laglend Fen",
+    "description": "Willpower +2",
+    "x": -1348.99,
+    "y": -593.274,
+    "lat": -68.39684048971812,
+    "lng": 95.6357327327443
+  },
+  {
+    "id": 1414601499,
+    "name": "Loch Raeth",
+    "description": "Strength +2",
+    "x": -1999.32,
+    "y": -292.212,
+    "lat": -55.919721448041514,
+    "lng": 129.62290372836594
+  },
+  {
+    "id": 1414601500,
+    "name": "The Blood Vale",
+    "description": "Willpower +2",
+    "x": -2243.94,
+    "y": -110.062,
+    "lat": -53.68806659694282,
+    "lng": 144.86867515150323
+  },
+  {
+    "id": 1414601501,
+    "name": "The Daudur Peats",
+    "description": "Intelligence +2",
+    "x": -2186.47,
+    "y": -58.2168,
+    "lat": -57.59320180390331,
+    "lng": 144.66773690584193
+  },
+  {
+    "id": -169456191,
+    "name": "Dead Forest",
+    "description": "Strength +2",
+    "x": -2186.25,
+    "y": 112.759,
+    "lat": -63.7089363574126,
+    "lng": 150.76775306436983
+  },
+  {
+    "id": -169456194,
+    "name": "Maddux Hill",
+    "description": "Intelligence +2",
+    "x": -1840.76,
+    "y": -1.05879,
+    "lat": -71.98510750054132,
+    "lng": 134.35961383432476
+  },
+  {
+    "id": -169456192,
+    "name": "Dead Forest",
+    "description": "Willpower +2",
+    "x": -1970.23,
+    "y": 24.7997,
+    "lat": -68.283728776015,
+    "lng": 139.90851055630864
+  },
+  {
+    "id": -169456190,
+    "name": "The Withered Scrubs",
+    "description": "Strength +2",
+    "x": -2117.57,
+    "y": -42.3272,
+    "lat": -60.62219367460477,
+    "lng": 142.77401325739177
+  },
+  {
+    "id": -169456195,
+    "name": "Gloom Pine Pass",
+    "description": "Dexterity +2",
+    "x": -1958.14,
+    "y": -120.263,
+    "lat": -63.533461911621,
+    "lng": 134.29444644044094
+  },
+  {
+    "id": -169456193,
+    "name": "The Great Northern Plains",
+    "description": "Strength +2",
+    "x": -1765.13,
+    "y": -202.896,
+    "lat": -67.47652846356145,
+    "lng": 124.44747928626458
+  },
+  {
+    "id": 323904565,
+    "name": "Zeleny Lowlands",
+    "description": "Dexterity +2",
+    "x": -1504.89,
+    "y": 439.792,
+    "lat": -99.73238969923993,
+    "lng": 138.10990820403296
+  },
+  {
+    "id": 323904567,
+    "name": "Tsepilova Pond",
+    "description": "Willpower +2",
+    "x": -1520.78,
+    "y": 617.142,
+    "lat": -105.5003261848874,
+    "lng": 145.01314149083157
+  },
+  {
+    "id": 323904566,
+    "name": "Trekker&#39;s Nook",
+    "description": "Intelligence +2",
+    "x": -1380.79,
+    "y": 647.976,
+    "lat": -111.60277869463738,
+    "lng": 141.1136934849643
+  },
+  {
+    "id": -1551192559,
+    "name": "Malnok",
+    "description": "Strength +2",
+    "x": -1601.79,
+    "y": 410.23,
+    "lat": -95.21470863985718,
+    "lng": 140.51546566142503
+  },
+  {
+    "id": 670305551,
+    "name": "Shivering Wilds",
+    "description": "Max Obols +5",
+    "x": -1649.58,
+    "y": 543.225,
+    "lat": -98.25854010436596,
+    "lng": 146.97376119937726
+  },
+  {
+    "id": 670305550,
+    "name": "Shivering Wilds",
+    "description": "Willpower +2",
+    "x": -1536.69,
+    "y": 399.253,
+    "lat": -97.14817839343515,
+    "lng": 137.79771944552886
+  },
+  {
+    "id": 670305548,
+    "name": "Olyam Tundra",
+    "description": "Intelligence +2",
+    "x": -1543.29,
+    "y": 128.881,
+    "lat": -87.2537345416902,
+    "lng": 128.3748274432237
+  },
+  {
+    "id": 670305547,
+    "name": "The Deep White",
+    "description": "Dexterity +2",
+    "x": -1637.2,
+    "y": 88.752,
+    "lat": -82.46537557600399,
+    "lng": 130.29607971706614
+  },
+  {
+    "id": 670305549,
+    "name": "Olyam Tundra",
+    "description": "Strength +2",
+    "x": -1592.88,
+    "y": 274.322,
+    "lat": -90.67787971749715,
+    "lng": 135.3420417423213
+  },
+  {
+    "id": 479075016,
+    "name": "Kor Dragan: Courtyard",
+    "description": "Willpower +2",
+    "x": -1561.57,
+    "y": -122.421,
+    "lat": -77.62328827838168,
+    "lng": 120.05043690836348
+  },
+  {
+    "id": -626110181,
+    "name": "Western Tunnels",
+    "description": "Strength +2",
+    "x": -1294.58,
+    "y": 393.505,
+    "lat": -105.59188583565361,
+    "lng": 128.9433332107983
+  },
+  {
+    "id": -626110180,
+    "name": "Shadow Trail",
+    "description": "Willpower +2",
+    "x": -1159.84,
+    "y": 371.547,
+    "lat": -109.62086770561694,
+    "lng": 123.34551262719877
+  },
+  {
+    "id": -626110182,
+    "name": "Southeast Foothills",
+    "description": "Max Obols +5",
+    "x": -1328.14,
+    "y": 206.446,
+    "lat": -97.71057542114195,
+    "lng": 123.459792503438
+  },
+  {
+    "id": -625463316,
+    "name": "Melnik&#39;s Hill",
+    "description": "Willpower +2",
+    "x": -1307.3,
+    "y": -184.558,
+    "lat": -84.48697551235225,
+    "lng": 108.74723190641723
+  },
+  {
+    "id": -625463314,
+    "name": "Frostbite Trails",
+    "description": "Max Obols +5",
+    "x": -960.946,
+    "y": 0.975025,
+    "lat": -103.48790811324383,
+    "lng": 103.00212371020831
+  },
+  {
+    "id": -625463315,
+    "name": "Frostbite Trails",
+    "description": "Dexterity +2",
+    "x": -1244.1,
+    "y": 68.4934,
+    "lat": -95.78462191825508,
+    "lng": 115.52941211768466
+  },
+  {
+    "id": -114806755,
+    "name": "Nostrava",
+    "description": "Intelligence +2",
+    "x": -1139.64,
+    "y": -9.60683,
+    "lat": -96.72628845570259,
+    "lng": 109.00769892899903
+  },
+  {
+    "id": -625607062,
+    "name": "Father&#39;s Cross",
+    "description": "Intelligence +2",
+    "x": -1261.71,
+    "y": 111.421,
+    "lat": -96.68905836548059,
+    "lng": 117.69203463591536
+  },
+  {
+    "id": -625607061,
+    "name": "Eastern Pass",
+    "description": "Dexterity +2",
+    "x": -1241.15,
+    "y": 209.308,
+    "lat": -100.92041457082854,
+    "lng": 120.45443538300852
+  },
+  {
+    "id": -625607063,
+    "name": "Icehowl Taiga",
+    "description": "Strength +2",
+    "x": -940.975,
+    "y": 93.9914,
+    "lat": -107.52422672268287,
+    "lng": 105.61156929159255
+  },
+  {
+    "id": -18409860,
+    "name": "Bloodsoaked Ingress",
+    "description": "Dexterity +2",
+    "x": -831.034,
+    "y": -507.275,
+    "lat": -89.9723024009604,
+    "lng": 80.20466286695216
+  },
+  {
+    "id": -18409859,
+    "name": "The Trail of Bones",
+    "description": "Strength +2",
+    "x": -853.967,
+    "y": -310.904,
+    "lat": -96.16813646634945,
+    "lng": 88.03899671464461
+  },
+  {
+    "id": -18409858,
+    "name": "Bloodsoaked Ingress",
+    "description": "Willpower +2",
+    "x": -783.448,
+    "y": -420.102,
+    "lat": -94.78638237661606,
+    "lng": 81.61885400814704
+  },
+  {
+    "id": -434833638,
+    "name": "Bluffs of Olzei",
+    "description": "Strength +2",
+    "x": -766.584,
+    "y": -573.337,
+    "lat": -89.91471591752885,
+    "lng": 75.54230112649127
+  },
+  {
+    "id": -434833640,
+    "name": "Hapless Frontier",
+    "description": "Dexterity +2",
+    "x": -1149,
+    "y": -762.758,
+    "lat": -69.48662539267339,
+    "lng": 82.43678212517531
+  },
+  {
+    "id": -434833637,
+    "name": "Bastard&#39;s Pass",
+    "description": "Intelligence +2",
+    "x": -771.942,
+    "y": -752.268,
+    "lat": -83.33124479772528,
+    "lng": 69.34164437173295
+  },
+  {
+    "id": -434833639,
+    "name": "The Crown of Fiends",
+    "description": "Intelligence +2",
+    "x": -1020.09,
+    "y": -738.905,
+    "lat": -74.94387351206491,
+    "lng": 78.6837652580091
+  },
+  {
+    "id": -1633361119,
+    "name": "Abahru Canyon",
+    "description": "Intelligence +2",
+    "x": -963.511,
+    "y": -834.604,
+    "lat": -73.54636530372517,
+    "lng": 73.24384309672192
+  },
+  {
+    "id": -1633361120,
+    "name": "Abahru Canyon",
+    "description": "Intelligence +2",
+    "x": -1027.24,
+    "y": -844.509,
+    "lat": -70.91589190360033,
+    "lng": 75.16663148643758
+  },
+  {
+    "id": -1671223582,
+    "name": "The Bleak Expanse",
+    "description": "Willpower +2",
+    "x": -802.734,
+    "y": -306.776,
+    "lat": -98.14583206762487,
+    "lng": 86.3562353610188
+  },
+  {
+    "id": -1671223583,
+    "name": "The Bleak Expanse",
+    "description": "Intelligence +2",
+    "x": -869.403,
+    "y": -193.967,
+    "lat": -99.79412012316662,
+    "lng": 92.76784012115152
+  },
+  {
+    "id": 895941637,
+    "name": "The Onyx Watchtower",
+    "description": "Willpower +2",
+    "x": -816.523,
+    "y": -681.459,
+    "lat": -84.26820403311213,
+    "lng": 73.46379345558566
+  },
+  {
+    "id": 1521936574,
+    "name": "Ruins of Qara-Yisu",
+    "description": "Willpower +2",
+    "x": -702.156,
+    "y": -93.8244,
+    "lat": -109.34624591111825,
+    "lng": 90.37062770254953
+  },
+  {
+    "id": -362569595,
+    "name": "Galtmaa Bushland",
+    "description": "Willpower +2",
+    "x": -318.854,
+    "y": -591.077,
+    "lat": -105.27551741302946,
+    "lng": 58.914025417496475
+  },
+  {
+    "id": -362569596,
+    "name": "Galtmaa Bushland",
+    "description": "Strength +2",
+    "x": -544.933,
+    "y": -507.016,
+    "lat": -100.2021196438069,
+    "lng": 69.99335046183367
+  },
+  {
+    "id": -362569598,
+    "name": "Crane Tribe Hutmoot",
+    "description": "Dexterity +2",
+    "x": -650.042,
+    "y": -614.372,
+    "lat": -92.6120996671992,
+    "lng": 69.91307947655403
+  },
+  {
+    "id": -362569597,
+    "name": "Desolation’s Reach",
+    "description": "Intelligence +2",
+    "x": -469.546,
+    "y": -412.397,
+    "lat": -106.27535022834164,
+    "lng": 70.68038721701745
+  },
+  {
+    "id": 675389760,
+    "name": "Temple of Rot",
+    "description": "Paragon Points +1",
+    "x": -479.003,
+    "y": -629.234,
+    "lat": -98.19130824219584,
+    "lng": 63.27202187331895
+  },
+  {
+    "id": -1545755390,
+    "name": "The Boiling Plains",
+    "description": "Willpower +2",
+    "x": -1131.22,
+    "y": -372.098,
+    "lat": -84.07758277033861,
+    "lng": 95.75740739934976
+  },
+  {
+    "id": -1545755391,
+    "name": "Forsaken Ascent",
+    "description": "Intelligence +2",
+    "x": -1209.92,
+    "y": -509.893,
+    "lat": -76.34359658515199,
+    "lng": 93.64631978248283
+  },
+  {
+    "id": -1545755389,
+    "name": "Path of Stray Souls ",
+    "description": "Paragon Points +1",
+    "x": -1021.49,
+    "y": -419.057,
+    "lat": -86.3199904325495,
+    "lng": 90.15990832837484
+  },
+  {
+    "id": -430058415,
+    "name": "The Brackish Pans",
+    "description": "Dexterity +2",
+    "x": -632.893,
+    "y": -968.741,
+    "lat": -80.56537885901128,
+    "lng": 56.64110977957182
+  },
+  {
+    "id": -430058413,
+    "name": "The Brackish Pans",
+    "description": "Paragon Points +1",
+    "x": -608.406,
+    "y": -816.385,
+    "lat": -86.88285186738084,
+    "lng": 61.20905397926987
+  },
+  {
+    "id": -430058414,
+    "name": "Adherent’s Rise",
+    "description": "Strength +2",
+    "x": -734.203,
+    "y": -822.408,
+    "lat": -82.17376362547544,
+    "lng": 65.4878154349365
+  },
+  {
+    "id": -141319703,
+    "name": "Ragged Shore",
+    "description": "Dexterity +2",
+    "x": -577.611,
+    "y": -1169.73,
+    "lat": -75.36019663732031,
+    "lng": 47.48618068807326
+  },
+  {
+    "id": -141319701,
+    "name": "The Ashen Tread",
+    "description": "Willpower +2",
+    "x": -269.486,
+    "y": -1169.83,
+    "lat": -86.36396621487228,
+    "lng": 36.47526638552981
+  },
+  {
+    "id": -141319700,
+    "name": "Tamuur Hinterland",
+    "description": "Intelligence +2",
+    "x": -132.323,
+    "y": -1009.49,
+    "lat": -96.99185181062086,
+    "lng": 37.30323284117114
+  },
+  {
+    "id": -141319702,
+    "name": "Undying Marches",
+    "description": "Strength +2",
+    "x": -450.445,
+    "y": -1006.36,
+    "lat": -85.73919573798953,
+    "lng": 48.77951880603675
+  },
+  {
+    "id": -1036883184,
+    "name": "Wayward Plains",
+    "description": "Strength +2",
+    "x": -812.66,
+    "y": -874.399,
+    "lat": -77.51368819701185,
+    "lng": 66.43327689306325
+  },
+  {
+    "id": -1036883185,
+    "name": "Wayward Plains",
+    "description": "Intelligence +2",
+    "x": -951.808,
+    "y": -869.413,
+    "lat": -72.72093522545589,
+    "lng": 71.582265852696
+  },
+  {
+    "id": -1036883183,
+    "name": "The Wretched Strand",
+    "description": "Willpower +2",
+    "x": -771.483,
+    "y": -1034.92,
+    "lat": -73.25028790007698,
+    "lng": 59.227893186373564
+  },
+  {
+    "id": -1036883186,
+    "name": "Wayward Plains",
+    "description": "Dexterity +2",
+    "x": -1139.04,
+    "y": -1088.26,
+    "lat": -58.214321326315414,
+    "lng": 70.45286344966277
+  },
+  {
+    "id": -728843099,
+    "name": "Akhai Prairie",
+    "description": "Paragon Points +1",
+    "x": -200.478,
+    "y": -837.17,
+    "lat": -100.71300320432493,
+    "lng": 45.89387155284004
+  },
+  {
+    "id": -1249237485,
+    "name": "The Swamp of Vanished Souls",
+    "description": "Max Obols +5",
+    "x": -1257.44,
+    "y": 766.864,
+    "lat": -120.25639815710645,
+    "lng": 140.95429467040367
+  },
+  {
+    "id": -1249237486,
+    "name": "Tszava&#39;s Slough",
+    "description": "Strength +2",
+    "x": -1152.53,
+    "y": 654.809,
+    "lat": -120.0011528567847,
+    "lng": 133.203518381487
+  },
+  {
+    "id": -1249237487,
+    "name": "Venom-Drenched Path",
+    "description": "Intelligence +2",
+    "x": -1270.22,
+    "y": 688.644,
+    "lat": -117.00554828596862,
+    "lng": 138.61654065318106
+  },
+  {
+    "id": -1249237488,
+    "name": "Misshapen Labyrinth",
+    "description": "Dexterity +2",
+    "x": -1099.85,
+    "y": 833.056,
+    "lat": -128.25070239735885,
+    "lng": 137.68922679653272
+  },
+  {
+    "id": 545181012,
+    "name": "Mangrove Snarl",
+    "description": "Max Obols +5",
+    "x": -714.71,
+    "y": 1360.38,
+    "lat": -160.8472241206326,
+    "lng": 142.76855468749824
+  },
+  {
+    "id": 545181011,
+    "name": "Blackguard Bog",
+    "description": "Willpower +2",
+    "x": -876.921,
+    "y": 1088.84,
+    "lat": -145.35206607166657,
+    "lng": 138.86292649451332
+  },
+  {
+    "id": 545181010,
+    "name": "The Rustwash",
+    "description": "Intelligence +2",
+    "x": -715.614,
+    "y": 1152,
+    "lat": -153.3708409950149,
+    "lng": 135.35675987580382
+  },
+  {
+    "id": 31746739,
+    "name": "Nymyr Highlands",
+    "description": "Dexterity +2",
+    "x": -332.54,
+    "y": 293.939,
+    "lat": -136.402583547299,
+    "lng": 91.01891861410431
+  },
+  {
+    "id": 31746742,
+    "name": "Savage Precipice",
+    "description": "Willpower +2",
+    "x": -101.328,
+    "y": 247.98,
+    "lat": -143.0204922415616,
+    "lng": 81.11736576099283
+  },
+  {
+    "id": 31746740,
+    "name": "Faith&#39;s Edge",
+    "description": "Intelligence +2",
+    "x": -348.687,
+    "y": 489.387,
+    "lat": -142.80786522581423,
+    "lng": 98.57785903699893
+  },
+  {
+    "id": 31746741,
+    "name": "The Fallow Tillage",
+    "description": "Strength +2",
+    "x": -66.0539,
+    "y": 454.8,
+    "lat": -151.66897107439934,
+    "lng": 87.2456071555997
+  },
+  {
+    "id": 615165666,
+    "name": "Bosun&#39;s Woe",
+    "description": "Dexterity +2",
+    "x": -1325.03,
+    "y": 1027.18,
+    "lat": -127.14126950067693,
+    "lng": 152.66828563573688
+  },
+  {
+    "id": 615165668,
+    "name": "Revenants&#39; Roam",
+    "description": "Max Obols +5",
+    "x": -1060.6,
+    "y": 968.56,
+    "lat": -134.49354875319204,
+    "lng": 141.12776859319757
+  },
+  {
+    "id": 615165667,
+    "name": "Bosun&#39;s Woe",
+    "description": "Willpower +2",
+    "x": -1143.43,
+    "y": 1219.84,
+    "lat": -140.51119337729276,
+    "lng": 153.0633889277675
+  },
+  {
+    "id": -2081509369,
+    "name": "Reach of Adulation",
+    "description": "Max Obols +5",
+    "x": -415.022,
+    "y": 856.497,
+    "lat": -153.5526385224239,
+    "lng": 114.0620856567279
+  },
+  {
+    "id": -2081509372,
+    "name": "Ottvik&#39;s Travail",
+    "description": "Dexterity +2",
+    "x": -565.891,
+    "y": 1027.31,
+    "lat": -154.26511049857746,
+    "lng": 125.55373278032528
+  },
+  {
+    "id": -2081509371,
+    "name": "Ottvik&#39;s Travail",
+    "description": "Intelligence +2",
+    "x": -485.873,
+    "y": 1082.02,
+    "lat": -159.07808304185943,
+    "lng": 124.64963927989939
+  },
+  {
+    "id": -2081509370,
+    "name": "The Molting Shore",
+    "description": "Strength +2",
+    "x": -344.415,
+    "y": 913.986,
+    "lat": -158.12869198498734,
+    "lng": 113.59346314453467
+  },
+  {
+    "id": -910331533,
+    "name": "Eriman&#39;s Pyre",
+    "description": "Intelligence +2",
+    "x": -1198.33,
+    "y": 483.612,
+    "lat": -112.24923341186935,
+    "lng": 128.72388298268402
+  },
+  {
+    "id": 1292036533,
+    "name": "Corpsewail Deluge",
+    "description": "Willpower +2",
+    "x": -928.207,
+    "y": 660.198,
+    "lat": -128.2072981930354,
+    "lng": 125.38240227502882
+  },
+  {
+    "id": 1292036531,
+    "name": "Corpsewail Deluge",
+    "description": "Dexterity +2",
+    "x": -985.622,
+    "y": 803.292,
+    "lat": -131.26806265577406,
+    "lng": 132.54531059164395
+  },
+  {
+    "id": 1292036534,
+    "name": "The Dark Dross",
+    "description": "Max Obols +5",
+    "x": -772.388,
+    "y": 998.635,
+    "lat": -145.8639141700585,
+    "lng": 131.90617921752826
+  },
+  {
+    "id": 1292036532,
+    "name": "Yngovani",
+    "description": "Strength +2",
+    "x": -798.901,
+    "y": 850.953,
+    "lat": -139.64103732057657,
+    "lng": 127.57758330504585
+  },
+  {
+    "id": -1605403118,
+    "name": "Vyeresz: Temple Ruins",
+    "description": "Dexterity +2",
+    "x": -548.663,
+    "y": 934.681,
+    "lat": -151.57151345315256,
+    "lng": 121.62924251336278
+  },
+  {
+    "id": -832467597,
+    "name": "Bloodpox Basin",
+    "description": "Max Obols +5",
+    "x": -833.532,
+    "y": 554.825,
+    "lat": -127.82512685323944,
+    "lng": 118.23596254951916
+  },
+  {
+    "id": -832467598,
+    "name": "Effluvium Ridge",
+    "description": "Strength +2",
+    "x": -1002.56,
+    "y": 571.651,
+    "lat": -122.3879196874491,
+    "lng": 124.87534114238125
+  },
+  {
+    "id": -832467599,
+    "name": "Intruder&#39;s Claim",
+    "description": "Intelligence +2",
+    "x": -1109.37,
+    "y": 389.443,
+    "lat": -112.06314904946544,
+    "lng": 122.18185126783126
+  },
+  {
+    "id": -832467596,
+    "name": "Dismal Foothills",
+    "description": "Max Obols +5",
+    "x": -892.584,
+    "y": 295.274,
+    "lat": -116.4434727708864,
+    "lng": 111.07341146915358
+  },
+  {
+    "id": 1111766887,
+    "name": "The Devouring Moor",
+    "description": "Strength +2",
+    "x": -627.977,
+    "y": 682.741,
+    "lat": -139.73791979146148,
+    "lng": 115.46241603143926
+  },
+  {
+    "id": 1111766890,
+    "name": "Plains of Attrition",
+    "description": "Max Obols +5",
+    "x": -205.4,
+    "y": 758.511,
+    "lat": -157.54068111818594,
+    "lng": 103.07321283078322
+  },
+  {
+    "id": 1111766888,
+    "name": "Diseased Embankment",
+    "description": "Willpower +2",
+    "x": -513.774,
+    "y": 717.489,
+    "lat": -145.05898945251477,
+    "lng": 112.62399541043644
+  },
+  {
+    "id": 1111766889,
+    "name": "Plains of Attrition",
+    "description": "Max Obols +5",
+    "x": -333.307,
+    "y": 683.215,
+    "lat": -150.28153335593515,
+    "lng": 104.95266846342534
+  },
+  {
+    "id": -2126667975,
+    "name": "Ruins of Rakhat Keep",
+    "description": "Max Obols +5",
+    "x": -780.047,
+    "y": 577.115,
+    "lat": -130.53208453439842,
+    "lng": 117.12156406896811
+  },
+  {
+    "id": 1278309815,
+    "name": "Monument to the Failed Crusade",
+    "description": "Willpower +2",
+    "x": -537.906,
+    "y": 149.786,
+    "lat": -123.91649787575808,
+    "lng": 93.20566886863134
+  },
+  {
+    "id": 834159278,
+    "name": "Alcarnus",
+    "description": "Dexterity +2",
+    "x": -220.13,
+    "y": -279.443,
+    "lat": -119.93499270336329,
+    "lng": 66.51994240721028
+  },
+  {
+    "id": 1653925628,
+    "name": "Altar of Ruin",
+    "description": "Intelligence +2",
+    "x": -71.5123,
+    "y": -696.833,
+    "lat": -110.33347185918284,
+    "lng": 46.3000956093199
+  },
+  {
+    "id": -451794209,
+    "name": "Scorching Dunes",
+    "description": "Willpower +2",
+    "x": 15.5221,
+    "y": -621.669,
+    "lat": -116.12778666949895,
+    "lng": 45.876041891623714
+  },
+  {
+    "id": -451794210,
+    "name": "Road to Alcarnus",
+    "description": "Strength +2",
+    "x": -96.8025,
+    "y": -351.468,
+    "lat": -121.76770397274846,
+    "lng": 59.541242962688784
+  },
+  {
+    "id": -451794207,
+    "name": "Forgotten Coastline",
+    "description": "Max Obols +5",
+    "x": 61.3545,
+    "y": -884.933,
+    "lat": -108.36034173717704,
+    "lng": 34.83399802229218
+  },
+  {
+    "id": -451794208,
+    "name": "Tar pits",
+    "description": "Max Obols +5",
+    "x": 155.649,
+    "y": -585.159,
+    "lat": -122.43789703876473,
+    "lng": 42.17447061675887
+  },
+  {
+    "id": -451794211,
+    "name": "Dunes of Despair",
+    "description": "Intelligence +2",
+    "x": -197.798,
+    "y": -414.12,
+    "lat": -115.92162205750637,
+    "lng": 60.911011776248955
+  },
+  {
+    "id": -451794212,
+    "name": "Lut Bahadur",
+    "description": "Dexterity +2",
+    "x": -220.323,
+    "y": -638.035,
+    "lat": -107.11789192296564,
+    "lng": 53.716630946046195
+  },
+  {
+    "id": 642497795,
+    "name": "Rezam&#39;s Excavation",
+    "description": "Willpower +2",
+    "x": 25.9799,
+    "y": -7.16999,
+    "lat": -138.45350936461114,
+    "lng": 67.45458353657364
+  },
+  {
+    "id": 642497796,
+    "name": "Forlorn Badlands",
+    "description": "Max Obols +5",
+    "x": -4.64526,
+    "y": -227.937,
+    "lat": -129.47286976626435,
+    "lng": 60.66202739843723
+  },
+  {
+    "id": 642497794,
+    "name": "Silent Expanse",
+    "description": "Strength +2",
+    "x": -332.034,
+    "y": 29.5737,
+    "lat": -126.97657287253506,
+    "lng": 81.55675563088332
+  },
+  {
+    "id": 642497797,
+    "name": "Forgotten Watch Post",
+    "description": "Dexterity +2",
+    "x": -286.281,
+    "y": -187.363,
+    "lat": -120.86127057488783,
+    "lng": 72.17252730786973
+  },
+  {
+    "id": 642497793,
+    "name": "Silent Expanse",
+    "description": "Intelligence +2",
+    "x": -484.096,
+    "y": 99.2585,
+    "lat": -124.03376067468126,
+    "lng": 89.47835514962206
+  },
+  {
+    "id": 642497792,
+    "name": "Scouring Sands",
+    "description": "Dexterity +2",
+    "x": -533.163,
+    "y": -146.057,
+    "lat": -113.51735065061278,
+    "lng": 82.46764733713866
+  },
+  {
+    "id": 977299326,
+    "name": "T&#250;r D&#250;lra",
+    "description": "Intelligence +2",
+    "x": -1495.35,
+    "y": -1051.73,
+    "lat": -46.790620537387326,
+    "lng": 84.4865322779901
+  },
+  {
+    "id": 2047135495,
+    "name": "Serac Rapture",
+    "description": "Strength +2",
+    "x": -1855.11,
+    "y": 546.431,
+    "lat": -91.0307934084529,
+    "lng": 154.4305677785182
+  },
+  {
+    "id": 2047135494,
+    "name": "Sinner&#39;s Pass",
+    "description": "Dexterity +2",
+    "x": -1886.97,
+    "y": 251.934,
+    "lat": -79.37213833817893,
+    "lng": 145.04822209053992
+  },
+  {
+    "id": 2047135496,
+    "name": "Fields of Judgment",
+    "description": "Intelligence +2",
+    "x": -1773.16,
+    "y": 450.057,
+    "lat": -90.51551584206507,
+    "lng": 148.06018808158652
+  },
+  {
+    "id": 670485234,
+    "name": "Western Ways",
+    "description": "Willpower +2",
+    "x": -1369.69,
+    "y": -69.9798,
+    "lat": -86.35132719636232,
+    "lng": 115.06917751263143
+  },
+  {
+    "id": 670485235,
+    "name": "Western Ways",
+    "description": "Max Obols +5",
+    "x": -1371.69,
+    "y": -272.608,
+    "lat": -79.04126612382203,
+    "lng": 107.9020109399214
+  },
+  {
+    "id": 670485232,
+    "name": "Crags of Ill Wind",
+    "description": "Intelligence +2",
+    "x": -1562.72,
+    "y": 6.54166,
+    "lat": -82.18921980904959,
+    "lng": 124.69853277643381
+  },
+  {
+    "id": 670485233,
+    "name": "Western Ways",
+    "description": "Strength +2",
+    "x": -1493.27,
+    "y": -208.908,
+    "lat": -76.9735827112785,
+    "lng": 114.52088417205786
+  },
+  {
+    "id": -625607064,
+    "name": "Icehowl Taiga",
+    "description": "Dexterity +2",
+    "x": -1040.68,
+    "y": 153.258,
+    "lat": -106.07962048719914,
+    "lng": 111.29061110889556
+  }
+]
