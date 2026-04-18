@@ -49,7 +49,7 @@ export const allPOIs = []
 export const layerGroups = {}
 
 export async function initLayers(map) {
-  const enabledByDefault = new Set(['waypoints', 'dungeons', 'altars', 'cellars', 'events'])
+  const enabledByDefault = new Set(['waypoints'])
 
   for (const config of LAYER_CONFIGS) {
     const group = L.layerGroup()
