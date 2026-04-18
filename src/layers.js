@@ -180,6 +180,7 @@ export function refreshBuildRotationLayers(map) {
     if (!build.dungeons?.length) continue
     const group = L.layerGroup()
     rotationGroups[build.id] = group
+    group.addTo(map)
 
     for (const idx of build.dungeons) {
       const d = dungeonsData[idx]
@@ -227,7 +228,7 @@ function renderRotationSection(map, builds) {
     const group = rotationGroups[build.id]
 
     const item = document.createElement('div')
-    item.className = 'layer-item'
+    item.className = 'layer-item checked'
     item.dataset.rotationId = build.id
     item.innerHTML = `
       <div class="layer-checkbox"></div>
