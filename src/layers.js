@@ -67,7 +67,7 @@ export async function initLayers(map) {
       const res = await fetch(`./src/data/${config.file}`)
       data = await res.json()
     } catch (e) {
-      console.warn(`Failed to load ${config.file}:`, e)
+      console.warn(`[MAP-LAYER] Failed to load ${config.file}:`, e)
       continue
     }
 
@@ -101,11 +101,14 @@ export async function initLayers(map) {
       })
     }
 
-    if (enabledByDefault.has(config.id)) {
+    const enabled = enabledByDefault.has(config.id)
+    if (enabled) {
       group.addTo(map)
     }
+    console.log(`[MAP-LAYER] init: ${config.id} — ${data.length} markers, enabled=${enabled}`)
   }
 
+  console.log(`[MAP-LAYER] initLayers complete — ${allPOIs.length} total POIs indexed`)
   buildSidebarPanel(map, enabledByDefault)
 }
 
@@ -130,6 +133,7 @@ function buildSidebarPanel(map, enabledByDefault) {
 
     item.addEventListener('click', () => {
       const enabled = item.classList.toggle('checked')
+      console.log(`[MAP-LAYER] toggle: ${config.id} → ${enabled ? 'on' : 'off'}`)
       if (enabled) {
         group.addTo(map)
       } else {
@@ -142,6 +146,7 @@ function buildSidebarPanel(map, enabledByDefault) {
 
   // All On / All Off — handles both static layers and build rotations
   document.getElementById('btn-all-on')?.addEventListener('click', () => {
+    console.log('[MAP-LAYER] all-on triggered')
     document.querySelectorAll('.layer-item').forEach(item => {
       item.classList.add('checked')
       const id = item.dataset.layerId
@@ -152,6 +157,7 @@ function buildSidebarPanel(map, enabledByDefault) {
   })
 
   document.getElementById('btn-all-off')?.addEventListener('click', () => {
+    console.log('[MAP-LAYER] all-off triggered')
     document.querySelectorAll('.layer-item').forEach(item => {
       item.classList.remove('checked')
       const id = item.dataset.layerId
@@ -173,6 +179,8 @@ export function refreshBuildRotationLayers(map) {
   let builds = []
   try { builds = JSON.parse(localStorage.getItem('d4jsp_builds') || '[]') }
   catch { /* ignore corrupt storage */ }
+
+  console.log(`[MAP-LAYER] refreshBuildRotationLayers — ${builds.length} build(s) found`)
 
   // Create a layer group per build using the cached dungeon data
   const rotIcon = icons.rotation
@@ -197,6 +205,8 @@ export function refreshBuildRotationLayers(map) {
         `, { maxWidth: 300, className: '' })
         .addTo(group)
     }
+
+    console.log(`[MAP-LAYER] rotation layer: "${build.name}" — ${build.dungeons.length} dungeons added to map`)
   }
 
   renderRotationSection(map, builds)
@@ -241,6 +251,7 @@ function renderRotationSection(map, builds) {
     item.addEventListener('click', e => {
       if (e.target.classList.contains('rotation-delete')) return
       const enabled = item.classList.toggle('checked')
+      console.log(`[MAP-LAYER] rotation toggle: "${build.name}" → ${enabled ? 'on' : 'off'}`)
       if (enabled && group) group.addTo(map)
       else if (!enabled && group) map.removeLayer(group)
     })
