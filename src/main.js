@@ -62,13 +62,21 @@ map.on('mouseout', () => {
   if (coordsText) coordsText.textContent = 'Hover map for coordinates'
 })
 
-// ── Load Layers + Search ─────────────────────────────────────
-import { initLayers } from './layers.js'
+// ── Load Layers + Search + Build Planner ────────────────────
+import { initLayers, dungeonsData, refreshBuildRotationLayers } from './layers.js'
 import { initSearch } from './search.js'
+import { initPlanner } from './planner.js'
 
 async function boot() {
   await initLayers(map)
   initSearch(map)
+  refreshBuildRotationLayers(map)
+  initPlanner(dungeonsData)
+
+  document.addEventListener('builds-changed', () => {
+    refreshBuildRotationLayers(map)
+  })
+
   console.log('[D4JSP Map] Ready — Sanctuary loaded.')
 }
 

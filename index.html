@@ -26,9 +26,51 @@
       <span class="panel-subtitle">Layer Controls</span>
     </div>
     <div id="layer-list"></div>
+    <div class="panel-plan-row">
+      <button id="btn-plan-builds" class="panel-btn">&#9876; Plan Builds</button>
+    </div>
     <div class="panel-footer">
       <button id="btn-all-on" class="panel-btn">All On</button>
       <button id="btn-all-off" class="panel-btn">All Off</button>
+    </div>
+  </div>
+
+  <!-- Build Planner Modal -->
+  <div id="planner-modal">
+    <div id="planner-panel">
+      <div class="planner-header">
+        <span class="planner-title">BUILD PLANNER</span>
+        <button id="planner-close" class="planner-close-btn">&#10005;</button>
+      </div>
+
+      <!-- List View: saved builds -->
+      <div id="planner-list-view">
+        <div id="planner-builds"></div>
+        <div class="planner-list-footer">
+          <button id="planner-new-btn" class="panel-btn planner-new-btn">+ New Build</button>
+        </div>
+      </div>
+
+      <!-- Form View: create / edit a build -->
+      <div id="planner-form-view" class="hidden">
+        <div id="planner-form-title" class="planner-section-title">NEW BUILD</div>
+        <div class="planner-field">
+          <label class="planner-label">Build Name</label>
+          <input id="planner-name-input" type="text" class="planner-input" placeholder="e.g. Necro Bone Spear S4" />
+        </div>
+        <div class="planner-field">
+          <label class="planner-label">
+            Dungeon Rotation
+            <span id="planner-selected-count" class="planner-count-badge"></span>
+          </label>
+          <input id="planner-dungeon-filter" type="text" class="planner-input" placeholder="Filter dungeons..." />
+        </div>
+        <div id="planner-dungeon-list" class="planner-dungeon-list"></div>
+        <div class="planner-form-footer">
+          <button id="planner-back-btn" class="panel-btn">&larr; Back</button>
+          <button id="planner-save-btn" class="panel-btn planner-save-btn">Save Build</button>
+        </div>
+      </div>
     </div>
   </div>
 

@@ -481,6 +481,349 @@ html, body {
   line-height: 1.5;
 }
 
+/* ── Plan Builds button row (above All On/Off) ─────────────── */
+.panel-plan-row {
+  padding: 6px 16px 2px;
+  flex-shrink: 0;
+  border-top: 1px solid var(--border);
+}
+
+.panel-plan-row .panel-btn {
+  width: 100%;
+  background: rgba(212,175,55,0.05);
+  border-color: rgba(212,175,55,0.3);
+  letter-spacing: 1.5px;
+}
+
+.panel-plan-row .panel-btn:hover {
+  background: rgba(212,175,55,0.12);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* ── Rotation section in sidebar ───────────────────────────── */
+.layer-section-header {
+  padding: 10px 16px 4px;
+  font-family: var(--font-head);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+}
+
+.layer-section-empty {
+  padding: 6px 16px 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.rotation-delete {
+  background: transparent;
+  border: none;
+  color: #4a4040;
+  font-size: 17px;
+  line-height: 1;
+  padding: 0 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.rotation-delete:hover {
+  color: var(--red-bright);
+}
+
+/* ── Build Planner Modal ────────────────────────────────────── */
+#planner-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(3px);
+  align-items: center;
+  justify-content: center;
+}
+
+#planner-modal.open {
+  display: flex;
+}
+
+#planner-panel {
+  width: 480px;
+  max-width: calc(100vw - 40px);
+  max-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #110f14 0%, #0a0810 100%);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  box-shadow: var(--shadow), 0 0 80px rgba(0,0,0,0.9);
+  overflow: hidden;
+}
+
+.planner-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.planner-title {
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--gold);
+  text-shadow: 0 0 12px rgba(212,175,55,0.5);
+}
+
+.planner-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  line-height: 1;
+  padding: 2px 6px;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.planner-close-btn:hover { color: var(--gold); }
+
+/* List view */
+#planner-list-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+#planner-builds {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+.planner-empty {
+  padding: 24px 20px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.planner-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  border-bottom: 1px solid rgba(212,175,55,0.08);
+  transition: background 0.12s;
+}
+
+.planner-card:hover { background: var(--bg-hover); }
+
+.planner-card-info { flex: 1; min-width: 0; }
+
+.planner-card-name {
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-light);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.planner-card-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.planner-card-btns {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.planner-edit-btn,
+.planner-del-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--gold-dim);
+  font-family: var(--font-head);
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.planner-edit-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(212,175,55,0.06);
+}
+
+.planner-del-btn {
+  font-size: 15px;
+  padding: 4px 8px;
+  color: #555;
+  border-color: rgba(255,255,255,0.06);
+}
+
+.planner-del-btn:hover {
+  border-color: var(--red-bright);
+  color: var(--red-bright);
+}
+
+.planner-list-footer {
+  padding: 10px 20px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.planner-new-btn {
+  width: 100%;
+  background: rgba(212,175,55,0.06) !important;
+  border-color: rgba(212,175,55,0.35) !important;
+}
+
+.planner-new-btn:hover {
+  background: rgba(212,175,55,0.14) !important;
+  border-color: var(--gold) !important;
+  color: var(--gold) !important;
+}
+
+/* Form view */
+#planner-form-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.planner-section-title {
+  padding: 12px 20px 10px;
+  font-family: var(--font-head);
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--gold-dim);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.planner-field {
+  padding: 10px 20px 0;
+  flex-shrink: 0;
+}
+
+.planner-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.planner-count-badge {
+  background: rgba(212,175,55,0.15);
+  color: var(--gold);
+  border-radius: 10px;
+  padding: 1px 8px;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+}
+
+.planner-input {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 8px 12px;
+  color: var(--text-light);
+  font-family: var(--font-body);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.planner-input:focus { border-color: var(--gold-dim); }
+
+.planner-dungeon-list {
+  flex: 1;
+  overflow-y: auto;
+  margin-top: 8px;
+  border-top: 1px solid var(--border);
+  min-height: 0;
+}
+
+.planner-dungeon-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 20px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.12s;
+}
+
+.planner-dungeon-row:hover { background: var(--bg-hover); }
+
+.planner-dungeon-row.checked .layer-checkbox {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.planner-dungeon-row.checked .layer-checkbox::after {
+  content: '✓';
+  font-size: 11px;
+  color: #000;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.planner-dungeon-name {
+  font-size: 13px;
+  color: var(--text-light);
+}
+
+.planner-form-footer {
+  padding: 10px 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.planner-save-btn {
+  background: rgba(212,175,55,0.1) !important;
+  border-color: var(--gold-dim) !important;
+  color: var(--gold) !important;
+}
+
+.planner-save-btn:hover {
+  background: rgba(212,175,55,0.22) !important;
+  border-color: var(--gold) !important;
+}
+
+.hidden { display: none !important; }
+
 /* ── Responsive ────────────────────────────────────────────── */
 @media (max-width: 680px) {
   #layer-panel {

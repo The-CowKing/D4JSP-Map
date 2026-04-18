@@ -103,6 +103,18 @@ icons.sidequests = makeDivIcon(`
   </svg>
 `, '#3b82f6', 30)
 
+// Build Rotation — gold dungeon arch with star (used for saved build rotation markers)
+icons.rotation = makeDivIcon(`
+  <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="16" cy="16" r="13" fill="#1a1400" stroke="#D4AF37" stroke-width="2"/>
+    <rect x="10" y="16" width="12" height="9" rx="1" fill="#5b4500" stroke="#D4AF37" stroke-width="1"/>
+    <path d="M10 16 Q16 9 22 16" fill="#7c6000" stroke="#D4AF37" stroke-width="1"/>
+    <rect x="14.5" y="18" width="3" height="5" rx="1" fill="#1a1400"/>
+    <polygon points="16,3 17,6 20,6 17.5,7.8 18.5,11 16,9 13.5,11 14.5,7.8 12,6 15,6"
+             fill="#D4AF37" stroke="#b8941e" stroke-width="0.4"/>
+  </svg>
+`, '#D4AF37', 32)
+
 // Stronghold — red fortress
 icons.strongholds = makeDivIcon(`
   <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">

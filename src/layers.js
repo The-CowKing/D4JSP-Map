@@ -29,7 +29,7 @@ function decodeHtml(str) {
 function buildPopupHtml(item, config) {
   const name = decodeHtml(item.name || 'Unknown')
   const desc = item.description ? decodeHtml(item.description) : null
-  const shortDesc = desc ? desc.split(' — ')[0] : null // first sentence only
+  const shortDesc = desc ? desc.split(' — ')[0] : null
 
   return `
     <div class="d4-popup">
@@ -48,6 +48,12 @@ export const allPOIs = []
 // layerGroups map: id -> L.layerGroup
 export const layerGroups = {}
 
+// Dungeon data cache (populated during initLayers, used by Build Planner)
+export const dungeonsData = []
+
+// Build rotation groups: buildId -> L.layerGroup
+export const rotationGroups = {}
+
 export async function initLayers(map) {
   const enabledByDefault = new Set(['waypoints'])
 
@@ -63,6 +69,11 @@ export async function initLayers(map) {
     } catch (e) {
       console.warn(`Failed to load ${config.file}:`, e)
       continue
+    }
+
+    // Cache dungeon data with stable indices for the Build Planner
+    if (config.id === 'dungeons') {
+      data.forEach((d, i) => dungeonsData.push({ ...d, _idx: i }))
     }
 
     const icon = icons[config.iconKey] || icons.waypoints
@@ -129,12 +140,14 @@ function buildSidebarPanel(map, enabledByDefault) {
     list.appendChild(item)
   }
 
-  // All On / All Off buttons
+  // All On / All Off — handles both static layers and build rotations
   document.getElementById('btn-all-on')?.addEventListener('click', () => {
     document.querySelectorAll('.layer-item').forEach(item => {
       item.classList.add('checked')
       const id = item.dataset.layerId
-      layerGroups[id]?.addTo(map)
+      const rotId = item.dataset.rotationId
+      if (id) layerGroups[id]?.addTo(map)
+      if (rotId) rotationGroups[rotId]?.addTo(map)
     })
   })
 
@@ -142,7 +155,117 @@ function buildSidebarPanel(map, enabledByDefault) {
     document.querySelectorAll('.layer-item').forEach(item => {
       item.classList.remove('checked')
       const id = item.dataset.layerId
-      if (layerGroups[id]) map.removeLayer(layerGroups[id])
+      const rotId = item.dataset.rotationId
+      if (id && layerGroups[id]) map.removeLayer(layerGroups[id])
+      if (rotId && rotationGroups[rotId]) map.removeLayer(rotationGroups[rotId])
     })
   })
+}
+
+// Rebuild all build rotation layers from localStorage and re-render sidebar section
+export function refreshBuildRotationLayers(map) {
+  // Remove existing rotation groups from map and clear the registry
+  for (const id of Object.keys(rotationGroups)) {
+    map.removeLayer(rotationGroups[id])
+    delete rotationGroups[id]
+  }
+
+  let builds = []
+  try { builds = JSON.parse(localStorage.getItem('d4jsp_builds') || '[]') }
+  catch { /* ignore corrupt storage */ }
+
+  // Create a layer group per build using the cached dungeon data
+  const rotIcon = icons.rotation
+  for (const build of builds) {
+    if (!build.dungeons?.length) continue
+    const group = L.layerGroup()
+    rotationGroups[build.id] = group
+
+    for (const idx of build.dungeons) {
+      const d = dungeonsData[idx]
+      if (!d) continue
+      const name = decodeHtml(d.name || 'Unknown')
+      L.marker([d.lat, d.lng], { icon: rotIcon })
+        .bindPopup(`
+          <div class="d4-popup">
+            <div class="d4-popup-header">
+              <div class="d4-popup-type" style="color:#D4AF37">ROTATION — ${escapeHtml(build.name.toUpperCase())}</div>
+              <div class="d4-popup-name" style="color:#D4AF37">${name}</div>
+            </div>
+          </div>
+        `, { maxWidth: 300, className: '' })
+        .addTo(group)
+    }
+  }
+
+  renderRotationSection(map, builds)
+}
+
+function renderRotationSection(map, builds) {
+  document.getElementById('rotation-section')?.remove()
+
+  const list = document.getElementById('layer-list')
+  if (!list) return
+
+  const section = document.createElement('div')
+  section.id = 'rotation-section'
+
+  const header = document.createElement('div')
+  header.className = 'layer-section-header'
+  header.textContent = 'BUILD ROTATIONS'
+  section.appendChild(header)
+
+  if (!builds.length) {
+    const empty = document.createElement('div')
+    empty.className = 'layer-section-empty'
+    empty.textContent = 'No builds saved'
+    section.appendChild(empty)
+  }
+
+  for (const build of builds) {
+    const count = build.dungeons?.length || 0
+    const group = rotationGroups[build.id]
+
+    const item = document.createElement('div')
+    item.className = 'layer-item'
+    item.dataset.rotationId = build.id
+    item.innerHTML = `
+      <div class="layer-checkbox"></div>
+      <div class="layer-dot" style="background:#D4AF37;color:#D4AF37"></div>
+      <div class="layer-label">${escapeHtml(build.name)}</div>
+      <div class="layer-count">${count}</div>
+      <button class="rotation-delete" title="Remove build">×</button>
+    `
+
+    item.addEventListener('click', e => {
+      if (e.target.classList.contains('rotation-delete')) return
+      const enabled = item.classList.toggle('checked')
+      if (enabled && group) group.addTo(map)
+      else if (!enabled && group) map.removeLayer(group)
+    })
+
+    item.querySelector('.rotation-delete').addEventListener('click', e => {
+      e.stopPropagation()
+      const buildName = build.name
+      if (confirm(`Remove "${buildName}" from your builds?`)) {
+        let saved = []
+        try { saved = JSON.parse(localStorage.getItem('d4jsp_builds') || '[]') }
+        catch { /* ignore */ }
+        localStorage.setItem('d4jsp_builds', JSON.stringify(saved.filter(b => b.id !== build.id)))
+        document.dispatchEvent(new CustomEvent('builds-changed'))
+      }
+    })
+
+    section.appendChild(item)
+  }
+
+  list.appendChild(section)
+}
+
+function escapeHtml(str) {
+  return (str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
 }
