@@ -6,24 +6,38 @@ This file is identical across all 4 trade-system repos. Only the **You are in** 
 
 ---
 
-## You are in: `D4JSP-Map` — Sanctuary tile map (iframed inside Profile)
+## You are in: `D4JSP` — Main Core / Trade Backend
 
-**Static Vite + Leaflet app.** No framework, no Supabase, no auth. Persistence is `localStorage` only — finding CS-5 (build rotations are device-local; not synced to `user_builds` like Build Planner).
+**The backend for everything.** Every API route in the trade system lives here; every other app calls back to these routes.
 
-- **Path:** `C:\Users\Owner\D4JSP-Map`
-- **Stack:** Vite 5, Leaflet 1.9.4, Fuse.js 7.0.0. No bundler heavyweight, no server.
-- **Deployed:** Static. `vite build` → `dist/`. Iframed inside the trade app's Profile tab.
-- **Key entry files:** `src/main.js` (entry, Leaflet init, tile layer), `src/layers.js` (POI overlays), `src/icons.js`, `src/planner.js` (build-rotation modal — localStorage-backed), `src/search.js` (Fuse.js fuzzy search). Tile data: `./tiles/Sanctuary/{z}/{x}/{y}.png`.
-- **Sister repos** (identical wiki, repo-specific "You are in"): `C:\Users\Owner\D4JSP` (trade backend; this app's iframe is rendered from `components/ProfileView.js` there), `C:\Users\Owner\D4JSP-Admin` (admin console), `C:\Users\Owner\D4JSP-Build-Planner` (`/builder`).
-- **Going-here-for-this-work hints:**
-  - Map persistence is local — if you need cross-device, push state to D4JSP's `user_builds` via fetch (CS-5 in audit).
-  - Build planner modal lives in `src/planner.js` — separate from the standalone Build Planner app.
-  - Tier gating (`d4_map_access`) is enforced by the trade app's iframe-rendering logic, not here.
-- **NOT in scope:** WordPress federation at `C:\Users\Owner\D4JSP-WP`.
+- **Path:** `C:\Users\Owner\D4JSP`
+- **Stack:** Next.js 15.3.3 + custom `server.js`, Supabase JS 2.100, ~22k LOC components, **92 API routes**
+- **Deployed:** KVM 4 `/opt/d4jsp`, PM2 `d4jsp` cluster, port 3000 → `https://trade.d4jsp.org`
+- **Key entry files:** [`components/AppShell.js`](./components/AppShell.js) · [`components/HomeView.js`](./components/HomeView.js) · [`lib/supabase.js`](./lib/supabase.js) · [`lib/auth-context.js`](./lib/auth-context.js) · [`lib/triggerEngine.js`](./lib/triggerEngine.js) · [`lib/sysConfig.js`](./lib/sysConfig.js)
+- **Sister repos** (each has identical start.md with their own "You are in" block): `C:\Users\Owner\D4JSP-Admin` (admin console), `C:\Users\Owner\D4JSP-Build-Planner` (`/builder`), `C:\Users\Owner\D4JSP-Map` (iframed in profile).
+- **NOT in scope:** WordPress federation at `C:\Users\Owner\D4JSP-WP` — *touch it only when you need to.*
 
 ---
 
 # § Protocols (read these first — they're the rules of engagement)
+
+## ⚠ HARD RULE: Verified-working flip workflow — NEVER auto-flip
+
+The "verified working" / "wired" / "green-lit" / "confirmed" switch on any catalog row (quests, triggers, specials, skills, badges, subscription tiers, fg_packages, etc.) is **flipped ONLY AFTER Adam confirms the feature works in production**.
+
+- Bots NEVER flip this switch based on internal/programmatic verification alone — DB rows reading correctly, RPC firing, logs looking clean are all NECESSARY but NOT SUFFICIENT. The flip waits for Adam.
+- This applies to ALL catalogs that have any verified / wired / connected / green-light / confirmed state. The existing badges in admin (the "NOT WIRED" / connected dots / verified flags shown in screenshots) are the SAME flag — there is exactly one source of truth per catalog row, do not invent new ones.
+- The static `wired: 'red'/'yellow'/'green'` constants in `components/AdminView.js` (`QUEST_WIRED`, `REQUIREMENT_TYPES`, `REWARD_TYPES`, etc.) describe codebase capabilities — those follow the same rule: do not flip from red to green just because you shipped a fix. Wait for Adam to confirm the feature works in prod, then flip.
+
+**Workflow:**
+1. Bot ships fix → bot deploys to KVM 4 → bot reports "wired correctly per DB inspection; awaiting prod confirmation."
+2. Adam tests in prod.
+3. Adam confirms ("the spawn quest pays out FG now" / "kill quest works" / "reward landed").
+4. **THEN** bot flips the switch — small separate commit (`verify(<scope>): flip switch on <id> after Adam's prod confirmation`). Push.
+
+**Never bundle the flip with the fix.** Two commits — fix first, flip after confirmation. The audit trail must show that the flip was a deliberate post-confirmation action, not an automatic side-effect.
+
+If you reach a verification step and are tempted to flip without explicit Adam confirmation, STOP and report instead. Adam: "I'll confirm it u flip em once we get to testing."
 
 ## Style + communication
 
