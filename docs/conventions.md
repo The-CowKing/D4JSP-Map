@@ -2,6 +2,64 @@
 
 Long-form version of the protocols section in [`../start.md`](../start.md). Both stay in sync; if they drift, start.md wins for the rules and this doc gets the rationale.
 
+## D4JSP-Map — repo-specific notes (2026-04-27)
+
+This repo is the standalone Sanctuary tile map + dungeon planner. Vite + Leaflet, no auth, no Supabase client (reads via REST). Iframed inside the main app's Profile → Map tab AND mounted at `https://trade.d4jsp.org/map/*` via KVM 4 nginx.
+
+> **For the master entrypoint covering all 4 sister apps, read the main `D4JSP` repo's [`../start.md`](../start.md).** This doc captures map-specific concerns only.
+
+**Stack:** Vite + Leaflet. Static export at `D4JSP-Map/dist/`. Served by KVM 4 nginx at `/map/`. Build: `npm install && npm run build` on KVM 4 (or locally then `rsync` dist).
+
+**No own runtime.** Pure static. Reads boss rotation via `https://isjkdbmfxpxuuloqosib.supabase.co/rest/v1/boss_rotations?active=eq.true&apikey=<anon>`.
+
+## Boss rotation via pg_cron (migration 048)
+
+`boss_rotations` table created migration 048. Map app reads `active=true` rows for live boss timers.
+
+**Schema:**
+```
+id uuid PK
+name text             -- 'Andariel', 'Lord Zir', 'Beast in the Ice', etc
+spawn_at timestamptz  -- when this boss is currently spawned
+duration_min int      -- how long the spawn lasts
+active boolean        -- public-readable filter
+sort_order int
+icon text
+slug text
+position jsonb        -- map coordinates
+```
+
+**6 D4 endgame bosses seeded.** pg_cron tick every minute advances expired rows by 180 min (cycle the rotation). The synthetic 180-min cadence is launch placeholder — helltide-real-sync swap scheduled ~36h follow-up post-launch.
+
+**RLS:** `boss_rotations` allows public READ for `active=true` rows. Server-role for writes (admin via Pending Migrations panel).
+
+**Smoke test post-deploy:**
+```bash
+curl 'https://isjkdbmfxpxuuloqosib.supabase.co/rest/v1/boss_rotations?active=eq.true&apikey=<anon>'
+# Expect 3 bosses with countdowns
+curl https://trade.d4jsp.org/map/
+# Expect 200 OK with the static dist HTML
+```
+
+## Embedded map flow
+
+The main app's `components/ProfileView.js` Map sub-tab embeds `<iframe src="/map/" />`. Same-origin so cookies + SSO carry. Pre-#119 this branched on `process.env.NEXT_PUBLIC_MAP_URL` defaulting to `''` (which triggered a "Coming Soon" placeholder). Post-#119 the default is `'/map/'` — placeholder JSX removed entirely.
+
+The map app itself doesn't auth — it just reads public `boss_rotations` rows via REST. If auth-gated map features get added later (favorite spots, party plans), wire SSO via the same `.d4jsp.org` cookie chain.
+
+## Hosting
+
+- **KVM 4 nginx:** `location /map/ { alias /opt/d4jsp-map/dist/ }`.
+- **Repo-side build:** `npm install && npm run build` produces `dist/`.
+- **Deploy:** push to repo → SSH KVM 4 → `cd /opt/d4jsp-map && git pull && npm install && npm run build`. Or local build + rsync dist.
+
+## DO NOT BREAK
+
+1. **No auth in map app.** It's a public read-only viewer. If auth is added, route through main app SSO — don't inline a separate auth flow.
+2. **`boss_rotations.active=true` is the public filter.** Don't expose drafts.
+3. **Synthetic 180-min cadence for now.** Don't replace with hardcoded times — wait for the helltide-real-sync follow-up.
+4. **Static dist only.** No SSR, no API routes.
+
 ## ⚠ MAIN DIRECTIVE — Bot owns the database. Code + migration atomic.
 
 Adam (verbatim): *"u always do supa base ur in charge of back end"* · *"u update the db when the update that requires it goes thru"* · *"make it main directive"* · *"no wonder nothing ever fucking works"* (re: deferring migrations to Adam).

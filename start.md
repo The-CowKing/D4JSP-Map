@@ -6,16 +6,18 @@ This file is identical across all 4 trade-system repos. Only the **You are in** 
 
 ---
 
-## You are in: `D4JSP` — Main Core / Trade Backend
+## You are in: `D4JSP-Map` — `/map/` static viewer (iframed in Profile)
 
-**The backend for everything.** Every API route in the trade system lives here; every other app calls back to these routes.
+**Master entrypoint:** for cross-app context (modular spine, escrow protection, vault discipline, Stripe contract), read the **main `D4JSP` repo's `start.md` at `C:\Users\Owner\D4JSP\start.md`**. That is the front door for the whole system. This block is map-app-specific.
 
-- **Path:** `C:\Users\Owner\D4JSP`
-- **Stack:** Next.js 15.3.3 + custom `server.js`, Supabase JS 2.100, ~22k LOC components, **92 API routes**
-- **Deployed:** KVM 4 `/opt/d4jsp`, PM2 `d4jsp` cluster, port 3000 → `https://trade.d4jsp.org`
-- **Key entry files:** [`components/AppShell.js`](./components/AppShell.js) · [`components/HomeView.js`](./components/HomeView.js) · [`lib/supabase.js`](./lib/supabase.js) · [`lib/auth-context.js`](./lib/auth-context.js) · [`lib/triggerEngine.js`](./lib/triggerEngine.js) · [`lib/sysConfig.js`](./lib/sysConfig.js)
-- **Sister repos** (each has identical start.md with their own "You are in" block): `C:\Users\Owner\D4JSP-Admin` (admin console), `C:\Users\Owner\D4JSP-Build-Planner` (`/builder`), `C:\Users\Owner\D4JSP-Map` (iframed in profile).
-- **NOT in scope:** WordPress federation at `C:\Users\Owner\D4JSP-WP` — *touch it only when you need to.*
+- **Path:** `C:\Users\Owner\D4JSP-Map`
+- **Stack:** Vite + Leaflet, no auth, no Supabase JS client (reads `boss_rotations` via REST). Pure static.
+- **Deployed:** static dist served by KVM 4 nginx at `https://trade.d4jsp.org/map/*`. ALSO iframed inside the main app's Profile → Map tab (#119).
+- **Boss data:** `boss_rotations` table (migration 048). pg_cron tick every minute advances expired rows by 180 min. Synthetic 180-min cadence is launch placeholder; helltide-real-sync is queued ~36h post-launch.
+- **No auth in the map app itself.** Public read-only viewer reading `boss_rotations` where `active=true`. If auth-gated features get added later, route through main app SSO via `.d4jsp.org` cookies.
+- **Repo-specific docs:** [`./docs/conventions.md`](./docs/conventions.md) — boss rotation, embedded map flow, hosting · [`./docs/features/boss-rotation.md`](./docs/features/boss-rotation.md)
+- **GitHub:** standard CowKing org repo.
+- **Sister repos:** `C:\Users\Owner\D4JSP` (main core, KVM 4), `C:\Users\Owner\D4JSP-Admin` (admin console, KVM 2), `C:\Users\Owner\D4JSP-Build-Planner` (`/builder`).
 
 ---
 
@@ -429,9 +431,4 @@ For the historical full audit snapshot: [`docs/audits/2026-04-26.md`](./docs/aud
 # § Conventions / agent reference
 
 - [`docs/conventions.md`](./docs/conventions.md) — full set of rules, doc-debt protocol details, doc-relevant globs
-- [`docs/glossary.md`](./docs/glossary.md) — extended glossary (this file's glossary is the short version)
-- [`CLAUDE.md`](./CLAUDE.md) — auto-loaded by Claude Code on session start; trimmed pointer back to this file
-
----
-
-*This file is the front door. Everything else is reachable from here. If you create a new doc, link it from here. If you delete a doc, delete the link too. The wiki is only useful if it stays consistent.*
+- [`docs/glossary.md`](./docs/glossary.md) — exten
