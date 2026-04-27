@@ -824,6 +824,133 @@ html, body {
 
 .hidden { display: none !important; }
 
+/* ── Boss Rotation Dock (right-side, below search) ─────────── */
+#boss-rotation-dock {
+  position: fixed;
+  top: 90px;
+  right: 20px;
+  z-index: 1000;
+  width: 300px;
+  max-height: calc(100vh - 160px);
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #110f14 0%, #0a0810 100%);
+  border: 1px solid rgba(220, 38, 38, 0.45);
+  border-radius: 6px;
+  box-shadow: var(--shadow), inset 0 0 60px rgba(0,0,0,0.4);
+  overflow: hidden;
+}
+
+.boss-dock-header {
+  padding: 10px 14px;
+  background: linear-gradient(180deg, rgba(75, 8, 8, 0.55) 0%, rgba(40, 0, 0, 0.4) 100%);
+  border-bottom: 1px solid rgba(220, 38, 38, 0.35);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.boss-dock-title {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 2.5px;
+  color: #ef4444;
+}
+
+.boss-dock-subtitle {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.boss-dock-list {
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.boss-row {
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(220, 38, 38, 0.10);
+  transition: background 0.15s;
+}
+
+.boss-row:hover {
+  background: rgba(220, 38, 38, 0.08);
+}
+
+.boss-row:last-child {
+  border-bottom: none;
+}
+
+.boss-row-rank {
+  font-family: var(--font-head);
+  font-size: 13px;
+  color: var(--gold-dim);
+  text-align: center;
+  font-weight: 700;
+}
+
+.boss-row-body {
+  min-width: 0;
+}
+
+.boss-row-name {
+  font-size: 13px;
+  color: var(--text-light);
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.boss-row-meta {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.boss-row-timer {
+  font-family: 'Barlow Condensed', monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  color: #f0cc55;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.boss-row-empty {
+  padding: 10px 14px;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.boss-popup-timer {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(220, 38, 38, 0.25);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.boss-popup-timer strong {
+  color: #f0cc55;
+  font-variant-numeric: tabular-nums;
+}
+
 /* ── Responsive ────────────────────────────────────────────── */
 @media (max-width: 680px) {
   #layer-panel {
@@ -837,6 +964,13 @@ html, body {
     width: calc(100vw - 220px);
     right: 10px;
     top: 10px;
+  }
+
+  #boss-rotation-dock {
+    width: calc(100vw - 220px);
+    right: 10px;
+    top: 70px;
+    max-height: 38vh;
   }
 
   #coords-display {

@@ -66,12 +66,14 @@ map.on('mouseout', () => {
 import { initLayers, dungeonsData, refreshBuildRotationLayers } from './layers.js'
 import { initSearch } from './search.js'
 import { initPlanner } from './planner.js'
+import { initBossRotation } from './boss-rotation.js'
 
 async function boot() {
   await initLayers(map)
   initSearch(map)
   refreshBuildRotationLayers(map)
   initPlanner(dungeonsData)
+  initBossRotation(map)
 
   document.addEventListener('builds-changed', () => {
     refreshBuildRotationLayers(map)
