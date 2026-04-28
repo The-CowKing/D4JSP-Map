@@ -1,6 +1,27 @@
 // Layer definitions, marker creation, sidebar panel
 import icons from './icons.js'
 
+// Static JSON imports — Vite bundles these at build time (fixes count=0 in dist)
+import waypointsRaw   from './data/waypoints.json'
+import dungeonsRaw    from './data/dungeons.json'
+import altarsRaw      from './data/altars.json'
+import cellarsRaw     from './data/cellars.json'
+import chestsRaw      from './data/chests.json'
+import livingsteelRaw from './data/livingsteel.json'
+import eventsRaw      from './data/events.json'
+import sideQuestsRaw  from './data/sidequests.json'
+
+const DATA_MAP = {
+  'waypoints.json':   waypointsRaw,
+  'dungeons.json':    dungeonsRaw,
+  'altars.json':      altarsRaw,
+  'cellars.json':     cellarsRaw,
+  'chests.json':      chestsRaw,
+  'livingsteel.json': livingsteelRaw,
+  'events.json':      eventsRaw,
+  'sidequests.json':  sideQuestsRaw,
+}
+
 // Layer config: id, label, icon key, color, data file name
 export const LAYER_CONFIGS = [
   { id: 'waypoints',    label: 'Waypoints',         iconKey: 'waypoints',    color: '#D4AF37', file: 'waypoints.json'    },
@@ -24,6 +45,14 @@ function decodeHtml(str) {
     .replace(/<\/br>/g, ' — ')
     .replace(/<br\s*\/?>/gi, ' — ')
     .replace(/<[^>]+>/g, '')
+}
+
+function escapeHtml(str) {
+  return (str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
 }
 
 function buildPopupHtml(item, config) {
@@ -51,25 +80,102 @@ export const layerGroups = {}
 // Dungeon data cache (populated during initLayers, used by Build Planner)
 export const dungeonsData = []
 
-// Build rotation groups: buildId -> L.layerGroup
-export const rotationGroups = {}
+// ── Route visualization state ────────────────────────────────
+let activeRoutePolyline = null
+let activeRouteHighlightGroup = null
+let activeBuildId = null
 
-export async function initLayers(map) {
+function distSq(a, b) {
+  const dlat = a.lat - b.lat
+  const dlng = a.lng - b.lng
+  return dlat * dlat + dlng * dlng
+}
+
+// Nearest-neighbor TSP: start from `start`, greedily visit each point in `pts`
+function nearestNeighborTSP(start, pts) {
+  const route = [start]
+  const remaining = [...pts]
+  let current = start
+  while (remaining.length > 0) {
+    let bestIdx = 0
+    let bestDist = distSq(current, remaining[0])
+    for (let i = 1; i < remaining.length; i++) {
+      const d = distSq(current, remaining[i])
+      if (d < bestDist) { bestDist = d; bestIdx = i }
+    }
+    current = remaining.splice(bestIdx, 1)[0]
+    route.push(current)
+  }
+  return route
+}
+
+function clearBuildRoute(map) {
+  if (activeRoutePolyline)      { map.removeLayer(activeRoutePolyline);      activeRoutePolyline = null }
+  if (activeRouteHighlightGroup){ map.removeLayer(activeRouteHighlightGroup); activeRouteHighlightGroup = null }
+  activeBuildId = null
+}
+
+function activateBuildRoute(map, build) {
+  clearBuildRoute(map)
+  if (!build) return
+
+  activeBuildId = build.id
+
+  const dungeonPts = (build.dungeons || [])
+    .map(idx => dungeonsData[idx])
+    .filter(Boolean)
+
+  if (!dungeonPts.length) return
+
+  // Centroid of the dungeon cluster
+  const centLat = dungeonPts.reduce((s, p) => s + p.lat, 0) / dungeonPts.length
+  const centLng = dungeonPts.reduce((s, p) => s + p.lng, 0) / dungeonPts.length
+  const centroid = { lat: centLat, lng: centLng }
+
+  // Nearest waypoint to centroid
+  let nearestWp = waypointsRaw[0]
+  let nearestDist = distSq(centroid, waypointsRaw[0])
+  for (const wp of waypointsRaw) {
+    const d = distSq(centroid, wp)
+    if (d < nearestDist) { nearestDist = d; nearestWp = wp }
+  }
+
+  // Run nearest-neighbor TSP starting from that waypoint
+  const routePts = nearestNeighborTSP(
+    { lat: nearestWp.lat, lng: nearestWp.lng },
+    dungeonPts.map(d => ({ lat: d.lat, lng: d.lng }))
+  )
+
+  // Draw gold dashed polyline
+  activeRoutePolyline = L.polyline(
+    routePts.map(p => [p.lat, p.lng]),
+    { color: '#D4AF37', weight: 2, opacity: 0.7, dashArray: '6 4' }
+  ).addTo(map)
+
+  // Highlight dungeon markers
+  activeRouteHighlightGroup = L.layerGroup().addTo(map)
+  for (const d of dungeonPts) {
+    L.circleMarker([d.lat, d.lng], {
+      radius: 9,
+      fillColor: '#D4AF37',
+      color: '#D4AF37',
+      weight: 2,
+      opacity: 0.85,
+      fillOpacity: 0.25,
+    }).addTo(activeRouteHighlightGroup)
+  }
+
+  console.log(`[MAP-LAYER] route activated: "${build.name}" — ${dungeonPts.length} dungeons, start WP: ${nearestWp.name}`)
+}
+
+// ── initLayers ───────────────────────────────────────────────
+export function initLayers(map) {
   const enabledByDefault = new Set(['waypoints'])
 
   for (const config of LAYER_CONFIGS) {
+    const data = DATA_MAP[config.file] || []
     const group = L.layerGroup()
     layerGroups[config.id] = group
-
-    // Load data
-    let data = []
-    try {
-      const res = await fetch(`./src/data/${config.file}`)
-      data = await res.json()
-    } catch (e) {
-      console.warn(`[MAP-LAYER] Failed to load ${config.file}:`, e)
-      continue
-    }
 
     // Cache dungeon data with stable indices for the Build Planner
     if (config.id === 'dungeons') {
@@ -102,9 +208,7 @@ export async function initLayers(map) {
     }
 
     const enabled = enabledByDefault.has(config.id)
-    if (enabled) {
-      group.addTo(map)
-    }
+    if (enabled) group.addTo(map)
     console.log(`[MAP-LAYER] init: ${config.id} — ${data.length} markers, enabled=${enabled}`)
   }
 
@@ -112,7 +216,9 @@ export async function initLayers(map) {
   buildSidebarPanel(map, enabledByDefault)
 }
 
+// ── buildSidebarPanel ────────────────────────────────────────
 function buildSidebarPanel(map, enabledByDefault) {
+  // ── LAYERS tab: layer checkboxes ──────────────────────────
   const list = document.getElementById('layer-list')
   if (!list) return
 
@@ -134,150 +240,99 @@ function buildSidebarPanel(map, enabledByDefault) {
     item.addEventListener('click', () => {
       const enabled = item.classList.toggle('checked')
       console.log(`[MAP-LAYER] toggle: ${config.id} → ${enabled ? 'on' : 'off'}`)
-      if (enabled) {
-        group.addTo(map)
-      } else {
-        map.removeLayer(group)
-      }
+      if (enabled) group.addTo(map)
+      else map.removeLayer(group)
     })
 
     list.appendChild(item)
   }
 
-  // All On / All Off — handles both static layers and build rotations
+  // All On / All Off (LAYERS tab only)
   document.getElementById('btn-all-on')?.addEventListener('click', () => {
-    console.log('[MAP-LAYER] all-on triggered')
-    document.querySelectorAll('.layer-item').forEach(item => {
+    document.querySelectorAll('#tab-layers .layer-item').forEach(item => {
       item.classList.add('checked')
       const id = item.dataset.layerId
-      const rotId = item.dataset.rotationId
       if (id) layerGroups[id]?.addTo(map)
-      if (rotId) rotationGroups[rotId]?.addTo(map)
     })
   })
 
   document.getElementById('btn-all-off')?.addEventListener('click', () => {
-    console.log('[MAP-LAYER] all-off triggered')
-    document.querySelectorAll('.layer-item').forEach(item => {
+    document.querySelectorAll('#tab-layers .layer-item').forEach(item => {
       item.classList.remove('checked')
       const id = item.dataset.layerId
-      const rotId = item.dataset.rotationId
       if (id && layerGroups[id]) map.removeLayer(layerGroups[id])
-      if (rotId && rotationGroups[rotId]) map.removeLayer(rotationGroups[rotId])
     })
   })
+
+  // ── Tab switching ─────────────────────────────────────────
+  document.querySelectorAll('.panel-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.dataset.tab
+      document.querySelectorAll('.panel-tab').forEach(b => b.classList.toggle('active', b === btn))
+      const layersTab = document.getElementById('tab-layers')
+      const buildsTab = document.getElementById('tab-builds')
+      if (layersTab) layersTab.classList.toggle('hidden', tab !== 'layers')
+      if (buildsTab) buildsTab.classList.toggle('hidden', tab !== 'builds')
+    })
+  })
+
+  // Initial render of BUILDS tab
+  renderBuildsTab(map)
 }
 
-// Rebuild all build rotation layers from localStorage and re-render sidebar section
-export function refreshBuildRotationLayers(map) {
-  // Remove existing rotation groups from map and clear the registry
-  for (const id of Object.keys(rotationGroups)) {
-    map.removeLayer(rotationGroups[id])
-    delete rotationGroups[id]
-  }
+// ── renderBuildsTab ──────────────────────────────────────────
+function renderBuildsTab(map) {
+  const container = document.getElementById('builds-list')
+  if (!container) return
 
   let builds = []
-  try { builds = JSON.parse(localStorage.getItem('d4jsp_builds') || '[]') }
-  catch { /* ignore corrupt storage */ }
+  try { builds = JSON.parse(localStorage.getItem('d4jsp_builds') || '[]') } catch { /* ignore */ }
 
-  console.log(`[MAP-LAYER] refreshBuildRotationLayers — ${builds.length} build(s) found`)
-
-  // Create a layer group per build using the cached dungeon data
-  const rotIcon = icons.rotation
-  for (const build of builds) {
-    if (!build.dungeons?.length) continue
-    const group = L.layerGroup()
-    rotationGroups[build.id] = group
-    group.addTo(map)
-
-    for (const idx of build.dungeons) {
-      const d = dungeonsData[idx]
-      if (!d) continue
-      const name = decodeHtml(d.name || 'Unknown')
-      L.marker([d.lat, d.lng], { icon: rotIcon })
-        .bindPopup(`
-          <div class="d4-popup">
-            <div class="d4-popup-header">
-              <div class="d4-popup-type" style="color:#D4AF37">ROTATION — ${escapeHtml(build.name.toUpperCase())}</div>
-              <div class="d4-popup-name" style="color:#D4AF37">${name}</div>
-            </div>
-          </div>
-        `, { maxWidth: 300, className: '' })
-        .addTo(group)
-    }
-
-    console.log(`[MAP-LAYER] rotation layer: "${build.name}" — ${build.dungeons.length} dungeons added to map`)
-  }
-
-  renderRotationSection(map, builds)
-}
-
-function renderRotationSection(map, builds) {
-  document.getElementById('rotation-section')?.remove()
-
-  const list = document.getElementById('layer-list')
-  if (!list) return
-
-  const section = document.createElement('div')
-  section.id = 'rotation-section'
-
-  const header = document.createElement('div')
-  header.className = 'layer-section-header'
-  header.textContent = 'BUILD ROTATIONS'
-  section.appendChild(header)
+  container.innerHTML = ''
 
   if (!builds.length) {
     const empty = document.createElement('div')
-    empty.className = 'layer-section-empty'
-    empty.textContent = 'No builds saved'
-    section.appendChild(empty)
+    empty.className = 'builds-empty'
+    empty.textContent = 'No builds saved. Use Plan Builds to create one.'
+    container.appendChild(empty)
+    return
   }
 
   for (const build of builds) {
     const count = build.dungeons?.length || 0
-    const group = rotationGroups[build.id]
+    const isActive = build.id === activeBuildId
 
     const item = document.createElement('div')
-    item.className = 'layer-item checked'
-    item.dataset.rotationId = build.id
+    item.className = 'build-item' + (isActive ? ' active' : '')
+    item.dataset.buildId = build.id
     item.innerHTML = `
-      <div class="layer-checkbox"></div>
-      <div class="layer-dot" style="background:#D4AF37;color:#D4AF37"></div>
-      <div class="layer-label">${escapeHtml(build.name)}</div>
-      <div class="layer-count">${count}</div>
-      <button class="rotation-delete" title="Remove build">×</button>
+      <div class="build-item-dot"></div>
+      <div class="build-item-info">
+        <div class="build-item-name">${escapeHtml(build.name)}</div>
+        <div class="build-item-count">${count} dungeon${count !== 1 ? 's' : ''}</div>
+      </div>
     `
 
-    item.addEventListener('click', e => {
-      if (e.target.classList.contains('rotation-delete')) return
-      const enabled = item.classList.toggle('checked')
-      console.log(`[MAP-LAYER] rotation toggle: "${build.name}" → ${enabled ? 'on' : 'off'}`)
-      if (enabled && group) group.addTo(map)
-      else if (!enabled && group) map.removeLayer(group)
-    })
-
-    item.querySelector('.rotation-delete').addEventListener('click', e => {
-      e.stopPropagation()
-      const buildName = build.name
-      if (confirm(`Remove "${buildName}" from your builds?`)) {
-        let saved = []
-        try { saved = JSON.parse(localStorage.getItem('d4jsp_builds') || '[]') }
-        catch { /* ignore */ }
-        localStorage.setItem('d4jsp_builds', JSON.stringify(saved.filter(b => b.id !== build.id)))
-        document.dispatchEvent(new CustomEvent('builds-changed'))
+    item.addEventListener('click', () => {
+      if (activeBuildId === build.id) {
+        // Deselect — clear route
+        clearBuildRoute(map)
+        item.classList.remove('active')
+      } else {
+        // Select — activate route
+        document.querySelectorAll('.build-item').forEach(el => el.classList.remove('active'))
+        item.classList.add('active')
+        activateBuildRoute(map, build)
       }
     })
 
-    section.appendChild(item)
+    container.appendChild(item)
   }
-
-  list.appendChild(section)
 }
 
-function escapeHtml(str) {
-  return (str || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
+// Called from main.js when builds-changed fires
+export function refreshBuildRotationLayers(map) {
+  clearBuildRoute(map)
+  renderBuildsTab(map)
+  console.log('[MAP-LAYER] builds-changed — tab re-rendered')
 }

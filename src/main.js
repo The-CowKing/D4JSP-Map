@@ -100,6 +100,13 @@ async function boot() {
   // Click anywhere on the map closes the panel
   map.on('click', closePanel)
 
+  // ── Plan Builds / New Build → open planner modal ───────────
+  function openPlanner() {
+    document.getElementById('planner-modal')?.classList.add('open')
+  }
+  document.getElementById('btn-plan-builds')?.addEventListener('click', openPlanner)
+  document.getElementById('btn-new-build')?.addEventListener('click', openPlanner)
+
   console.log('[D4JSP Map] Ready — Sanctuary loaded.')
 }
 
