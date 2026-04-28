@@ -91,11 +91,62 @@ html, body {
   border-width: 0 2px 2px 0;
 }
 
+/* Panel toggle button (shown when panel is closed) */
+#panel-toggle-btn {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(180deg, #110f14 0%, #0a0810 100%);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  color: var(--gold-dim);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: color 0.15s, border-color 0.15s;
+}
+
+#panel-toggle-btn:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+#layer-panel.panel-hidden {
+  display: none;
+}
+
 .panel-header {
   padding: 16px 20px 12px;
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
 }
+
+.panel-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.panel-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 15px;
+  cursor: pointer;
+  padding: 0 0 0 6px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.15s;
+  margin-top: 1px;
+}
+
+.panel-close-btn:hover { color: var(--gold); }
 
 .panel-title {
   display: block;

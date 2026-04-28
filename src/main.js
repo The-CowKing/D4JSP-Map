@@ -77,6 +77,29 @@ async function boot() {
     refreshBuildRotationLayers(map)
   })
 
+  // ── Layer panel show/hide ───────────────────────────────────
+  // X button on panel closes it; click on map closes it;
+  // toggle button (top-left) reopens it.
+  const layerPanel   = document.getElementById('layer-panel')
+  const closePanelBtn = document.getElementById('panel-close-btn')
+  const toggleBtn    = document.getElementById('panel-toggle-btn')
+
+  function closePanel() {
+    layerPanel?.classList.add('panel-hidden')
+    if (toggleBtn) toggleBtn.style.display = 'flex'
+  }
+
+  function openPanel() {
+    layerPanel?.classList.remove('panel-hidden')
+    if (toggleBtn) toggleBtn.style.display = 'none'
+  }
+
+  closePanelBtn?.addEventListener('click', e => { e.stopPropagation(); closePanel() })
+  toggleBtn?.addEventListener('click', openPanel)
+
+  // Click anywhere on the map closes the panel
+  map.on('click', closePanel)
+
   console.log('[D4JSP Map] Ready — Sanctuary loaded.')
 }
 

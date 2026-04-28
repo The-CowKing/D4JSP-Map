@@ -19,11 +19,19 @@
 <body>
   <div id="map"></div>
 
+  <!-- Panel reopen button (visible when panel is closed) -->
+  <button id="panel-toggle-btn" title="Show layer controls">&#9776;</button>
+
   <!-- Left sidebar: layer controls -->
   <div id="layer-panel">
     <div class="panel-header">
-      <span class="panel-title">SANCTUARY</span>
-      <span class="panel-subtitle">Layer Controls</span>
+      <div class="panel-header-top">
+        <div>
+          <span class="panel-title">SANCTUARY</span>
+          <span class="panel-subtitle">Layer Controls</span>
+        </div>
+        <button id="panel-close-btn" class="panel-close-btn" title="Close">&#10005;</button>
+      </div>
     </div>
     <div id="layer-list"></div>
     <div class="panel-plan-row">
