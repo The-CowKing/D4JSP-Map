@@ -63,7 +63,7 @@ map.on('mouseout', () => {
 })
 
 // ── Load Layers + Search + Build Planner ────────────────────
-import { initLayers, dungeonsData, refreshBuildRotationLayers } from './layers.js'
+import { initLayers, dungeonsData, refreshBuildRotationLayers, setParentBuilds } from './layers.js'
 import { initSearch } from './search.js'
 import { initPlanner } from './planner.js'
 
@@ -76,6 +76,15 @@ async function boot() {
   document.addEventListener('builds-changed', () => {
     refreshBuildRotationLayers(map)
   })
+
+  // ── postMessage bridge: receive builds from parent app ──────
+  window.addEventListener('message', (e) => {
+    if (e.data?.type === 'd4jsp:builds') {
+      setParentBuilds(e.data.builds || [], map)
+    }
+  })
+  // Tell parent we're ready to receive builds
+  window.parent.postMessage({ type: 'd4jsp:map-ready' }, '*')
 
   // ── Layer panel show/hide ───────────────────────────────────
   // X button on panel closes it; click on map closes it;

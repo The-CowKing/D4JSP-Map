@@ -280,49 +280,118 @@ function buildSidebarPanel(map, enabledByDefault) {
   renderBuildsTab(map)
 }
 
+// ── parentBuilds — received from main app via postMessage ────
+let parentBuilds = []
+
+// Slot label map for display
+const SLOT_LABELS = {
+  Helm: 'Helm', ChestArmor: 'Chest Armor', Gloves: 'Gloves',
+  Legs: 'Legs', Boots: 'Boots', Amulet: 'Amulet',
+  Ring1: 'Ring 1', Ring2: 'Ring 2', Weapon: 'Weapon',
+  OffHand: 'Off-Hand', Weapon2H: '2H Weapon',
+}
+
 // ── renderBuildsTab ──────────────────────────────────────────
 function renderBuildsTab(map) {
   const container = document.getElementById('builds-list')
   if (!container) return
 
-  let builds = []
-  try { builds = JSON.parse(localStorage.getItem('d4jsp_builds') || '[]') } catch { /* ignore */ }
-
   container.innerHTML = ''
 
-  if (!builds.length) {
+  // Source label
+  const note = document.createElement('div')
+  note.className = 'builds-source-note'
+  note.textContent = parentBuilds.length
+    ? `${parentBuilds.length} build${parentBuilds.length !== 1 ? 's' : ''} from your Builder`
+    : 'No builds yet — save one in the Builder tab'
+  container.appendChild(note)
+
+  if (!parentBuilds.length) {
     const empty = document.createElement('div')
     empty.className = 'builds-empty'
-    empty.textContent = 'No builds saved. Use Plan Builds to create one.'
+    empty.innerHTML = 'Open <b>Character → Builds</b> and save a build to see it here.'
     container.appendChild(empty)
     return
   }
 
-  for (const build of builds) {
-    const count = build.dungeons?.length || 0
+  for (const build of parentBuilds) {
+    const equipment = build.equipment || {}
+    // Get filled slots
+    const slots = Object.entries(equipment)
+      .filter(([k]) => !k.startsWith('_'))
+      .map(([slotId, item]) => ({ slotId, label: SLOT_LABELS[slotId] || slotId, name: item?.name || item?.cache_key || slotId }))
+
     const isActive = build.id === activeBuildId
 
     const item = document.createElement('div')
     item.className = 'build-item' + (isActive ? ' active' : '')
     item.dataset.buildId = build.id
+
+    // Gear expand section
+    const gearHtml = slots.length
+      ? slots.map(s => `
+          <div class="build-gear-slot" data-slot="${escapeHtml(s.slotId)}">
+            <div class="build-gear-slot-check"></div>
+            <div class="build-gear-slot-name" title="${escapeHtml(s.name)}">${escapeHtml(s.label)}: ${escapeHtml(s.name)}</div>
+          </div>`).join('')
+      : `<div class="build-gear-empty">No gear saved in this build</div>`
+
     item.innerHTML = `
       <div class="build-item-dot"></div>
       <div class="build-item-info">
         <div class="build-item-name">${escapeHtml(build.name)}</div>
-        <div class="build-item-count">${count} dungeon${count !== 1 ? 's' : ''}</div>
+        <div class="build-item-count">${build.character_class || ''} · ${slots.length} items</div>
+      </div>
+      <div class="build-gear-expand">
+        <div class="build-gear-title">Gear Slots</div>
+        ${gearHtml}
+        <button class="build-activate-btn${isActive ? ' active-route' : ''}">
+          ${isActive ? '✓ Active Route' : '▶ Show Dungeons'}
+        </button>
       </div>
     `
 
-    item.addEventListener('click', () => {
+    // Header row click → expand/collapse
+    const headerRow = item.querySelector('.build-item-dot')?.parentElement
+    const infoEl = item.querySelector('.build-item-info')
+    const expandEl = item.querySelector('.build-gear-expand')
+    const activateBtn = item.querySelector('.build-activate-btn')
+
+    // Click on header (not gear expand) → toggle expand
+    const toggleExpand = (e) => {
+      if (expandEl?.contains(e.target)) return
+      const expanded = item.classList.toggle('expanded')
+      console.log(`[MAP-BUILDS] ${expanded ? 'expand' : 'collapse'} "${build.name}"`)
+    }
+    item.addEventListener('click', toggleExpand)
+
+    // Gear slot checkboxes — select which slots are being farmed
+    expandEl?.querySelectorAll('.build-gear-slot').forEach(slotEl => {
+      slotEl.addEventListener('click', (e) => {
+        e.stopPropagation()
+        slotEl.classList.toggle('gear-checked')
+      })
+    })
+
+    // Activate button → show dungeon markers / route
+    activateBtn?.addEventListener('click', (e) => {
+      e.stopPropagation()
       if (activeBuildId === build.id) {
-        // Deselect — clear route
         clearBuildRoute(map)
-        item.classList.remove('active')
-      } else {
-        // Select — activate route
+        activateBtn.textContent = '▶ Show Dungeons'
+        activateBtn.classList.remove('active-route')
         document.querySelectorAll('.build-item').forEach(el => el.classList.remove('active'))
+      } else {
+        document.querySelectorAll('.build-item').forEach(el => el.classList.remove('active'))
+        document.querySelectorAll('.build-activate-btn').forEach(btn => {
+          btn.textContent = '▶ Show Dungeons'
+          btn.classList.remove('active-route')
+        })
         item.classList.add('active')
-        activateBuildRoute(map, build)
+        activateBtn.textContent = '✓ Active Route'
+        activateBtn.classList.add('active-route')
+        // Show all dungeons + waypoints on the map for this build
+        showBuildDungeons(map, build)
       }
     })
 
@@ -330,7 +399,42 @@ function renderBuildsTab(map) {
   }
 }
 
-// Called from main.js when builds-changed fires
+// Show dungeon layer + nearest waypoints when a build is activated
+function showBuildDungeons(map, build) {
+  clearBuildRoute(map)
+  activeBuildId = build.id
+
+  // Enable dungeons + waypoints layers if not already on
+  if (layerGroups.dungeons && !map.hasLayer(layerGroups.dungeons)) {
+    layerGroups.dungeons.addTo(map)
+    const item = document.querySelector('[data-layer-id="dungeons"]')
+    if (item) item.classList.add('checked')
+  }
+  if (layerGroups.waypoints && !map.hasLayer(layerGroups.waypoints)) {
+    layerGroups.waypoints.addTo(map)
+    const item = document.querySelector('[data-layer-id="waypoints"]')
+    if (item) item.classList.add('checked')
+  }
+
+  // If build has a stored dungeon rotation (from the old local planner), use it;
+  // otherwise show all dungeons (user can filter visually)
+  if (build.dungeons?.length) {
+    activateBuildRoute(map, build)
+  }
+  // Pan map to Sanctuary center
+  map.setView([-90, 95], 3)
+  console.log(`[MAP-BUILDS] activated "${build.name}" — dungeons visible`)
+}
+
+// Called from main.js with builds from parent app via postMessage
+export function setParentBuilds(builds, map) {
+  parentBuilds = Array.isArray(builds) ? builds : []
+  clearBuildRoute(map)
+  renderBuildsTab(map)
+  console.log(`[MAP-BUILDS] received ${parentBuilds.length} builds from parent`)
+}
+
+// Called from main.js when builds-changed fires (local planner compat)
 export function refreshBuildRotationLayers(map) {
   clearBuildRoute(map)
   renderBuildsTab(map)
