@@ -1,0 +1,6518 @@
+[
+  {
+    "id": "cannibal:cannibal_dualwield_fire",
+    "type": "cannibal",
+    "lat": -138.8916,
+    "lng": 68.3914
+  },
+  {
+    "id": "cannibal:cannibal_brute_fire",
+    "type": "cannibal",
+    "lat": -138.8021,
+    "lng": 68.7671
+  },
+  {
+    "id": "cannibal:cannibal_twohand_fire",
+    "type": "cannibal",
+    "lat": -139.1063,
+    "lng": 68.4272
+  },
+  {
+    "id": "cannibal:cannibal_twohand_fire",
+    "type": "cannibal",
+    "lat": -138.7485,
+    "lng": 68.5345
+  },
+  {
+    "id": "cannibal:cannibal_melee_fire",
+    "type": "cannibal",
+    "lat": -139.0168,
+    "lng": 68.8386
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -138.8953,
+    "lng": 68.504
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -138.7158,
+    "lng": 68.6735
+  },
+  {
+    "id": "cannibal:cannibal_brute_phys",
+    "type": "cannibal",
+    "lat": -138.8334,
+    "lng": 68.6803
+  },
+  {
+    "id": "cannibal:cannibal_twohand_phys",
+    "type": "cannibal",
+    "lat": -138.8945,
+    "lng": 68.5955
+  },
+  {
+    "id": "cannibal:cannibal_twohand_phys",
+    "type": "cannibal",
+    "lat": -137.7671,
+    "lng": 68.5965
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -137.6947,
+    "lng": 68.6689
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -137.7114,
+    "lng": 68.8425
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -137.6757,
+    "lng": 68.5976
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -137.8175,
+    "lng": 68.7452
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -137.7102,
+    "lng": 68.7018
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_regional",
+    "type": "cannibal",
+    "lat": -137.8182,
+    "lng": 68.6061
+  },
+  {
+    "id": "cannibal:cannibal_melee_phys",
+    "type": "cannibal",
+    "lat": -138.7209,
+    "lng": 68.143
+  },
+  {
+    "id": "cannibal:cannibal_melee_phys",
+    "type": "cannibal",
+    "lat": -138.7237,
+    "lng": 68.2645
+  },
+  {
+    "id": "cannibal:cannibal_melee_phys",
+    "type": "cannibal",
+    "lat": -138.9424,
+    "lng": 68.8132
+  },
+  {
+    "id": "cannibal:cannibal_melee_phys",
+    "type": "cannibal",
+    "lat": -139.1688,
+    "lng": 68.9693
+  },
+  {
+    "id": "cannibal:cannibal_melee_phys",
+    "type": "cannibal",
+    "lat": -139.0599,
+    "lng": 68.9644
+  },
+  {
+    "id": "cannibal:cannibal_twohand_phys",
+    "type": "cannibal",
+    "lat": -139.3019,
+    "lng": 68.631
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -139.167,
+    "lng": 68.5186
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -139.2223,
+    "lng": 68.5863
+  },
+  {
+    "id": "cannibal:cannibal_melee_phys",
+    "type": "cannibal",
+    "lat": -137.8788,
+    "lng": 68.4744
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -137.9082,
+    "lng": 68.5017
+  },
+  {
+    "id": "cannibal:cannibal_twohand_phys",
+    "type": "cannibal",
+    "lat": -138.0048,
+    "lng": 68.592
+  },
+  {
+    "id": "cannibal:cannibal_twohand_phys",
+    "type": "cannibal",
+    "lat": -137.8555,
+    "lng": 68.4339
+  },
+  {
+    "id": "cannibal:cannibal_brute_phys",
+    "type": "cannibal",
+    "lat": -137.9197,
+    "lng": 68.586
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -137.9645,
+    "lng": 68.558
+  },
+  {
+    "id": "cannibal:cannibal_brute_phys",
+    "type": "cannibal",
+    "lat": -137.9217,
+    "lng": 68.3504
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -138.1701,
+    "lng": 68.5987
+  },
+  {
+    "id": "cannibal:cannibal_melee_phys",
+    "type": "cannibal",
+    "lat": -137.5626,
+    "lng": 68.5388
+  },
+  {
+    "id": "cannibal:cannibal_twohand_phys",
+    "type": "cannibal",
+    "lat": -137.9255,
+    "lng": 68.8207
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -139.333,
+    "lng": 68.8582
+  },
+  {
+    "id": "cannibal:cannibal_melee_phys",
+    "type": "cannibal",
+    "lat": -139.4592,
+    "lng": 69.0937
+  },
+  {
+    "id": "cannibal:cannibal_brute_phys",
+    "type": "cannibal",
+    "lat": -139.6357,
+    "lng": 68.7314
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -139.5395,
+    "lng": 69.0152
+  },
+  {
+    "id": "cannibal:cannibal_melee_phys",
+    "type": "cannibal",
+    "lat": -139.5312,
+    "lng": 68.8342
+  },
+  {
+    "id": "cannibal:cannibal_brute_phys",
+    "type": "cannibal",
+    "lat": -139.3802,
+    "lng": 68.3393
+  },
+  {
+    "id": "cannibal:cannibal_twohand_phys",
+    "type": "cannibal",
+    "lat": -139.5819,
+    "lng": 68.4574
+  },
+  {
+    "id": "cannibal:cannibal_twohand_phys",
+    "type": "cannibal",
+    "lat": -139.0016,
+    "lng": 68.2334
+  },
+  {
+    "id": "cannibal:cannibal_brute_phys",
+    "type": "cannibal",
+    "lat": -139.5952,
+    "lng": 68.2055
+  },
+  {
+    "id": "cannibal:cannibal_melee_phys",
+    "type": "cannibal",
+    "lat": -139.4822,
+    "lng": 68.0921
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -139.1329,
+    "lng": 68.34
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -139.1393,
+    "lng": 68.8407
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -139.4396,
+    "lng": 68.8637
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -139.3464,
+    "lng": 68.035
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -139.5367,
+    "lng": 68.3595
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -139.0744,
+    "lng": 68.1411
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -139.2847,
+    "lng": 69.0885
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -139.3654,
+    "lng": 69.1617
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -138.9914,
+    "lng": 68.8877
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -139.6058,
+    "lng": 69.0976
+  },
+  {
+    "id": "cannibal:cannibal_melee_phys",
+    "type": "cannibal",
+    "lat": -139.2458,
+    "lng": 68.8716
+  },
+  {
+    "id": "cannibal:cannibal_melee_phys",
+    "type": "cannibal",
+    "lat": -139.2346,
+    "lng": 68.3146
+  },
+  {
+    "id": "cannibal:cannibal_melee_phys",
+    "type": "cannibal",
+    "lat": -139.0264,
+    "lng": 69.0131
+  },
+  {
+    "id": "cannibal:cannibal_melee_phys",
+    "type": "cannibal",
+    "lat": -139.2353,
+    "lng": 68.1075
+  },
+  {
+    "id": "cannibal:cannibal_brute_phys",
+    "type": "cannibal",
+    "lat": -139.1953,
+    "lng": 69.3555
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -139.207,
+    "lng": 69.2451
+  },
+  {
+    "id": "cannibal:cannibal_brute_phys",
+    "type": "cannibal",
+    "lat": -139.5687,
+    "lng": 69.6187
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_phys",
+    "type": "cannibal",
+    "lat": -139.6737,
+    "lng": 69.5337
+  },
+  {
+    "id": "cannibal:cannibal_melee_phys",
+    "type": "cannibal",
+    "lat": -139.6184,
+    "lng": 69.4178
+  },
+  {
+    "id": "cannibal:cannibal_brute_cold",
+    "type": "cannibal",
+    "lat": -137.7753,
+    "lng": 68.581
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_05",
+    "type": "knight",
+    "lat": -143.332,
+    "lng": 67.9783
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_04",
+    "type": "knight",
+    "lat": -143.186,
+    "lng": 68.0997
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_04",
+    "type": "knight",
+    "lat": -143.5809,
+    "lng": 67.7909
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_02",
+    "type": "knight",
+    "lat": -143.5367,
+    "lng": 69.3202
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_02",
+    "type": "knight",
+    "lat": -142.493,
+    "lng": 69.1028
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_03",
+    "type": "knight",
+    "lat": -142.7933,
+    "lng": 68.4726
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_03",
+    "type": "knight",
+    "lat": -141.3542,
+    "lng": 70.8211
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_03",
+    "type": "knight",
+    "lat": -142.2074,
+    "lng": 70.5184
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_01",
+    "type": "knight",
+    "lat": -143.5027,
+    "lng": 68.2044
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_03",
+    "type": "knight",
+    "lat": -141.5712,
+    "lng": 67.196
+  },
+  {
+    "id": "knight:knight_brute_corpse_04",
+    "type": "knight",
+    "lat": -142.2102,
+    "lng": 70.0311
+  },
+  {
+    "id": "knight:knight_brute_corpse_04",
+    "type": "knight",
+    "lat": -143.0723,
+    "lng": 68.5208
+  },
+  {
+    "id": "knight:knight_brute_corpse_04",
+    "type": "knight",
+    "lat": -141.7984,
+    "lng": 69.5855
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_01",
+    "type": "knight",
+    "lat": -141.0211,
+    "lng": 70.6267
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_03",
+    "type": "knight",
+    "lat": -141.4257,
+    "lng": 70.5134
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_05",
+    "type": "knight",
+    "lat": -141.1587,
+    "lng": 70.4137
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_04",
+    "type": "knight",
+    "lat": -141.1412,
+    "lng": 70.018
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_02",
+    "type": "knight",
+    "lat": -140.7407,
+    "lng": 70.9811
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_04",
+    "type": "knight",
+    "lat": -142.043,
+    "lng": 68.7049
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_04",
+    "type": "knight",
+    "lat": -140.68,
+    "lng": 70.3537
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_03",
+    "type": "knight",
+    "lat": -139.4476,
+    "lng": 68.1101
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_01",
+    "type": "knight",
+    "lat": -142.2758,
+    "lng": 70.3909
+  },
+  {
+    "id": "knight:knight_caster_ghost_crasdersmon",
+    "type": "knight",
+    "lat": -137.8165,
+    "lng": 68.6072
+  },
+  {
+    "id": "knight:knight_melee_ghost_crusadersmon",
+    "type": "knight",
+    "lat": -137.8126,
+    "lng": 68.3198
+  },
+  {
+    "id": "knight:knight_melee_ghost_crusadersmon_2",
+    "type": "knight",
+    "lat": -138.0993,
+    "lng": 68.6063
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_04",
+    "type": "knight",
+    "lat": -137.7466,
+    "lng": 68.6776
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_01",
+    "type": "knight",
+    "lat": -141.8199,
+    "lng": 68.2433
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_02",
+    "type": "knight",
+    "lat": -141.7661,
+    "lng": 68.2859
+  },
+  {
+    "id": "knight:knight_brute_cold",
+    "type": "knight",
+    "lat": -140.4956,
+    "lng": 70.3123
+  },
+  {
+    "id": "knight:knight_monk_fire_QST_Naha_GardenOfGods_Monk_Speaker",
+    "type": "knight",
+    "lat": -163.9293,
+    "lng": 83.5971
+  },
+  {
+    "id": "knight:knight_monk_mace",
+    "type": "knight",
+    "lat": -163.2874,
+    "lng": 76.5216
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_05",
+    "type": "knight",
+    "lat": -137.9588,
+    "lng": 68.5967
+  },
+  {
+    "id": "knight:knight_brute_corpse_frac_04",
+    "type": "knight",
+    "lat": -137.8629,
+    "lng": 68.5526
+  },
+  {
+    "id": "knight:knight_melee_fire_NPC_QST_Naha_GoNative_Cpt",
+    "type": "knight",
+    "lat": -139.5508,
+    "lng": 68.6886
+  },
+  {
+    "id": "zombie:zombie_melee_female_QST_Hawe_Delta_Zurke_02_Corpse03",
+    "type": "zombie",
+    "lat": -138.1489,
+    "lng": 68.9523
+  },
+  {
+    "id": "zombie:zombie_melee_male_QST_Hawe_Delta_Zurke_02_Corpse01",
+    "type": "zombie",
+    "lat": -137.5243,
+    "lng": 68.0289
+  },
+  {
+    "id": "zombie:zombie_melee_male_QST_Hawe_Delta_Zurke_02_Corpse02",
+    "type": "zombie",
+    "lat": -137.4765,
+    "lng": 69.3933
+  },
+  {
+    "id": "zombie:zombie_melee_female_phys_muscle",
+    "type": "zombie",
+    "lat": -137.8463,
+    "lng": 68.6599
+  },
+  {
+    "id": "zombie:zombie_brute_phys_muscle",
+    "type": "zombie",
+    "lat": -137.7349,
+    "lng": 68.3344
+  },
+  {
+    "id": "cultist:cultist_summoner_phys",
+    "type": "cultist",
+    "lat": -138.9878,
+    "lng": 68.2662
+  },
+  {
+    "id": "cultist:cultist_melee_female_fire_noWeapon_IsNpc",
+    "type": "cultist",
+    "lat": -142.5749,
+    "lng": 93.752
+  },
+  {
+    "id": "cultist:cultist_caster_female_miniboss",
+    "type": "cultist",
+    "lat": -137.8182,
+    "lng": 68.6061
+  },
+  {
+    "id": "cultist:cultist_melee_female_helltide",
+    "type": "cultist",
+    "lat": -138.3117,
+    "lng": 68.1672
+  },
+  {
+    "id": "cultist:cultist_summoner_helltide",
+    "type": "cultist",
+    "lat": -138.2645,
+    "lng": 68.4937
+  },
+  {
+    "id": "cultist:cultist_caster_female_QST_Kehj_TriuneRitual_CultistGhost",
+    "type": "cultist",
+    "lat": -137.947,
+    "lng": 67.6963
+  },
+  {
+    "id": "cultist:cultist_caster_male_drys_noWeapon",
+    "type": "cultist",
+    "lat": -137.7474,
+    "lng": 68.64
+  },
+  {
+    "id": "wildlife:wildlife_bloodhawk_spirit_peaceful",
+    "type": "wildlife",
+    "lat": -139.1383,
+    "lng": 68.5828
+  },
+  {
+    "id": "wildlife:wildlife_bear_regional",
+    "type": "wildlife",
+    "lat": -137.7958,
+    "lng": 68.6016
+  },
+  {
+    "id": "wildlife:wildlife_woodwraith_regional",
+    "type": "wildlife",
+    "lat": -137.8182,
+    "lng": 68.6061
+  },
+  {
+    "id": "wildlife:wildlife_leviathan_horiz_NonCombat",
+    "type": "wildlife",
+    "lat": -198.8664,
+    "lng": 16.5408
+  },
+  {
+    "id": "fallen:fallen_lunatic_cold",
+    "type": "fallen",
+    "lat": -138.8765,
+    "lng": 69.169
+  },
+  {
+    "id": "fallen:fallen_shaman_special_living_effigy",
+    "type": "fallen",
+    "lat": -137.815,
+    "lng": 68.6064
+  },
+  {
+    "id": "fallen:fallen_grunt_Encounter",
+    "type": "fallen",
+    "lat": -138.0006,
+    "lng": 68.5677
+  },
+  {
+    "id": "fallen:fallen_shaman_miniboss",
+    "type": "fallen",
+    "lat": -137.1157,
+    "lng": 69.3057
+  },
+  {
+    "id": "fallen:fallen_effigy",
+    "type": "fallen",
+    "lat": -137.8182,
+    "lng": 68.6061
+  },
+  {
+    "id": "snake:snake_queen",
+    "type": "snake",
+    "lat": -137.7423,
+    "lng": 69.0176
+  },
+  {
+    "id": "snake:snake_family_Encounter",
+    "type": "snake",
+    "lat": -138.0006,
+    "lng": 68.5677
+  },
+  {
+    "id": "snake:snake_brute_lightning",
+    "type": "snake",
+    "lat": -137.5825,
+    "lng": 68.8878
+  },
+  {
+    "id": "drown:drowned_brute_DGN_Hawe_BelfryZakara",
+    "type": "drown",
+    "lat": -137.7466,
+    "lng": 68.6776
+  },
+  {
+    "id": "drown:drowned_brute_cold_miniboss_x1",
+    "type": "drown",
+    "lat": -137.9476,
+    "lng": 68.3606
+  },
+  {
+    "id": "drown:drowned_brute_phys",
+    "type": "drown",
+    "lat": -137.7452,
+    "lng": 68.6583
+  },
+  {
+    "id": "drown:drowned_brute_poison",
+    "type": "drown",
+    "lat": -138.2294,
+    "lng": 68.9169
+  },
+  {
+    "id": "ghost:ghost_melee_male_lightning",
+    "type": "ghost",
+    "lat": -137.8276,
+    "lng": 68.6067
+  },
+  {
+    "id": "ghost:ghost_melee_female_lightning_CSD_Frac_Conv_HoradricVault",
+    "type": "ghost",
+    "lat": -138.479,
+    "lng": 68.6359
+  },
+  {
+    "id": "werewolf:werewolf_melee_lightning",
+    "type": "werewolf",
+    "lat": -137.8182,
+    "lng": 68.6061
+  },
+  {
+    "id": "werewolf:werewolf_family_encounter",
+    "type": "werewolf",
+    "lat": -138.0006,
+    "lng": 68.5677
+  },
+  {
+    "id": "demon:demon_mega_fire_S05_QST_Rep_Main_05_FinalFight",
+    "type": "demon",
+    "lat": -140.6519,
+    "lng": 68.6507
+  },
+  {
+    "id": "demon:demon_swarmer_regional",
+    "type": "demon",
+    "lat": -137.7824,
+    "lng": 68.6418
+  },
+  {
+    "id": "demon:demon_mega_phys_S08_BelialTide",
+    "type": "demon",
+    "lat": -137.8273,
+    "lng": 68.4857
+  },
+  {
+    "id": "demon:demon_spitter_mummy",
+    "type": "demon",
+    "lat": -137.8163,
+    "lng": 68.5279
+  },
+  {
+    "id": "demon:demon_succubus_phys",
+    "type": "demon",
+    "lat": -137.9613,
+    "lng": 68.4629
+  },
+  {
+    "id": "demon:demon_mega_fire_S05_QST_Rep_Main_03_Interrogation",
+    "type": "demon",
+    "lat": -138.8831,
+    "lng": 68.8408
+  },
+  {
+    "id": "demon:demon_mega_lightning",
+    "type": "demon",
+    "lat": -137.4384,
+    "lng": 68.4045
+  },
+  {
+    "id": "bandit:bandit_ambusher_female_NonCombat",
+    "type": "bandit",
+    "lat": -139.4633,
+    "lng": 74.9536
+  },
+  {
+    "id": "bandit:bandit_sword_encounter",
+    "type": "bandit",
+    "lat": -138.0006,
+    "lng": 68.5677
+  },
+  {
+    "id": "bandit:bandit_sword_female_QST_Hawe_Coast_Lyndon_BackwaterTraitors",
+    "type": "bandit",
+    "lat": -138.1497,
+    "lng": 68.2136
+  },
+  {
+    "id": "bandit:bandit_ranged_female_phys",
+    "type": "bandit",
+    "lat": -137.6552,
+    "lng": 68.4082
+  },
+  {
+    "id": "bandit:bandit_ranged_male_QST_Hawe_Coast_Lyndon_BackwaterTraitors",
+    "type": "bandit",
+    "lat": -137.5777,
+    "lng": 68.5354
+  },
+  {
+    "id": "bandit:bandit_melee_phys",
+    "type": "bandit",
+    "lat": -137.7942,
+    "lng": 68.7281
+  },
+  {
+    "id": "bandit:bandit_melee_bomb_poison",
+    "type": "bandit",
+    "lat": -138.0166,
+    "lng": 68.3999
+  },
+  {
+    "id": "goatman:goatman_ranged_spear_held_prop",
+    "type": "goatman",
+    "lat": -183.528,
+    "lng": 43.9016
+  },
+  {
+    "id": "demon:demon_mega_boss_raid_betaWing",
+    "type": "boss",
+    "lat": -137.8182,
+    "lng": 68.6061
+  },
+  {
+    "id": "vampire:vampire_caster_frac_camp_kordragan_boss",
+    "type": "boss",
+    "lat": -137.8176,
+    "lng": 68.6125
+  },
+  {
+    "id": "snake:snake_brute_camp_snakecultist_boss",
+    "type": "boss",
+    "lat": -137.8135,
+    "lng": 68.6052
+  },
+  {
+    "id": "skeleton:skeleton_boss_Capstone",
+    "type": "boss",
+    "lat": -137.6701,
+    "lng": 68.7541
+  },
+  {
+    "id": "cultist:cultist_caster_bosswave_palace_PalaceCorner",
+    "type": "boss",
+    "lat": -137.9254,
+    "lng": 68.6097
+  },
+  {
+    "id": "demon:demon_mega_unique_Camp_Scos_TurDulra",
+    "type": "unique",
+    "lat": -137.6822,
+    "lng": 68.4928
+  },
+  {
+    "id": "goatman:goatman_brute_unique_QST_burzog",
+    "type": "unique",
+    "lat": -139.0572,
+    "lng": 68.5297
+  },
+  {
+    "id": "cultist:cultist_caster_female_unique_QST_Kehj_Oasis_LonelyWolf_03",
+    "type": "unique",
+    "lat": -139.3719,
+    "lng": 68.7077
+  },
+  {
+    "id": "fallen:fallen_shaman_boss_unique_Camp_QaraYisu",
+    "type": "unique",
+    "lat": -137.6281,
+    "lng": 68.5608
+  },
+  {
+    "id": "cultist:cultist_caster_female_fire_unique_QST_CSD_TempleOfTheTriune_CaveDefender",
+    "type": "unique",
+    "lat": -137.6525,
+    "lng": 68.5552
+  },
+  {
+    "id": "cannibal:cannibal_twohand_unique_QST_CSD_VenerationOfDestruction",
+    "type": "unique",
+    "lat": -140.0251,
+    "lng": 67.7105
+  },
+  {
+    "id": "cannibal:cannibal_dualwield_unique_QST_CSD_VenerationOfDestruction",
+    "type": "unique",
+    "lat": -140.4272,
+    "lng": 68.6435
+  },
+  {
+    "id": "spider:spider_host_unique_DGN_Kehj_AbandonedMineworks",
+    "type": "unique",
+    "lat": -137.8718,
+    "lng": 68.6239
+  },
+  {
+    "id": "knight:knight_monk_fire_QST_Naha_GoNative4_Unique_Elite_02",
+    "type": "unique",
+    "lat": -137.8182,
+    "lng": 68.6061
+  },
+  {
+    "id": "drown:drowned_melee_unique_DGN_Hawe_GhoaRuins",
+    "type": "unique",
+    "lat": -137.749,
+    "lng": 68.6607
+  },
+  {
+    "id": "knight:knight_caster_frac_unique_DGN_Hawe_HeathensKeep_HighInquisitor",
+    "type": "unique",
+    "lat": -137.7824,
+    "lng": 68.6418
+  },
+  {
+    "id": "drown:drowned_brute_scos_unique_DGN_Scos_FloodedDepths",
+    "type": "unique",
+    "lat": -137.776,
+    "lng": 68.6468
+  },
+  {
+    "id": "skeleton:skeleton_ranged_unique_DGN_Step_SeasideDescent",
+    "type": "unique",
+    "lat": -137.7928,
+    "lng": 68.5637
+  },
+  {
+    "id": "skeleton:skeleton_melee_shield_unique_DGN_Step_SeasideDescent",
+    "type": "unique",
+    "lat": -137.8571,
+    "lng": 68.6472
+  },
+  {
+    "id": "ghost:ghost_ranged_male_lightning_noteleport_unique_DGN_Kehj_AbandonedMineworks",
+    "type": "unique",
+    "lat": -137.7108,
+    "lng": 68.7134
+  },
+  {
+    "id": "cultist:cultist_melee_male_unique_DGN_Frac_CultistRefuge",
+    "type": "unique",
+    "lat": -137.9159,
+    "lng": 68.6322
+  },
+  {
+    "id": "cannibal:cannibal_brute_unique_QST_CSD_VenerationOfDestruction",
+    "type": "unique",
+    "lat": -138.2519,
+    "lng": 68.2139
+  },
+  {
+    "id": "bandit:bandit_melee_unique_QST_Kehj_EliasPalace_Bouncer",
+    "type": "unique",
+    "lat": -139.2072,
+    "lng": 74.9062
+  },
+  {
+    "id": "cannibal:cannibal_brute_unique_desert_tyrant",
+    "type": "unique",
+    "lat": -139.0252,
+    "lng": 68.5209
+  },
+  {
+    "id": "knight:knight_caster_cold_unique_QST_Pale_Remnants",
+    "type": "unique",
+    "lat": -137.9416,
+    "lng": 68.5091
+  },
+  {
+    "id": "bandit:bandit_sword_male_unique_QST_Scos_APyreofAsh_BlackwealdMilitantM",
+    "type": "unique",
+    "lat": -137.7779,
+    "lng": 68.5476
+  },
+  {
+    "id": "bandit:bandit_sword_female_unique_QST_Scos_APyreofAsh_BlackwealdMilitantF",
+    "type": "unique",
+    "lat": -137.8972,
+    "lng": 68.654
+  },
+  {
+    "id": "werewolf:werewolf_melee_scos_unique_QST_Scos_UnholyBloodlines_Una",
+    "type": "unique",
+    "lat": -137.8325,
+    "lng": 68.6204
+  },
+  {
+    "id": "goatman:goatman_ranged_frac_unique_QST_Frac_BearTribeLoss",
+    "type": "unique",
+    "lat": -137.9325,
+    "lng": 68.7048
+  },
+  {
+    "id": "ghost:ghost_caster_unique_ACD_RareSpawn",
+    "type": "unique",
+    "lat": -137.854,
+    "lng": 68.5703
+  },
+  {
+    "id": "knight:knight_caster_fire_QST_Naha_GoNative4_Unique_Elite_01",
+    "type": "unique",
+    "lat": -137.9117,
+    "lng": 68.4582
+  },
+  {
+    "id": "knight:knight_brute_fire_QST_Naha_GoNative3_Unique_Elite",
+    "type": "unique",
+    "lat": -137.7338,
+    "lng": 68.7694
+  },
+  {
+    "id": "fallen:fallen_brute_unique_ACD_ZE_Invasion_Demon_FallenCaptain",
+    "type": "unique",
+    "lat": -137.8724,
+    "lng": 68.3634
+  },
+  {
+    "id": "goatman:goatman_brute_frac_unique_ACD_ZE_Invasion_Demon_GoatmanCaptain",
+    "type": "unique",
+    "lat": -137.7516,
+    "lng": 69.2706
+  },
+  {
+    "id": "demon:demon_mega_unique_ACD_ZE_Invasion_Demon_DemonCaptain",
+    "type": "unique",
+    "lat": -137.2044,
+    "lng": 68.851
+  },
+  {
+    "id": "campaignQuests:CMP_Kehj_Omaths@-148.21258,48.76526",
+    "type": "campaignQuests",
+    "lat": -148.2126,
+    "lng": 48.7653
+  },
+  {
+    "id": "campaignQuests:CMP_Naha_Chakhir@-177.81841,5.05907",
+    "type": "campaignQuests",
+    "lat": -177.8184,
+    "lng": 5.0591
+  },
+  {
+    "id": "campaignQuests:CMP_Naha_GatesOfTheNecropolis@-200.88006,62.74032",
+    "type": "campaignQuests",
+    "lat": -200.8801,
+    "lng": 62.7403
+  },
+  {
+    "id": "campaignQuests:CMP_Naha_Kichuk@-154.04942,82.42132",
+    "type": "campaignQuests",
+    "lat": -154.0494,
+    "lng": 82.4213
+  },
+  {
+    "id": "campaignQuests:CMP_X1R_KeyRoom@-134.36403,68.60388",
+    "type": "campaignQuests",
+    "lat": -134.364,
+    "lng": 68.6039
+  },
+  {
+    "id": "campaignQuests:QST_Frac_Underworld2_01@-136.6136,72.10383",
+    "type": "campaignQuests",
+    "lat": -136.6136,
+    "lng": 72.1038
+  },
+  {
+    "id": "campaignQuests:QST_Frac_Underworld2_02@-131.39741,72.93323",
+    "type": "campaignQuests",
+    "lat": -131.3974,
+    "lng": 72.9332
+  },
+  {
+    "id": "campaignQuests:QST_Frac_Underworld_01@-138.34925,71.52464",
+    "type": "campaignQuests",
+    "lat": -138.3493,
+    "lng": 71.5246
+  },
+  {
+    "id": "campaignQuests:QST_Frac_Underworld_02@-136.76476,72.25784",
+    "type": "campaignQuests",
+    "lat": -136.7648,
+    "lng": 72.2578
+  },
+  {
+    "id": "campaignQuests:QST_Frac_Underworld_03@-134.84525,75.01169",
+    "type": "campaignQuests",
+    "lat": -134.8452,
+    "lng": 75.0117
+  },
+  {
+    "id": "campaignQuests:QST_Frac_Underworld_04@-133.58249,69.98472",
+    "type": "campaignQuests",
+    "lat": -133.5825,
+    "lng": 69.9847
+  },
+  {
+    "id": "campaignQuests:QST_Hawe_Zarbizet_01@-144.03937,90.28376",
+    "type": "campaignQuests",
+    "lat": -144.0394,
+    "lng": 90.2838
+  },
+  {
+    "id": "campaignQuests:QST_Hell_Main_03@-134.54946,79.20033",
+    "type": "campaignQuests",
+    "lat": -134.5495,
+    "lng": 79.2003
+  },
+  {
+    "id": "campaignQuests:QST_Hell_Main_01@-146.50468,63.23835",
+    "type": "campaignQuests",
+    "lat": -146.5047,
+    "lng": 63.2383
+  },
+  {
+    "id": "campaignQuests:QST_Hell_Main_01B_Battlefield@-150.75987,74.95283",
+    "type": "campaignQuests",
+    "lat": -150.7599,
+    "lng": 74.9528
+  },
+  {
+    "id": "campaignQuests:QST_Hell_Main_02@-140.64096,73.16744",
+    "type": "campaignQuests",
+    "lat": -140.641,
+    "lng": 73.1674
+  },
+  {
+    "id": "campaignQuests:QST_Kehj_Caldeum_00@-132.79951,56.28316",
+    "type": "campaignQuests",
+    "lat": -132.7995,
+    "lng": 56.2832
+  },
+  {
+    "id": "campaignQuests:QST_Kehj_Caldeum_01@-131.76942,46.34253",
+    "type": "campaignQuests",
+    "lat": -131.7694,
+    "lng": 46.3425
+  },
+  {
+    "id": "campaignQuests:QST_Kehj_EliasPalace_01@-130.07288,75.244",
+    "type": "campaignQuests",
+    "lat": -130.0729,
+    "lng": 75.244
+  },
+  {
+    "id": "campaignQuests:QST_Kehj_Intro_01@-131.72084,73.87024",
+    "type": "campaignQuests",
+    "lat": -131.7208,
+    "lng": 73.8702
+  },
+  {
+    "id": "campaignQuests:QST_Kehj_X1_Prologue_GeaKul_01@-149.44039,29.14222",
+    "type": "campaignQuests",
+    "lat": -149.4404,
+    "lng": 29.1422
+  },
+  {
+    "id": "campaignQuests:QST_Kehj_X1_Prologue_LowDesert_01@-152.2966,35.76475",
+    "type": "campaignQuests",
+    "lat": -152.2966,
+    "lng": 35.7647
+  },
+  {
+    "id": "campaignQuests:QST_Naha_Epilogue_Cabin_01@-101.45439,116.16248",
+    "type": "campaignQuests",
+    "lat": -101.4544,
+    "lng": 116.1625
+  },
+  {
+    "id": "campaignQuests:QST_Naha_Epilogue_Vault_01@-102.94486,135.43655",
+    "type": "campaignQuests",
+    "lat": -102.9449,
+    "lng": 135.4366
+  },
+  {
+    "id": "campaignQuests:QST_Naha_FieldOfGiants_01@-185.61007,72.4833",
+    "type": "campaignQuests",
+    "lat": -185.6101,
+    "lng": 72.4833
+  },
+  {
+    "id": "campaignQuests:QST_Naha_FieldOfGiants_02@-173.30907,68.81906",
+    "type": "campaignQuests",
+    "lat": -173.3091,
+    "lng": 68.8191
+  },
+  {
+    "id": "campaignQuests:QST_Naha_FieldOfGiants_03@-172.60073,62.23499",
+    "type": "campaignQuests",
+    "lat": -172.6007,
+    "lng": 62.235
+  },
+  {
+    "id": "campaignQuests:QST_Naha_FiveHills_01@-186.59149,34.61273",
+    "type": "campaignQuests",
+    "lat": -186.5915,
+    "lng": 34.6127
+  },
+  {
+    "id": "campaignQuests:QST_Naha_FiveHills_02@-190.45029,16.64043",
+    "type": "campaignQuests",
+    "lat": -190.4503,
+    "lng": 16.6404
+  },
+  {
+    "id": "campaignQuests:QST_Naha_FiveHills_03@-198.28575,12.97247",
+    "type": "campaignQuests",
+    "lat": -198.2858,
+    "lng": 12.9725
+  },
+  {
+    "id": "campaignQuests:QST_Naha_FiveHills_04@-196.20027,17.11924",
+    "type": "campaignQuests",
+    "lat": -196.2003,
+    "lng": 17.1192
+  },
+  {
+    "id": "campaignQuests:QST_Naha_FiveHills_05@-207.6713,25.15749",
+    "type": "campaignQuests",
+    "lat": -207.6713,
+    "lng": 25.1575
+  },
+  {
+    "id": "campaignQuests:QST_Naha_Kurast@-182.76162,35.14951",
+    "type": "campaignQuests",
+    "lat": -182.7616,
+    "lng": 35.1495
+  },
+  {
+    "id": "campaignQuests:QST_Naha_LingeringHatred2_01@-164.34413,28.92213",
+    "type": "campaignQuests",
+    "lat": -164.3441,
+    "lng": 28.9221
+  },
+  {
+    "id": "campaignQuests:QST_Naha_LingeringHatred2_02@-168.44797,27.11461",
+    "type": "campaignQuests",
+    "lat": -168.448,
+    "lng": 27.1146
+  },
+  {
+    "id": "campaignQuests:QST_Naha_LingeringHatred_01@-157.5983,50.02466",
+    "type": "campaignQuests",
+    "lat": -157.5983,
+    "lng": 50.0247
+  },
+  {
+    "id": "campaignQuests:QST_Naha_LingeringHatred_01A@-161.86423,53.18883",
+    "type": "campaignQuests",
+    "lat": -161.8642,
+    "lng": 53.1888
+  },
+  {
+    "id": "campaignQuests:QST_Naha_LingeringHatred_02@-157.02095,22.26103",
+    "type": "campaignQuests",
+    "lat": -157.0209,
+    "lng": 22.261
+  },
+  {
+    "id": "campaignQuests:QST_Naha_LingeringHatred_02A@-166.73999,20.0002",
+    "type": "campaignQuests",
+    "lat": -166.74,
+    "lng": 20.0002
+  },
+  {
+    "id": "campaignQuests:QST_Naha_LingeringHatred_03@-167.90701,25.63548",
+    "type": "campaignQuests",
+    "lat": -167.907,
+    "lng": 25.6355
+  },
+  {
+    "id": "campaignQuests:QST_Naha_LingeringHatred_04@-168.25898,27.01578",
+    "type": "campaignQuests",
+    "lat": -168.259,
+    "lng": 27.0158
+  },
+  {
+    "id": "campaignQuests:QST_Naha_MercHideout@-135.09251,68.84507",
+    "type": "campaignQuests",
+    "lat": -135.0925,
+    "lng": 68.8451
+  },
+  {
+    "id": "campaignQuests:QST_Naha_Ormus1_01@-179.77932,41.36965",
+    "type": "campaignQuests",
+    "lat": -179.7793,
+    "lng": 41.3697
+  },
+  {
+    "id": "campaignQuests:QST_Naha_Ormus1_02@-180.23395,38.96284",
+    "type": "campaignQuests",
+    "lat": -180.2339,
+    "lng": 38.9628
+  },
+  {
+    "id": "campaignQuests:QST_Naha_Ormus2_01@-181.82367,41.64452",
+    "type": "campaignQuests",
+    "lat": -181.8237,
+    "lng": 41.6445
+  },
+  {
+    "id": "campaignQuests:QST_Naha_TeganzePlateau_02@-164.97455,78.20424",
+    "type": "campaignQuests",
+    "lat": -164.9745,
+    "lng": 78.2042
+  },
+  {
+    "id": "sideQuests:QST_Class_Spiritborn@-147.30802,29.08175",
+    "type": "sideQuests",
+    "lat": -147.308,
+    "lng": 29.0817
+  },
+  {
+    "id": "sideQuests:QST_Hawe_Crossway_RareHarvest_Ore@-145.0176,90.52077",
+    "type": "sideQuests",
+    "lat": -145.0176,
+    "lng": 90.5208
+  },
+  {
+    "id": "sideQuests:QST_Hawe_Coast_DropGift_Lyndon03@-145.08104,90.46456",
+    "type": "sideQuests",
+    "lat": -145.081,
+    "lng": 90.4646
+  },
+  {
+    "id": "sideQuests:QST_Hawe_Wetlands_FailedCrusader_01@-143.12754,89.05971",
+    "type": "sideQuests",
+    "lat": -143.1275,
+    "lng": 89.0597
+  },
+  {
+    "id": "sideQuests:QST_Hawe_Zarbinzet_APriceToPay@-142.39232,89.75843",
+    "type": "sideQuests",
+    "lat": -142.3923,
+    "lng": 89.7584
+  },
+  {
+    "id": "sideQuests:QST_Hawe_Zarbinzet_Carthas_02@-142.72851,88.21751",
+    "type": "sideQuests",
+    "lat": -142.7285,
+    "lng": 88.2175
+  },
+  {
+    "id": "sideQuests:QST_Hawe_Zarbinzet_CoiledGrasp@-145.35441,88.59489",
+    "type": "sideQuests",
+    "lat": -145.3544,
+    "lng": 88.5949
+  },
+  {
+    "id": "sideQuests:QST_Hawe_Zarbinzet_TheHeretic@-145.41466,90.1147",
+    "type": "sideQuests",
+    "lat": -145.4147,
+    "lng": 90.1147
+  },
+  {
+    "id": "sideQuests:QST_Hawe_Zarbinzet_ToWalkADarkPath@-142.49945,90.8619",
+    "type": "sideQuests",
+    "lat": -142.4994,
+    "lng": 90.8619
+  },
+  {
+    "id": "sideQuests:S11_QST_Main_Connect_RepTracking@-143.21191,90.85718",
+    "type": "sideQuests",
+    "lat": -143.2119,
+    "lng": 90.8572
+  },
+  {
+    "id": "sideQuests:QST_Kehj_Caldeum_Remnants@-133.21202,45.18539",
+    "type": "sideQuests",
+    "lat": -133.212,
+    "lng": 45.1854
+  },
+  {
+    "id": "sideQuests:QST_Kehj_GaeKul_PinchofPoison@-144.00845,29.06626",
+    "type": "sideQuests",
+    "lat": -144.0085,
+    "lng": 29.0663
+  },
+  {
+    "id": "sideQuests:QST_Kehj_GeaKul_FetchMinor_06@-144.28275,29.72726",
+    "type": "sideQuests",
+    "lat": -144.2827,
+    "lng": 29.7273
+  },
+  {
+    "id": "sideQuests:QST_Kehj_GeaKul_FetchMinor_07@-148.8523,30.30458",
+    "type": "sideQuests",
+    "lat": -148.8523,
+    "lng": 30.3046
+  },
+  {
+    "id": "sideQuests:QST_Kehj_LowDesert_FinalStraw@-141.28574,32.52369",
+    "type": "sideQuests",
+    "lat": -141.2857,
+    "lng": 32.5237
+  },
+  {
+    "id": "sideQuests:QST_Kehj_LowDesert_LadyoftheOasis_01@-139.92186,34.75123",
+    "type": "sideQuests",
+    "lat": -139.9219,
+    "lng": 34.7512
+  },
+  {
+    "id": "sideQuests:QST_Kehj_LowDesert_LadyoftheOasis_02@-139.99317,34.75943",
+    "type": "sideQuests",
+    "lat": -139.9932,
+    "lng": 34.7594
+  },
+  {
+    "id": "sideQuests:QST_Kehj_LowDesert_LadyoftheOasis_Breadcrumb_01@-150.54873,28.69689",
+    "type": "sideQuests",
+    "lat": -150.5487,
+    "lng": 28.6969
+  },
+  {
+    "id": "sideQuests:QST_Kehj_LowDesert_Motes_Goatmen@-142.06121,36.0428",
+    "type": "sideQuests",
+    "lat": -142.0612,
+    "lng": 36.0428
+  },
+  {
+    "id": "sideQuests:QST_Kehj_LowDesert_TideComesIn@-153.48451,29.60278",
+    "type": "sideQuests",
+    "lat": -153.4845,
+    "lng": 29.6028
+  },
+  {
+    "id": "sideQuests:QST_Kehj_LowDesert_ZakarumsPlight@-150.62809,41.65379",
+    "type": "sideQuests",
+    "lat": -150.6281,
+    "lng": 41.6538
+  },
+  {
+    "id": "sideQuests:QST_Kehj_Oasis_GeaKulRefugees@-135.19698,26.77248",
+    "type": "sideQuests",
+    "lat": -135.197,
+    "lng": 26.7725
+  },
+  {
+    "id": "sideQuests:QST_Kehj_Penitent_01@-135.76539,50.80328",
+    "type": "sideQuests",
+    "lat": -135.7654,
+    "lng": 50.8033
+  },
+  {
+    "id": "sideQuests:QST_Kehj_Penitent_02@-146.47104,30.3765",
+    "type": "sideQuests",
+    "lat": -146.471,
+    "lng": 30.3765
+  },
+  {
+    "id": "sideQuests:QST_Kehj_Penitent_03@-145.42758,28.55574",
+    "type": "sideQuests",
+    "lat": -145.4276,
+    "lng": 28.5557
+  },
+  {
+    "id": "sideQuests:QST_Kehj_Penitent_04@-139.02291,54.99188",
+    "type": "sideQuests",
+    "lat": -139.0229,
+    "lng": 54.9919
+  },
+  {
+    "id": "sideQuests:QST_Kehj_Ridge_FetchMinor_05@-131.74759,74.84051",
+    "type": "sideQuests",
+    "lat": -131.7476,
+    "lng": 74.8405
+  },
+  {
+    "id": "sideQuests:QST_Kehj_Ridge_PayDue@-132.15684,75.80543",
+    "type": "sideQuests",
+    "lat": -132.1568,
+    "lng": 75.8054
+  },
+  {
+    "id": "sideQuests:QST_Kehj_Ridge_TracesofIron@-130.01552,74.52464",
+    "type": "sideQuests",
+    "lat": -130.0155,
+    "lng": 74.5246
+  },
+  {
+    "id": "sideQuests:QST_Naha_AkaratDeath@-197.27561,63.21756",
+    "type": "sideQuests",
+    "lat": -197.2756,
+    "lng": 63.2176
+  },
+  {
+    "id": "sideQuests:QST_Naha_AkaratFaith@-176.02749,18.5142",
+    "type": "sideQuests",
+    "lat": -176.0275,
+    "lng": 18.5142
+  },
+  {
+    "id": "sideQuests:QST_Naha_Akarat_Perseverance@-166.75122,42.27939",
+    "type": "sideQuests",
+    "lat": -166.7512,
+    "lng": 42.2794
+  },
+  {
+    "id": "sideQuests:QST_Naha_BeHumble_01@-158.17726,24.48875",
+    "type": "sideQuests",
+    "lat": -158.1773,
+    "lng": 24.4887
+  },
+  {
+    "id": "sideQuests:QST_Naha_BestialSoulofTeganze_02@-155.43759,76.19155",
+    "type": "sideQuests",
+    "lat": -155.4376,
+    "lng": 76.1916
+  },
+  {
+    "id": "sideQuests:QST_Naha_BestialSoulofTeganze_03@-147.79135,74.42696",
+    "type": "sideQuests",
+    "lat": -147.7913,
+    "lng": 74.427
+  },
+  {
+    "id": "sideQuests:QST_Naha_BlessedHunt@-188.07212,40.64535",
+    "type": "sideQuests",
+    "lat": -188.0721,
+    "lng": 40.6454
+  },
+  {
+    "id": "sideQuests:QST_Naha_BloomWhereYouArePlanted@-192.88438,14.33791",
+    "type": "sideQuests",
+    "lat": -192.8844,
+    "lng": 14.3379
+  },
+  {
+    "id": "sideQuests:QST_Naha_BridgeCat_01@-154.01664,85.81203",
+    "type": "sideQuests",
+    "lat": -154.0166,
+    "lng": 85.812
+  },
+  {
+    "id": "sideQuests:QST_Naha_CatRescue_01@-186.85645,72.90186",
+    "type": "sideQuests",
+    "lat": -186.8564,
+    "lng": 72.9019
+  },
+  {
+    "id": "sideQuests:QST_Naha_Cowsplosion@-159.0878,24.58379",
+    "type": "sideQuests",
+    "lat": -159.0878,
+    "lng": 24.5838
+  },
+  {
+    "id": "sideQuests:QST_Naha_CursedChild_Acquisition@-133.85585,67.94198",
+    "type": "sideQuests",
+    "lat": -133.8559,
+    "lng": 67.942
+  },
+  {
+    "id": "sideQuests:QST_Naha_DeathBlooms@-184.44717,36.76778",
+    "type": "sideQuests",
+    "lat": -184.4472,
+    "lng": 36.7678
+  },
+  {
+    "id": "sideQuests:QST_Naha_FiveHills_MidnightJaguars@-194.49539,30.79138",
+    "type": "sideQuests",
+    "lat": -194.4954,
+    "lng": 30.7914
+  },
+  {
+    "id": "sideQuests:QST_Naha_GardenOfGods@-163.38586,76.45204",
+    "type": "sideQuests",
+    "lat": -163.3859,
+    "lng": 76.452
+  },
+  {
+    "id": "sideQuests:QST_Naha_GiantBloodHawks@-170.87239,71.07799",
+    "type": "sideQuests",
+    "lat": -170.8724,
+    "lng": 71.078
+  },
+  {
+    "id": "sideQuests:QST_Naha_GoNative_01@-158.6993,24.97258",
+    "type": "sideQuests",
+    "lat": -158.6993,
+    "lng": 24.9726
+  },
+  {
+    "id": "sideQuests:QST_Naha_GoNative_02@-143.77703,28.87891",
+    "type": "sideQuests",
+    "lat": -143.777,
+    "lng": 28.8789
+  },
+  {
+    "id": "sideQuests:QST_Naha_GoNative_03@-181.2626,15.54128",
+    "type": "sideQuests",
+    "lat": -181.2626,
+    "lng": 15.5413
+  },
+  {
+    "id": "sideQuests:QST_Naha_GoNative_04@-179.58452,25.72155",
+    "type": "sideQuests",
+    "lat": -179.5845,
+    "lng": 25.7216
+  },
+  {
+    "id": "sideQuests:QST_Naha_GoNative_05@-92.70228,122.88756",
+    "type": "sideQuests",
+    "lat": -92.7023,
+    "lng": 122.8876
+  },
+  {
+    "id": "sideQuests:QST_Naha_HollowLifeCycle@-183.7585,65.0537",
+    "type": "sideQuests",
+    "lat": -183.7585,
+    "lng": 65.0537
+  },
+  {
+    "id": "sideQuests:QST_Naha_KeeningSpirit@-187.02247,37.61417",
+    "type": "sideQuests",
+    "lat": -187.0225,
+    "lng": 37.6142
+  },
+  {
+    "id": "sideQuests:QST_Naha_Lacuni_Eye@-197.49283,36.40365",
+    "type": "sideQuests",
+    "lat": -197.4928,
+    "lng": 36.4036
+  },
+  {
+    "id": "sideQuests:QST_Naha_LakeLife_01@-198.78079,21.39432",
+    "type": "sideQuests",
+    "lat": -198.7808,
+    "lng": 21.3943
+  },
+  {
+    "id": "sideQuests:QST_Naha_LegacyOfTheEater@-183.54565,43.82813",
+    "type": "sideQuests",
+    "lat": -183.5456,
+    "lng": 43.8281
+  },
+  {
+    "id": "sideQuests:QST_Naha_LivingDying@-169.52439,63.26769",
+    "type": "sideQuests",
+    "lat": -169.5244,
+    "lng": 63.2677
+  },
+  {
+    "id": "sideQuests:QST_Naha_RaidIntro_01@-184.28927,36.6886",
+    "type": "sideQuests",
+    "lat": -184.2893,
+    "lng": 36.6886
+  },
+  {
+    "id": "sideQuests:QST_Naha_RestlessCanopy_ThePitOfAnguish@-185.99171,38.3388",
+    "type": "sideQuests",
+    "lat": -185.9917,
+    "lng": 38.3388
+  },
+  {
+    "id": "sideQuests:QST_Naha_RestlessCanopy_TheScalesOfHistory@-180.6154,35.75624",
+    "type": "sideQuests",
+    "lat": -180.6154,
+    "lng": 35.7562
+  },
+  {
+    "id": "sideQuests:QST_Naha_ReturnToDust@-171.89351,35.8105",
+    "type": "sideQuests",
+    "lat": -171.8935,
+    "lng": 35.8105
+  },
+  {
+    "id": "sideQuests:QST_Naha_SaltTheEarth@-176.73208,45.62026",
+    "type": "sideQuests",
+    "lat": -176.7321,
+    "lng": 45.6203
+  },
+  {
+    "id": "sideQuests:QST_Naha_SevenStones_EverythingOld_03@-190.80416,13.02697",
+    "type": "sideQuests",
+    "lat": -190.8042,
+    "lng": 13.027
+  },
+  {
+    "id": "sideQuests:QST_Naha_ShroudofWrath@-161.66296,88.74255",
+    "type": "sideQuests",
+    "lat": -161.663,
+    "lng": 88.7425
+  },
+  {
+    "id": "sideQuests:QST_Naha_SinProxy_01@-191.24277,71.15127",
+    "type": "sideQuests",
+    "lat": -191.2428,
+    "lng": 71.1513
+  },
+  {
+    "id": "sideQuests:QST_Naha_SinProxy_02@-190.71029,70.86259",
+    "type": "sideQuests",
+    "lat": -190.7103,
+    "lng": 70.8626
+  },
+  {
+    "id": "sideQuests:QST_Naha_SinProxy_03@-190.84003,70.68097",
+    "type": "sideQuests",
+    "lat": -190.84,
+    "lng": 70.681
+  },
+  {
+    "id": "sideQuests:QST_Naha_SinProxy_04@-184.87371,69.47338",
+    "type": "sideQuests",
+    "lat": -184.8737,
+    "lng": 69.4734
+  },
+  {
+    "id": "sideQuests:QST_Naha_SpiritEgg_01@-190.31782,16.82068",
+    "type": "sideQuests",
+    "lat": -190.3178,
+    "lng": 16.8207
+  },
+  {
+    "id": "sideQuests:QST_Naha_TheGoatEater@-192.81715,43.00239",
+    "type": "sideQuests",
+    "lat": -192.8171,
+    "lng": 43.0024
+  },
+  {
+    "id": "sideQuests:QST_Naha_TheWitness@-157.90805,23.16845",
+    "type": "sideQuests",
+    "lat": -157.9081,
+    "lng": 23.1684
+  },
+  {
+    "id": "sideQuests:QST_Naha_TorchDreamPlant@-192.22826,13.73474",
+    "type": "sideQuests",
+    "lat": -192.2283,
+    "lng": 13.7347
+  },
+  {
+    "id": "sideQuests:QST_Naha_TreeMan_01@-194.32025,28.31268",
+    "type": "sideQuests",
+    "lat": -194.3202,
+    "lng": 28.3127
+  },
+  {
+    "id": "sideQuests:QST_Naha_Treeman_02@-197.45977,25.28723",
+    "type": "sideQuests",
+    "lat": -197.4598,
+    "lng": 25.2872
+  },
+  {
+    "id": "sideQuests:QST_S03_Main_10_Kehj_01@-132.51672,67.29086",
+    "type": "sideQuests",
+    "lat": -132.5167,
+    "lng": 67.2909
+  },
+  {
+    "id": "sideQuests:QST_S03_Main_03@-135.55096,68.0642",
+    "type": "sideQuests",
+    "lat": -135.551,
+    "lng": 68.0642
+  },
+  {
+    "id": "sideQuests:QST_S03_Main_05@-134.12334,68.82456",
+    "type": "sideQuests",
+    "lat": -134.1233,
+    "lng": 68.8246
+  },
+  {
+    "id": "sideQuests:QST_S03_Main_06@-135.5743,67.38221",
+    "type": "sideQuests",
+    "lat": -135.5743,
+    "lng": 67.3822
+  },
+  {
+    "id": "sideQuests:S05_QST_Rep_Main_01b@-143.90261,91.302",
+    "type": "sideQuests",
+    "lat": -143.9026,
+    "lng": 91.302
+  },
+  {
+    "id": "sideQuests:S06_Bounty_Hatetide_Realmwalker_Naha_RestlessCanopy@-188.88695,49.26711",
+    "type": "sideQuests",
+    "lat": -188.887,
+    "lng": 49.2671
+  },
+  {
+    "id": "sideQuests:S07_Bounty_BloodyTrail_Tier1_Naha_FieldOfGiants@-185.38558,69.77672",
+    "type": "sideQuests",
+    "lat": -185.3856,
+    "lng": 69.7767
+  },
+  {
+    "id": "sideQuests:S07_Bounty_BloodyTrail_Tier1_Naha_RestlessCanopy@-189.10124,46.8154",
+    "type": "sideQuests",
+    "lat": -189.1012,
+    "lng": 46.8154
+  },
+  {
+    "id": "sideQuests:S07_Bounty_BossInvasion_Tier3_Naha_FieldOfGiants@-183.60797,66.14476",
+    "type": "sideQuests",
+    "lat": -183.608,
+    "lng": 66.1448
+  },
+  {
+    "id": "sideQuests:S07_Bounty_BossInvasion_Tier3_Naha_RestlessCanopy@-197.43344,50.99993",
+    "type": "sideQuests",
+    "lat": -197.4334,
+    "lng": 50.9999
+  },
+  {
+    "id": "sideQuests:S07_Bounty_CovenOfChains_Tier1_Naha_FieldOfGiants@-174.33647,76.49583",
+    "type": "sideQuests",
+    "lat": -174.3365,
+    "lng": 76.4958
+  },
+  {
+    "id": "sideQuests:S07_Bounty_CovenOfChains_Tier1_Naha_RestlessCanopy@-194.74897,54.62628",
+    "type": "sideQuests",
+    "lat": -194.749,
+    "lng": 54.6263
+  },
+  {
+    "id": "sideQuests:S07_Bounty_GatheringSwarm_Tier2_Naha_FieldOfGiants_Dreg@-176.76321,66.35375",
+    "type": "sideQuests",
+    "lat": -176.7632,
+    "lng": 66.3538
+  },
+  {
+    "id": "sideQuests:S07_Bounty_GatheringSwarm_Tier2_Naha_RestlessCanopy_Dreg@-201.30714,47.69535",
+    "type": "sideQuests",
+    "lat": -201.3071,
+    "lng": 47.6953
+  },
+  {
+    "id": "sideQuests:S07_Bounty_HeadlessHunt_Tier1_Naha_FieldOfGiants@-178.18895,79.81111",
+    "type": "sideQuests",
+    "lat": -178.189,
+    "lng": 79.8111
+  },
+  {
+    "id": "sideQuests:S07_Bounty_HeadlessHunt_Tier1_Naha_RestlessCanopy@-184.89503,47.49509",
+    "type": "sideQuests",
+    "lat": -184.895,
+    "lng": 47.4951
+  },
+  {
+    "id": "sideQuests:S07_Bounty_HerbalRemedy_Tier1_Naha_FieldOfGiants@-176.27667,71.13295",
+    "type": "sideQuests",
+    "lat": -176.2767,
+    "lng": 71.1329
+  },
+  {
+    "id": "sideQuests:S07_Bounty_HerbalRemedy_Tier1_Naha_RestlessCanopy@-190.48709,54.46276",
+    "type": "sideQuests",
+    "lat": -190.4871,
+    "lng": 54.4628
+  },
+  {
+    "id": "sideQuests:S07_Bounty_Herding_Tier1_Naha_FieldOfGiants@-185.20922,76.07326",
+    "type": "sideQuests",
+    "lat": -185.2092,
+    "lng": 76.0733
+  },
+  {
+    "id": "sideQuests:S07_Bounty_Herding_Tier1_Naha_RestlessCanopy@-186.03153,57.34348",
+    "type": "sideQuests",
+    "lat": -186.0315,
+    "lng": 57.3435
+  },
+  {
+    "id": "sideQuests:S07_Bounty_RottenHunt_Tier3_Kehj_Ridge@-130.77502,77.66905",
+    "type": "sideQuests",
+    "lat": -130.775,
+    "lng": 77.669
+  },
+  {
+    "id": "sideQuests:S07_Bounty_RottenHunt_Tier3_Naha_FieldOfGiants@-180.03469,77.48133",
+    "type": "sideQuests",
+    "lat": -180.0347,
+    "lng": 77.4813
+  },
+  {
+    "id": "sideQuests:S07_Bounty_RottenHunt_Tier3_Naha_RestlessCanopy@-188.19342,53.65698",
+    "type": "sideQuests",
+    "lat": -188.1934,
+    "lng": 53.657
+  },
+  {
+    "id": "sideQuests:S07_Bounty_SigilsOfCorruption_Tier1_Naha_FieldOfGiants@-180.37671,71.84309",
+    "type": "sideQuests",
+    "lat": -180.3767,
+    "lng": 71.8431
+  },
+  {
+    "id": "sideQuests:S07_Bounty_SigilsOfCorruption_Tier1_Naha_RestlessCanopy@-193.93822,62.30101",
+    "type": "sideQuests",
+    "lat": -193.9382,
+    "lng": 62.301
+  },
+  {
+    "id": "sideQuests:S11_Bounty_Helltide_Tier1_Kehj_LowDesert_CullMaggots@-143.26368,40.24389",
+    "type": "sideQuests",
+    "lat": -143.2637,
+    "lng": 40.2439
+  },
+  {
+    "id": "sideQuests:S11_Bounty_Helltide_Tier1_Kehj_Oasis_CullMaggots@-133.5124,30.59151",
+    "type": "sideQuests",
+    "lat": -133.5124,
+    "lng": 30.5915
+  },
+  {
+    "id": "sideQuests:S11_Bounty_Helltide_Tier1_Naha_LingeringHatred_CullMaggots@-169.40702,35.24076",
+    "type": "sideQuests",
+    "lat": -169.407,
+    "lng": 35.2408
+  },
+  {
+    "id": "sideQuests:S11_Bounty_Helltide_Tier1_Naha_SevenStones_CullMaggots@-184.89496,12.9736",
+    "type": "sideQuests",
+    "lat": -184.895,
+    "lng": 12.9736
+  },
+  {
+    "id": "sideQuests:S11_Bounty_Helltide_Tier2_Kehj_LowDesert_DurielSpawn@-144.7866,38.16558",
+    "type": "sideQuests",
+    "lat": -144.7866,
+    "lng": 38.1656
+  },
+  {
+    "id": "sideQuests:S11_Bounty_Helltide_Tier2_Kehj_Oasis_DurielSpawn@-131.2866,31.22256",
+    "type": "sideQuests",
+    "lat": -131.2866,
+    "lng": 31.2226
+  },
+  {
+    "id": "sideQuests:S11_Bounty_Helltide_Tier2_Naha_LingeringHatred_DurielSpawn@-162.44099,36.90663",
+    "type": "sideQuests",
+    "lat": -162.441,
+    "lng": 36.9066
+  },
+  {
+    "id": "sideQuests:S11_Bounty_Helltide_Tier2_Naha_SevenStones_DurielSpawn@-174.06032,12.28486",
+    "type": "sideQuests",
+    "lat": -174.0603,
+    "lng": 12.2849
+  },
+  {
+    "id": "sideQuests:S11_Bounty_Helltide_Tier3_Kehj_LowDesert_DurielBoss@-141.33003,37.38725",
+    "type": "sideQuests",
+    "lat": -141.33,
+    "lng": 37.3873
+  },
+  {
+    "id": "sideQuests:S11_Bounty_Helltide_Tier3_Naha_LingeringHatred_DurielBoss@-171.00059,27.98769",
+    "type": "sideQuests",
+    "lat": -171.0006,
+    "lng": 27.9877
+  },
+  {
+    "id": "sideQuests:S11_Bounty_Helltide_Tier3_Naha_SevenStones_DurielBoss@-178.65979,15.01373",
+    "type": "sideQuests",
+    "lat": -178.6598,
+    "lng": 15.0137
+  },
+  {
+    "id": "Bounty_WE_Tier3_Hawe_Boss",
+    "type": "events",
+    "lat": -152.0111,
+    "lng": 98.5395
+  },
+  {
+    "id": "Bounty_ZE_Tier2_Kehj_DilapidatedAqueducts",
+    "type": "events",
+    "lat": -134.2186,
+    "lng": 41.8837
+  },
+  {
+    "id": "Bounty_LE_Tier1_Kehj_PvP_CompleteAny1",
+    "type": "events",
+    "lat": -148.0404,
+    "lng": 65.1268
+  },
+  {
+    "id": "Bounty_PVP_Tier2_Kehj_Turn_In_Shards",
+    "type": "events",
+    "lat": -145.513,
+    "lng": 60.2227
+  },
+  {
+    "id": "Bounty_PVP_Tier3_Kehj_Kill_Boss",
+    "type": "events",
+    "lat": -147.9863,
+    "lng": 61.4785
+  },
+  {
+    "id": "Bounty_ZE_Tier2_Naha_Chakhir",
+    "type": "events",
+    "lat": -177.9029,
+    "lng": 5.1063
+  },
+  {
+    "id": "Bounty_Harvest_Tier2_Hawe_Crossway",
+    "type": "events",
+    "lat": -148.9739,
+    "lng": 87.1002
+  },
+  {
+    "id": "Bounty_Culling_Tier1_Hawe_Crossway_Spider",
+    "type": "events",
+    "lat": -140.7596,
+    "lng": 81.5047
+  },
+  {
+    "id": "Bounty_LE_Tier2_Hawe_Crossway_CompleteAny3",
+    "type": "events",
+    "lat": -140.2151,
+    "lng": 93.5108
+  },
+  {
+    "id": "Bounty_LE_Tier1_Hawe_Crossway_LocA",
+    "type": "events",
+    "lat": -141.9817,
+    "lng": 84.1213
+  },
+  {
+    "id": "Bounty_LE_Tier1_Hawe_Crossway_LocC",
+    "type": "events",
+    "lat": -132.34,
+    "lng": 96.7919
+  },
+  {
+    "id": "Bounty_LE_Tier1_Hawe_Crossway_LocD",
+    "type": "events",
+    "lat": -150.2145,
+    "lng": 93.4756
+  },
+  {
+    "id": "Bounty_LE_Tier1_Hawe_Crossway_EH",
+    "type": "events",
+    "lat": -135.1881,
+    "lng": 88.5738
+  },
+  {
+    "id": "Bounty_Ritual_Tier2_Hawe_Crossway",
+    "type": "events",
+    "lat": -140.9731,
+    "lng": 90.7233
+  },
+  {
+    "id": "Bounty_OWC_Hawe_Crossway_01",
+    "type": "events",
+    "lat": -145.2977,
+    "lng": 82.2423
+  },
+  {
+    "id": "Bounty_OWC_Hawe_Crossway_02",
+    "type": "events",
+    "lat": -136.1519,
+    "lng": 98.0037
+  },
+  {
+    "id": "Bounty_OWC_Hawe_Crossway_03",
+    "type": "events",
+    "lat": -152.0338,
+    "lng": 91.8337
+  },
+  {
+    "id": "Bounty_Assassinate_Tier1_Hawe_KnightBrute_Refactor",
+    "type": "events",
+    "lat": -139.7758,
+    "lng": 95.981
+  },
+  {
+    "id": "Bounty_Assassinate_Tier1_Hawe_GhostRanged_Refactor",
+    "type": "events",
+    "lat": -131.9392,
+    "lng": 90.9961
+  },
+  {
+    "id": "Bounty_OWC_Kehj_LowDesert_04",
+    "type": "events",
+    "lat": -141.1544,
+    "lng": 27.1119
+  },
+  {
+    "id": "Bounty_Harvest_Tier2_Kehj_LowDesert",
+    "type": "events",
+    "lat": -151.8496,
+    "lng": 38.9265
+  },
+  {
+    "id": "Bounty_Culling_Tier1_Kehj_LowDesert_Fly",
+    "type": "events",
+    "lat": -150.5931,
+    "lng": 40.5827
+  },
+  {
+    "id": "Bounty_LE_Tier1_Kehj_LowDesert_LocA",
+    "type": "events",
+    "lat": -139.0811,
+    "lng": 31.4028
+  },
+  {
+    "id": "Bounty_LE_Tier1_Kehj_LowDesert_LocB",
+    "type": "events",
+    "lat": -152.448,
+    "lng": 41.0877
+  },
+  {
+    "id": "Bounty_LE_Tier1_Kehj_LowDesert_EH",
+    "type": "events",
+    "lat": -142.7559,
+    "lng": 41.3413
+  },
+  {
+    "id": "Bounty_LE_Tier2_Kehj_LowDesert_CompleteAny3",
+    "type": "events",
+    "lat": -145.4048,
+    "lng": 34.4513
+  },
+  {
+    "id": "Bounty_OWC_Kehj_LowDesert_01",
+    "type": "events",
+    "lat": -149.4487,
+    "lng": 42.1942
+  },
+  {
+    "id": "Bounty_OWC_Kehj_LowDesert_02",
+    "type": "events",
+    "lat": -153.9319,
+    "lng": 37.0617
+  },
+  {
+    "id": "Bounty_OWC_Kehj_LowDesert_03",
+    "type": "events",
+    "lat": -139.288,
+    "lng": 41.351
+  },
+  {
+    "id": "Bounty_Assassinate_Tier1_Kehj_DemonSpitter_Refactor",
+    "type": "events",
+    "lat": -139.9578,
+    "lng": 39.998
+  },
+  {
+    "id": "Bounty_Assassinate_Tier1_Kehj_GoatmanMelee_Refactor",
+    "type": "events",
+    "lat": -151.37,
+    "lng": 44.7328
+  },
+  {
+    "id": "Bounty_LE_Tier1_Kehj_Oasis_LocA",
+    "type": "events",
+    "lat": -132.8948,
+    "lng": 28.3046
+  },
+  {
+    "id": "Bounty_LE_Tier1_Kehj_Oasis_LocB",
+    "type": "events",
+    "lat": -137.3096,
+    "lng": 34.6631
+  },
+  {
+    "id": "Bounty_LE_Tier1_Kehj_Oasis_EH",
+    "type": "events",
+    "lat": -131.3949,
+    "lng": 20.3989
+  },
+  {
+    "id": "Bounty_OWC_Kehj_Oasis_01",
+    "type": "events",
+    "lat": -133.1803,
+    "lng": 34.2166
+  },
+  {
+    "id": "Bounty_Assassinate_Tier1_Kehj_FlyHost_Refactor",
+    "type": "events",
+    "lat": -134.9679,
+    "lng": 31.1176
+  },
+  {
+    "id": "Bounty_LE_Tier1_Kehj_Ridge_LocA",
+    "type": "events",
+    "lat": -133.1631,
+    "lng": 68.8685
+  },
+  {
+    "id": "Bounty_OWC_Kehj_Ridge_01",
+    "type": "events",
+    "lat": -133.4909,
+    "lng": 70.4549
+  },
+  {
+    "id": "Bounty_OWC_Kehj_Ridge_05",
+    "type": "events",
+    "lat": -130.4656,
+    "lng": 63.8056
+  },
+  {
+    "id": "Bounty_Culling_Tier1_Kehj_Caldeum_Demon",
+    "type": "events",
+    "lat": -130.1423,
+    "lng": 44.7625
+  },
+  {
+    "id": "Bounty_Culling_Tier1_Kehj_Caldeum_Knight_Breadcrumb",
+    "type": "events",
+    "lat": -131.2435,
+    "lng": 51.3159
+  },
+  {
+    "id": "Bounty_LE_Tier1_Kehj_Caldeum_LocA_Breadcrumb",
+    "type": "events",
+    "lat": -137.1181,
+    "lng": 46.1817
+  },
+  {
+    "id": "Bounty_OWC_Kehj_Caldeum_01_Breadcrumb",
+    "type": "events",
+    "lat": -133.2348,
+    "lng": 57.0832
+  },
+  {
+    "id": "Bounty_OWC_Kehj_Caldeum_04_Breadcrumb",
+    "type": "events",
+    "lat": -133.5219,
+    "lng": 49.0788
+  },
+  {
+    "id": "Bounty_OWC_Kehj_Caldeum_05",
+    "type": "events",
+    "lat": -140.073,
+    "lng": 53.9074
+  },
+  {
+    "id": "Bounty_Assassinate_Tier1_Kehj_KnightMonk_Refactor",
+    "type": "events",
+    "lat": -130.2781,
+    "lng": 51.9618
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Kehj_Caldeum_RenegadesRetreat",
+    "type": "events",
+    "lat": -131.758,
+    "lng": 55.8849
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Kehj_Caldeum_PrisonofCaldeum_Breadcrumb",
+    "type": "events",
+    "lat": -133.212,
+    "lng": 45.1854
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Kehj_Caldeum_DesertedUnderpass",
+    "type": "events",
+    "lat": -140.9114,
+    "lng": 48.7009
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Kehj_Ridge_AbandonedMineworks",
+    "type": "events",
+    "lat": -138.0062,
+    "lng": 67.8875
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Kehj_LowDesert_CrumblingHekma",
+    "type": "events",
+    "lat": -146.2175,
+    "lng": 47.8684
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Kehj_Oasis_HereticsAsylum",
+    "type": "events",
+    "lat": -132.8589,
+    "lng": 19.0035
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Kehj_Oasis_CorruptedGrotto",
+    "type": "events",
+    "lat": -136.0275,
+    "lng": 31.8881
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Hawe_Crossway_LostKeep",
+    "type": "events",
+    "lat": -131.1095,
+    "lng": 89.3487
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Hawe_Crossway_EarthenWound",
+    "type": "events",
+    "lat": -147.4577,
+    "lng": 85.1425
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Hawe_Crossway_EndlessGates",
+    "type": "events",
+    "lat": -132.6842,
+    "lng": 93.4016
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Kehj_LowDesert_Conclave",
+    "type": "events",
+    "lat": -138.237,
+    "lng": 43.4663
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Kehj_LowDesert_HakansRefuge",
+    "type": "events",
+    "lat": -144.5868,
+    "lng": 36.8075
+  },
+  {
+    "id": "Bounty_S3_LNY_Tier1_Hawe_Crossway_Shrine",
+    "type": "events",
+    "lat": -138.1534,
+    "lng": 89.404
+  },
+  {
+    "id": "Bounty_S3_LNY_Tier1_Kehj_Caldeum_Shrine",
+    "type": "events",
+    "lat": -136.5162,
+    "lng": 47.1008
+  },
+  {
+    "id": "Bounty_S3_LNY_Tier1_Kehj_LowDesert_Shrine",
+    "type": "events",
+    "lat": -143.1789,
+    "lng": 39.03
+  },
+  {
+    "id": "Bounty_S3_LNY_Tier1_Kehj_Ridge_Shrine",
+    "type": "events",
+    "lat": -136.3407,
+    "lng": 70.4971
+  },
+  {
+    "id": "Bounty_Helltide_Tier1_Kehj_Oasis_Ironwolves",
+    "type": "events",
+    "lat": -131.1685,
+    "lng": 33.5134
+  },
+  {
+    "id": "Bounty_Helltide_Tier1_Kehj_Oasis_CullDemons",
+    "type": "events",
+    "lat": -133.6596,
+    "lng": 32.42
+  },
+  {
+    "id": "S11_Bounty_Helltide_Tier2_Kehj_Oasis_DurielSpawn",
+    "type": "events",
+    "lat": -131.2866,
+    "lng": 31.2226
+  },
+  {
+    "id": "Bounty_Helltide_Tier1_Kehj_LowDesert_Ironwolves",
+    "type": "events",
+    "lat": -144.7925,
+    "lng": 40.2591
+  },
+  {
+    "id": "Bounty_Helltide_Tier1_Kehj_LowDesert_CullDemons",
+    "type": "events",
+    "lat": -143.092,
+    "lng": 38.8555
+  },
+  {
+    "id": "S11_Bounty_Helltide_Tier2_Kehj_LowDesert_DurielSpawn",
+    "type": "events",
+    "lat": -144.7866,
+    "lng": 38.1656
+  },
+  {
+    "id": "Bounty_Culling_Tier1_Naha_FieldOfGiants_Lacuni",
+    "type": "events",
+    "lat": -174.2305,
+    "lng": 64.6547
+  },
+  {
+    "id": "Bounty_Harvest_Tier2_Naha_FieldOfGiants_Plusup",
+    "type": "events",
+    "lat": -177.9956,
+    "lng": 70.3894
+  },
+  {
+    "id": "Bounty_Ritual_Tier2_Naha_FieldOfGiants",
+    "type": "events",
+    "lat": -176.8697,
+    "lng": 71.8826
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_FieldOfGiants_LocA",
+    "type": "events",
+    "lat": -187.7157,
+    "lng": 69.0719
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_FieldOfGiants_LocB",
+    "type": "events",
+    "lat": -178.4108,
+    "lng": 63.1392
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_FieldOfGiants_LocC",
+    "type": "events",
+    "lat": -173.2677,
+    "lng": 74.2325
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_FieldOfGiants_AncientRemains_EH",
+    "type": "events",
+    "lat": -182.4177,
+    "lng": 67.4185
+  },
+  {
+    "id": "Bounty_OWC_Naha_FieldOfGiants_01",
+    "type": "events",
+    "lat": -177.454,
+    "lng": 77.5243
+  },
+  {
+    "id": "Bounty_OWC_Naha_FieldOfGiants_02",
+    "type": "events",
+    "lat": -177.1409,
+    "lng": 65.5647
+  },
+  {
+    "id": "Bounty_OWC_Naha_FieldOfGiants_03",
+    "type": "events",
+    "lat": -183.8524,
+    "lng": 63.1229
+  },
+  {
+    "id": "Bounty_OWC_Naha_FieldOfGiants_04",
+    "type": "events",
+    "lat": -181.7441,
+    "lng": 76.6901
+  },
+  {
+    "id": "Bounty_Assassinate_Tier1_Naha_HollowCaster",
+    "type": "events",
+    "lat": -188.2756,
+    "lng": 67.3966
+  },
+  {
+    "id": "Bounty_Assassinate_Tier1_Naha_LacuniTrapper_Plusup",
+    "type": "events",
+    "lat": -177.335,
+    "lng": 76.4693
+  },
+  {
+    "id": "Bounty_Culling_Tier1_Naha_FiveHills_Lacuni",
+    "type": "events",
+    "lat": -198.242,
+    "lng": 32.5951
+  },
+  {
+    "id": "Bounty_Harvest_Tier2_Naha_FiveHills",
+    "type": "events",
+    "lat": -196.1874,
+    "lng": 26.0901
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_FiveHills_LocA",
+    "type": "events",
+    "lat": -187.3943,
+    "lng": 30.5329
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_FiveHills_LocB",
+    "type": "events",
+    "lat": -203.4053,
+    "lng": 29.657
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_FiveHills_LocC",
+    "type": "events",
+    "lat": -205.1812,
+    "lng": 21.7134
+  },
+  {
+    "id": "Bounty_OWC_Naha_FiveHills_01",
+    "type": "events",
+    "lat": -190.1374,
+    "lng": 29.5334
+  },
+  {
+    "id": "Bounty_OWC_Naha_FiveHills_02",
+    "type": "events",
+    "lat": -200.012,
+    "lng": 30.173
+  },
+  {
+    "id": "Bounty_OWC_Naha_FiveHills_03",
+    "type": "events",
+    "lat": -200.9528,
+    "lng": 34.1023
+  },
+  {
+    "id": "Bounty_OWC_Naha_FiveHills_04",
+    "type": "events",
+    "lat": -207.1046,
+    "lng": 27.7345
+  },
+  {
+    "id": "Bounty_OWC_Naha_FiveHills_05",
+    "type": "events",
+    "lat": -197.6571,
+    "lng": 23.1953
+  },
+  {
+    "id": "Bounty_Ritual_Tier2_Naha_FiveHills",
+    "type": "events",
+    "lat": -197.4992,
+    "lng": 28.4488
+  },
+  {
+    "id": "Bounty_Assassinate_Tier1_Naha_HollowSpitter",
+    "type": "events",
+    "lat": -189.0848,
+    "lng": 26.6925
+  },
+  {
+    "id": "Bounty_Assassinate_Tier1_Naha_LacuniCaster",
+    "type": "events",
+    "lat": -199.786,
+    "lng": 35.3356
+  },
+  {
+    "id": "Bounty_Assassinate_Tier1_Naha_DregCaster",
+    "type": "events",
+    "lat": -162.7047,
+    "lng": 19.3383
+  },
+  {
+    "id": "Bounty_Assassinate_Tier1_Naha_HollowBrute",
+    "type": "events",
+    "lat": -162.9431,
+    "lng": 42.0664
+  },
+  {
+    "id": "Bounty_Culling_Tier1_Naha_LingeringHatred_Hollow",
+    "type": "events",
+    "lat": -167.0424,
+    "lng": 27.3677
+  },
+  {
+    "id": "Bounty_Harvest_Tier2_Naha_LingeringHatred",
+    "type": "events",
+    "lat": -166.0748,
+    "lng": 37.3103
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_LingeringHatred_LocA",
+    "type": "events",
+    "lat": -159.7374,
+    "lng": 33.5207
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_LingeringHatred_LocB",
+    "type": "events",
+    "lat": -163.8133,
+    "lng": 24.6532
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_LingeringHatred_LocC",
+    "type": "events",
+    "lat": -175.2977,
+    "lng": 32.498
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_LingeringHatred_LocD",
+    "type": "events",
+    "lat": -169.7986,
+    "lng": 47.3729
+  },
+  {
+    "id": "Bounty_LE_Tier2_Naha_LingeringHatred_CompleteAny3",
+    "type": "events",
+    "lat": -168.0057,
+    "lng": 37.1191
+  },
+  {
+    "id": "Bounty_OWC_Naha_LingeringHatred_01",
+    "type": "events",
+    "lat": -169.1864,
+    "lng": 22.7365
+  },
+  {
+    "id": "Bounty_OWC_Naha_LingeringHatred_02",
+    "type": "events",
+    "lat": -162.4068,
+    "lng": 16.0842
+  },
+  {
+    "id": "Bounty_OWC_Naha_LingeringHatred_03",
+    "type": "events",
+    "lat": -157.2552,
+    "lng": 33.1714
+  },
+  {
+    "id": "Bounty_OWC_Naha_LingeringHatred_04",
+    "type": "events",
+    "lat": -160.0004,
+    "lng": 54.7632
+  },
+  {
+    "id": "Bounty_OWC_Naha_LingeringHatred_05",
+    "type": "events",
+    "lat": -177.4137,
+    "lng": 40.6635
+  },
+  {
+    "id": "Bounty_Ritual_Tier2_Naha_LingeringHatred",
+    "type": "events",
+    "lat": -175.9757,
+    "lng": 35.1669
+  },
+  {
+    "id": "Bounty_Assassinate_Tier1_Naha_DregBrute_Plusup",
+    "type": "events",
+    "lat": -193.7248,
+    "lng": 54.1362
+  },
+  {
+    "id": "Bounty_Assassinate_Tier1_Naha_SnakeMelee",
+    "type": "events",
+    "lat": -187.4825,
+    "lng": 47.3764
+  },
+  {
+    "id": "Bounty_Culling_Tier1_Naha_RestlessCanopy_Snake_Plusup",
+    "type": "events",
+    "lat": -193.1359,
+    "lng": 47.0595
+  },
+  {
+    "id": "Bounty_Harvest_Tier2_Naha_RestlessCanopy_Plusup",
+    "type": "events",
+    "lat": -190.5157,
+    "lng": 51.2341
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_RestlessCanopy_LocA",
+    "type": "events",
+    "lat": -174.8735,
+    "lng": 45.6131
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_RestlessCanopy_LocB",
+    "type": "events",
+    "lat": -190.6444,
+    "lng": 57.4358
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_RestlessCanopy_SouthTempleRuins_EH",
+    "type": "events",
+    "lat": -196.1784,
+    "lng": 42.9072
+  },
+  {
+    "id": "Bounty_LE_Tier2_Naha_RestlessCanopy_CompleteAny3",
+    "type": "events",
+    "lat": -189.408,
+    "lng": 51.4747
+  },
+  {
+    "id": "Bounty_OWC_Naha_RestlessCanopy_01",
+    "type": "events",
+    "lat": -172.7676,
+    "lng": 47.9139
+  },
+  {
+    "id": "Bounty_OWC_Naha_RestlessCanopy_02",
+    "type": "events",
+    "lat": -189.3774,
+    "lng": 47.279
+  },
+  {
+    "id": "Bounty_OWC_Naha_RestlessCanopy_03",
+    "type": "events",
+    "lat": -201.823,
+    "lng": 42.5486
+  },
+  {
+    "id": "Bounty_OWC_Naha_RestlessCanopy_04",
+    "type": "events",
+    "lat": -192.2104,
+    "lng": 62.8056
+  },
+  {
+    "id": "Bounty_OWC_Naha_RestlessCanopy_05",
+    "type": "events",
+    "lat": -197.0747,
+    "lng": 55.883
+  },
+  {
+    "id": "Bounty_Ritual_Tier2_Naha_RestlessCanopy",
+    "type": "events",
+    "lat": -190.5431,
+    "lng": 44.1848
+  },
+  {
+    "id": "Bounty_Culling_Tier1_Naha_SevenStones_Goatman",
+    "type": "events",
+    "lat": -182.6494,
+    "lng": 11.2118
+  },
+  {
+    "id": "Bounty_Harvest_Tier2_Naha_SevenStones",
+    "type": "events",
+    "lat": -180.1926,
+    "lng": 11.5673
+  },
+  {
+    "id": "Bounty_Ritual_Tier2_Naha_SevenStones",
+    "type": "events",
+    "lat": -178.3646,
+    "lng": 15.4213
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_SevenStones_LocA",
+    "type": "events",
+    "lat": -183.6977,
+    "lng": 7.9492
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_SevenStones_LocB",
+    "type": "events",
+    "lat": -184.4676,
+    "lng": 26.5915
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_SevenStones_LocC",
+    "type": "events",
+    "lat": -170.8598,
+    "lng": 12.8606
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_SevenStones_EH",
+    "type": "events",
+    "lat": -180.0558,
+    "lng": 21.5564
+  },
+  {
+    "id": "Bounty_LE_Tier2_Naha_SevenStones_CompleteAny3",
+    "type": "events",
+    "lat": -178.4692,
+    "lng": 16.4998
+  },
+  {
+    "id": "Bounty_OWC_Naha_SevenStones_01",
+    "type": "events",
+    "lat": -171.6088,
+    "lng": 9.7188
+  },
+  {
+    "id": "Bounty_OWC_Naha_SevenStones_02",
+    "type": "events",
+    "lat": -175.298,
+    "lng": 15.7616
+  },
+  {
+    "id": "Bounty_OWC_Naha_SevenStones_03",
+    "type": "events",
+    "lat": -181.192,
+    "lng": 26.8854
+  },
+  {
+    "id": "Bounty_OWC_Naha_SevenStones_04",
+    "type": "events",
+    "lat": -184.3011,
+    "lng": 19.3254
+  },
+  {
+    "id": "Bounty_OWC_Naha_SevenStones_05",
+    "type": "events",
+    "lat": -180.9361,
+    "lng": 12.1326
+  },
+  {
+    "id": "Bounty_Assassinate_Tier1_Naha_DregMelee",
+    "type": "events",
+    "lat": -181.3187,
+    "lng": 11.4869
+  },
+  {
+    "id": "Bounty_Assassinate_Tier1_Naha_DregRanged",
+    "type": "events",
+    "lat": -174.6998,
+    "lng": 12.5981
+  },
+  {
+    "id": "Bounty_Assassinate_Tier1_Naha_KnightMelee",
+    "type": "events",
+    "lat": -163.551,
+    "lng": 67.8916
+  },
+  {
+    "id": "Bounty_Assassinate_Tier1_Naha_LacuniHorror",
+    "type": "events",
+    "lat": -155.8663,
+    "lng": 72.1822
+  },
+  {
+    "id": "Bounty_Culling_Tier1_Naha_TeganzePlateau_Lacuni",
+    "type": "events",
+    "lat": -155.8095,
+    "lng": 75.854
+  },
+  {
+    "id": "Bounty_Harvest_Tier2_Naha_TeganzePlateau",
+    "type": "events",
+    "lat": -162.2752,
+    "lng": 74.4828
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_TeganzePlateau_LacuniVillage_EH",
+    "type": "events",
+    "lat": -150.4638,
+    "lng": 72.5243
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_TeganzePlateau_LocA",
+    "type": "events",
+    "lat": -156.0098,
+    "lng": 63.2781
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_TeganzePlateau_LocB",
+    "type": "events",
+    "lat": -168.219,
+    "lng": 64.6833
+  },
+  {
+    "id": "Bounty_LE_Tier1_Naha_TeganzePlateau_LocC",
+    "type": "events",
+    "lat": -165.0745,
+    "lng": 83.8172
+  },
+  {
+    "id": "Bounty_LE_Tier2_Naha_TeganzePlateau_CompleteAny3",
+    "type": "events",
+    "lat": -158.917,
+    "lng": 74.8285
+  },
+  {
+    "id": "Bounty_OWC_Naha_TeganzePlateau_01",
+    "type": "events",
+    "lat": -153.2384,
+    "lng": 63.7442
+  },
+  {
+    "id": "Bounty_OWC_Naha_TeganzePlateau_02",
+    "type": "events",
+    "lat": -164.162,
+    "lng": 69.7361
+  },
+  {
+    "id": "Bounty_OWC_Naha_TeganzePlateau_03",
+    "type": "events",
+    "lat": -159.1398,
+    "lng": 79.6248
+  },
+  {
+    "id": "Bounty_OWC_Naha_TeganzePlateau_04",
+    "type": "events",
+    "lat": -157.0753,
+    "lng": 74.5965
+  },
+  {
+    "id": "Bounty_Ritual_Tier2_Naha_TeganzePlateau",
+    "type": "events",
+    "lat": -154.9198,
+    "lng": 71.9651
+  },
+  {
+    "id": "Bounty_WE_Tier3_Naha_Boss",
+    "type": "events",
+    "lat": -170.956,
+    "lng": 83.9349
+  },
+  {
+    "id": "Bounty_ZE_Tier2_Naha_Crater",
+    "type": "events",
+    "lat": -182.5152,
+    "lng": 54.3104
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Naha_LingeringHatred_ForgeOfMalice",
+    "type": "events",
+    "lat": -158.9764,
+    "lng": 37.0097
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Naha_LingeringHatred_HierophantPyre",
+    "type": "events",
+    "lat": -170.0003,
+    "lng": 40.8916
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Naha_LingeringHatred_RemnantsofRage",
+    "type": "events",
+    "lat": -165.2579,
+    "lng": 16.4973
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Naha_RestlessCanopy_HallowedStones",
+    "type": "events",
+    "lat": -180.7905,
+    "lng": 48.9984
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Naha_RestlessCanopy_UlarianSepulcher",
+    "type": "events",
+    "lat": -198.9145,
+    "lng": 48.4786
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Naha_RestlessCanopy_VileHive",
+    "type": "events",
+    "lat": -195.0296,
+    "lng": 63.9253
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Naha_TeganzePlateau_FaraiCliffs",
+    "type": "events",
+    "lat": -163.087,
+    "lng": 73.4337
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Naha_TeganzePlateau_SkatsimiFane",
+    "type": "events",
+    "lat": -158.0535,
+    "lng": 90.1635
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Naha_TeganzePlateau_SleeplessHollow",
+    "type": "events",
+    "lat": -160.8681,
+    "lng": 60.3407
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Naha_FiveHills_FeedingGrounds",
+    "type": "events",
+    "lat": -204.7291,
+    "lng": 28.0983
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Naha_FiveHills_PutrescentLarder",
+    "type": "events",
+    "lat": -197.278,
+    "lng": 36.1659
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Naha_FiveHills_SeethingUnderpass",
+    "type": "events",
+    "lat": -183.4562,
+    "lng": 30.8219
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Naha_SevenStones_IronCenotaph",
+    "type": "events",
+    "lat": -185.3967,
+    "lng": 10.0869
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Naha_SevenStones_MurmuringSpiral",
+    "type": "events",
+    "lat": -174.499,
+    "lng": 20.0586
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Naha_SevenStones_RazaksDescent",
+    "type": "events",
+    "lat": -186.681,
+    "lng": 22.413
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Naha_FieldOfGiants_BeastGraveyard",
+    "type": "events",
+    "lat": -187.6049,
+    "lng": 65.5746
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Naha_FieldOfGiants_ForgottenRemains",
+    "type": "events",
+    "lat": -170.8839,
+    "lng": 68.3562
+  },
+  {
+    "id": "Bounty_Dungeon_Tier3_Naha_FieldOfGiants_RuinedWild",
+    "type": "events",
+    "lat": -175.6635,
+    "lng": 81.2189
+  },
+  {
+    "id": "Bounty_Boss_Tier3_Duriel",
+    "type": "events",
+    "lat": -154.6783,
+    "lng": 42.6013
+  },
+  {
+    "id": "Bounty_Boss_Tier3_Urivar",
+    "type": "events",
+    "lat": -155.0143,
+    "lng": 76.7079
+  },
+  {
+    "id": "Bounty_Boss_Tier3_Harbinger",
+    "type": "events",
+    "lat": -159.6587,
+    "lng": 20.4969
+  },
+  {
+    "id": "Bounty_Helltide_Tier1_Naha_LingeringHatred_Harbingers",
+    "type": "events",
+    "lat": -168.1238,
+    "lng": 33.0853
+  },
+  {
+    "id": "Bounty_Helltide_Tier1_Naha_LingeringHatred_CullDemons",
+    "type": "events",
+    "lat": -164.1702,
+    "lng": 33.1828
+  },
+  {
+    "id": "S11_Bounty_Helltide_Tier2_Naha_LingeringHatred_DurielSpawn",
+    "type": "events",
+    "lat": -162.441,
+    "lng": 36.9066
+  },
+  {
+    "id": "Bounty_Helltide_Tier1_Naha_SevenStones_Harbingers",
+    "type": "events",
+    "lat": -182.875,
+    "lng": 16.0545
+  },
+  {
+    "id": "Bounty_Helltide_Tier1_Naha_SevenStones_CullDemons",
+    "type": "events",
+    "lat": -180.9913,
+    "lng": 11.5066
+  },
+  {
+    "id": "S11_Bounty_Helltide_Tier2_Naha_SevenStones_DurielSpawn",
+    "type": "events",
+    "lat": -174.0603,
+    "lng": 12.2849
+  },
+  {
+    "id": "S06_Bounty_Hatetide_Realmwalker_Naha_RestlessCanopy",
+    "type": "events",
+    "lat": -188.887,
+    "lng": 49.2671
+  },
+  {
+    "id": "Bounty_Patrol_Tier2_Naha_FieldOfGiants_Dreg",
+    "type": "events",
+    "lat": -180.3847,
+    "lng": 74.6065
+  },
+  {
+    "id": "S07_Bounty_SigilsOfCorruption_Tier1_Naha_FieldOfGiants",
+    "type": "events",
+    "lat": -180.3767,
+    "lng": 71.8431
+  },
+  {
+    "id": "S07_Bounty_CovenOfChains_Tier1_Naha_FieldOfGiants",
+    "type": "events",
+    "lat": -174.3365,
+    "lng": 76.4958
+  },
+  {
+    "id": "Bounty_Culling_Tier1_Naha_FieldOfGiants_Dreg_Plusup",
+    "type": "events",
+    "lat": -174.0124,
+    "lng": 64.6422
+  },
+  {
+    "id": "S07_Bounty_GatheringSwarm_Tier2_Naha_FieldOfGiants_Dreg",
+    "type": "events",
+    "lat": -176.7632,
+    "lng": 66.3538
+  },
+  {
+    "id": "S07_Bounty_HeadlessHunt_Tier1_Naha_FieldOfGiants",
+    "type": "events",
+    "lat": -178.189,
+    "lng": 79.8111
+  },
+  {
+    "id": "S07_Bounty_BloodyTrail_Tier1_Naha_FieldOfGiants",
+    "type": "events",
+    "lat": -185.3856,
+    "lng": 69.7767
+  },
+  {
+    "id": "S07_Bounty_Herding_Tier1_Naha_FieldOfGiants",
+    "type": "events",
+    "lat": -185.2092,
+    "lng": 76.0733
+  },
+  {
+    "id": "S07_Bounty_HerbalRemedy_Tier1_Naha_FieldOfGiants",
+    "type": "events",
+    "lat": -176.2767,
+    "lng": 71.1329
+  },
+  {
+    "id": "Bounty_Patrol_Tier2_Naha_RestlessCanopy_BurnedKnights",
+    "type": "events",
+    "lat": -192.1065,
+    "lng": 58.9005
+  },
+  {
+    "id": "S07_Bounty_GatheringSwarm_Tier2_Naha_RestlessCanopy_Dreg",
+    "type": "events",
+    "lat": -201.3071,
+    "lng": 47.6953
+  },
+  {
+    "id": "S07_Bounty_HeadlessHunt_Tier1_Naha_RestlessCanopy",
+    "type": "events",
+    "lat": -184.895,
+    "lng": 47.4951
+  },
+  {
+    "id": "S07_Bounty_HerbalRemedy_Tier1_Naha_RestlessCanopy",
+    "type": "events",
+    "lat": -190.4871,
+    "lng": 54.4628
+  },
+  {
+    "id": "S07_Bounty_BloodyTrail_Tier1_Naha_RestlessCanopy",
+    "type": "events",
+    "lat": -189.1012,
+    "lng": 46.8154
+  },
+  {
+    "id": "S07_Bounty_Herding_Tier1_Naha_RestlessCanopy",
+    "type": "events",
+    "lat": -186.0315,
+    "lng": 57.3435
+  },
+  {
+    "id": "S07_Bounty_CovenOfChains_Tier1_Naha_RestlessCanopy",
+    "type": "events",
+    "lat": -194.749,
+    "lng": 54.6263
+  },
+  {
+    "id": "S07_Bounty_SigilsOfCorruption_Tier1_Naha_RestlessCanopy",
+    "type": "events",
+    "lat": -193.9382,
+    "lng": 62.301
+  },
+  {
+    "id": "S07_Bounty_RottenHunt_Tier3_Naha_FieldOfGiants",
+    "type": "events",
+    "lat": -180.0347,
+    "lng": 77.4813
+  },
+  {
+    "id": "S07_Bounty_RottenHunt_Tier3_Naha_RestlessCanopy",
+    "type": "events",
+    "lat": -188.1934,
+    "lng": 53.657
+  },
+  {
+    "id": "S07_Bounty_BossInvasion_Tier3_Naha_FieldOfGiants",
+    "type": "events",
+    "lat": -183.608,
+    "lng": 66.1448
+  },
+  {
+    "id": "S07_Bounty_BossInvasion_Tier3_Naha_RestlessCanopy",
+    "type": "events",
+    "lat": -197.4334,
+    "lng": 50.9999
+  },
+  {
+    "id": "Bounty_Citadel_Tier3_AnyWing",
+    "type": "events",
+    "lat": -175.4764,
+    "lng": 51.9566
+  },
+  {
+    "id": "Bounty_Undercity_Tier3_Run",
+    "type": "events",
+    "lat": -183.0596,
+    "lng": 40.149
+  },
+  {
+    "id": "S07_Bounty_RottenHunt_Tier3_Kehj_Ridge",
+    "type": "events",
+    "lat": -130.775,
+    "lng": 77.669
+  },
+  {
+    "id": "Bounty_S08_BelialTide_Tier3_Naha_FiveHills",
+    "type": "events",
+    "lat": -206.4598,
+    "lng": 33.261
+  },
+  {
+    "id": "Bounty_S08_BelialTide_Tier3_Naha_FieldOfGiants",
+    "type": "events",
+    "lat": -178.4754,
+    "lng": 63.1347
+  },
+  {
+    "id": "Bounty_S08_BelialTide_Tier3_Naha_Teganze",
+    "type": "events",
+    "lat": -162.4734,
+    "lng": 68.1592
+  },
+  {
+    "id": "S11_Bounty_Helltide_Tier3_Kehj_LowDesert_DurielBoss",
+    "type": "events",
+    "lat": -141.33,
+    "lng": 37.3873
+  },
+  {
+    "id": "S11_Bounty_Helltide_Tier3_Naha_LingeringHatred_DurielBoss",
+    "type": "events",
+    "lat": -171.0006,
+    "lng": 27.9877
+  },
+  {
+    "id": "S11_Bounty_Helltide_Tier3_Naha_SevenStones_DurielBoss",
+    "type": "events",
+    "lat": -178.6598,
+    "lng": 15.0137
+  },
+  {
+    "id": "S11_Bounty_Helltide_Tier1_Kehj_Oasis_CullMaggots",
+    "type": "events",
+    "lat": -133.5124,
+    "lng": 30.5915
+  },
+  {
+    "id": "S11_Bounty_Helltide_Tier1_Kehj_LowDesert_CullMaggots",
+    "type": "events",
+    "lat": -143.2637,
+    "lng": 40.2439
+  },
+  {
+    "id": "S11_Bounty_Helltide_Tier1_Naha_LingeringHatred_CullMaggots",
+    "type": "events",
+    "lat": -169.407,
+    "lng": 35.2408
+  },
+  {
+    "id": "S11_Bounty_Helltide_Tier1_Naha_SevenStones_CullMaggots",
+    "type": "events",
+    "lat": -184.895,
+    "lng": 12.9736
+  },
+  {
+    "id": "Bounty_AzmodanTakeover_Tier3_Kill",
+    "type": "events",
+    "lat": -150.9337,
+    "lng": 98.3771
+  },
+  {
+    "id": "TWN_Scos_Eldhaime_Crafter_Blacksmith@-138.61221,68.47555",
+    "type": "blacksmiths",
+    "lat": -138.6122,
+    "lng": 68.4755
+  },
+  {
+    "id": "TWN_Hawe_Zarbinzet_Crafter_Blacksmith@-144.27595,91.69401",
+    "type": "blacksmiths",
+    "lat": -144.2759,
+    "lng": 91.694
+  },
+  {
+    "id": "TWN_Kehj_GeaKul_Crafter_Blacksmith@-149.19826,30.85149",
+    "type": "blacksmiths",
+    "lat": -149.1983,
+    "lng": 30.8515
+  },
+  {
+    "id": "TWN_Kehj_GeaKul_Crafter_Blacksmith@-149.17121,30.82486",
+    "type": "blacksmiths",
+    "lat": -149.1712,
+    "lng": 30.8249
+  },
+  {
+    "id": "TWN_Kehj_PVPTown_Crafter_Blacksmith@-143.40627,53.73316",
+    "type": "blacksmiths",
+    "lat": -143.4063,
+    "lng": 53.7332
+  },
+  {
+    "id": "TWN_Kehj_Tarsarak_Crafter_Blacksmith@-131.00598,75.8656",
+    "type": "blacksmiths",
+    "lat": -131.006,
+    "lng": 75.8656
+  },
+  {
+    "id": "TWN_Naha_Necropolis_Crafter_Blacksmith@-200.33162,55.33219",
+    "type": "blacksmiths",
+    "lat": -200.3316,
+    "lng": 55.3322
+  },
+  {
+    "id": "TWN_Naha_Kichuk_Crafter_Blacksmith@-155.53352,87.00515",
+    "type": "blacksmiths",
+    "lat": -155.5335,
+    "lng": 87.0052
+  },
+  {
+    "id": "TWN_Naha_Ichorfall_Crafter_Blacksmith@-187.82939,72.82064",
+    "type": "blacksmiths",
+    "lat": -187.8294,
+    "lng": 72.8206
+  },
+  {
+    "id": "TWN_Naha_Samuk_Crafter_Blacksmith@-191.5792,12.74863",
+    "type": "blacksmiths",
+    "lat": -191.5792,
+    "lng": 12.7486
+  },
+  {
+    "id": "TWN_Naha_Kurast_Crafter_Blacksmith@-180.43275,37.9816",
+    "type": "blacksmiths",
+    "lat": -180.4327,
+    "lng": 37.9816
+  },
+  {
+    "id": "TWN_Naha_KurastDocks_Crafter_Blacksmith@-157.64879,25.95919",
+    "type": "blacksmiths",
+    "lat": -157.6488,
+    "lng": 25.9592
+  },
+  {
+    "id": "TWN_Scos_Eldhaime_Crafter_Blacksmith@-139.75718,69.62053",
+    "type": "blacksmiths",
+    "lat": -139.7572,
+    "lng": 69.6205
+  },
+  {
+    "id": "TWN_Scos_Cerrigar_Crafter_Occultist@-138.97478,68.05281",
+    "type": "occultists",
+    "lat": -138.9748,
+    "lng": 68.0528
+  },
+  {
+    "id": "TWN_Hawe_Zarbinzet_Crafter_Occultist@-143.85324,91.45385",
+    "type": "occultists",
+    "lat": -143.8532,
+    "lng": 91.4539
+  },
+  {
+    "id": "TWN_Kehj_GeaKul_Crafter_Occultist@-149.52347,30.25084",
+    "type": "occultists",
+    "lat": -149.5235,
+    "lng": 30.2508
+  },
+  {
+    "id": "TWN_Kehj_GeaKul_Crafter_Occultist@-149.53485,30.29828",
+    "type": "occultists",
+    "lat": -149.5349,
+    "lng": 30.2983
+  },
+  {
+    "id": "TWN_Naha_Kurast_Crafter_Occultist@-179.65463,37.42031",
+    "type": "occultists",
+    "lat": -179.6546,
+    "lng": 37.4203
+  },
+  {
+    "id": "TWN_Scos_Cerrigar_Crafter_Occultist@-140.12924,69.2265",
+    "type": "occultists",
+    "lat": -140.1292,
+    "lng": 69.2265
+  },
+  {
+    "id": "TWN_Kehj_GeaKul_Crafter_Jeweler@-139.11868,69.00618",
+    "type": "jewelers",
+    "lat": -139.1187,
+    "lng": 69.0062
+  },
+  {
+    "id": "TWN_Hawe_Zarbinzet_Crafter_Jeweler@-145.07306,90.75127",
+    "type": "jewelers",
+    "lat": -145.0731,
+    "lng": 90.7513
+  },
+  {
+    "id": "TWN_Kehj_GeaKul_Crafter_Jeweler@-147.93793,30.82451",
+    "type": "jewelers",
+    "lat": -147.9379,
+    "lng": 30.8245
+  },
+  {
+    "id": "TWN_Naha_Kurast_Crafter_Jeweler@-181.42136,37.26206",
+    "type": "jewelers",
+    "lat": -181.4214,
+    "lng": 37.2621
+  },
+  {
+    "id": "TWN_Kehj_GeaKul_Crafter_Jeweler@-140.26365,70.15115",
+    "type": "jewelers",
+    "lat": -140.2637,
+    "lng": 70.1512
+  },
+  {
+    "id": "TWN_Frac_KyovashadTrainingGrounds_Crafter_Jeweler@-138.19836,68.61852",
+    "type": "jewelers",
+    "lat": -138.1984,
+    "lng": 68.6185
+  },
+  {
+    "id": "TWN_Naha_KurastTrainingGrounds_Crafter_Jeweler@-138.11932,68.66302",
+    "type": "jewelers",
+    "lat": -138.1193,
+    "lng": 68.663
+  },
+  {
+    "id": "TWN_Naha_Keyroom_Crafter_Jeweler@-134.47402,69.01518",
+    "type": "jewelers",
+    "lat": -134.474,
+    "lng": 69.0152
+  },
+  {
+    "id": "TWN_Hawe_Zarbinzet_Service_StableMaster@-145.39484,91.55615",
+    "type": "stableMasters",
+    "lat": -145.3948,
+    "lng": 91.5562
+  },
+  {
+    "id": "TWN_Kehj_GeaKul_Service_StableMaster@-143.92723,30.38612",
+    "type": "stableMasters",
+    "lat": -143.9272,
+    "lng": 30.3861
+  },
+  {
+    "id": "TWN_Naha_Ichorfall_Service_StableMaster@-187.50071,74.15833",
+    "type": "stableMasters",
+    "lat": -187.5007,
+    "lng": 74.1583
+  },
+  {
+    "id": "TWN_Naha_Kurast_Service_StableMaster@-183.13413,34.32838",
+    "type": "stableMasters",
+    "lat": -183.1341,
+    "lng": 34.3284
+  },
+  {
+    "id": "TWN_Frac_Kyovashad_Service_StableMaster@-137.22856,71.66265",
+    "type": "stableMasters",
+    "lat": -137.2286,
+    "lng": 71.6626
+  },
+  {
+    "id": "TWN_Hawe_Zarbinzet_Service_Healer@-143.07834,91.62757",
+    "type": "healers",
+    "lat": -143.0783,
+    "lng": 91.6276
+  },
+  {
+    "id": "TWN_Kehj_GeaKul_Service_Healer@-146.09109,30.74529",
+    "type": "healers",
+    "lat": -146.0911,
+    "lng": 30.7453
+  },
+  {
+    "id": "TWN_Kehj_PvPTown_Service_Healer@-141.68215,53.18364",
+    "type": "healers",
+    "lat": -141.6822,
+    "lng": 53.1836
+  },
+  {
+    "id": "TWN_Naha_Kichuk_Service_Healer@-154.81625,85.26552",
+    "type": "healers",
+    "lat": -154.8162,
+    "lng": 85.2655
+  },
+  {
+    "id": "TWN_Naha_Ichorfall_Service_Healer@-185.44015,72.73345",
+    "type": "healers",
+    "lat": -185.4401,
+    "lng": 72.7335
+  },
+  {
+    "id": "TWN_Naha_Samuk_Service_Healer@-191.31948,13.158",
+    "type": "healers",
+    "lat": -191.3195,
+    "lng": 13.158
+  },
+  {
+    "id": "TWN_Naha_Kurast_Service_Healer@-181.02724,36.63393",
+    "type": "healers",
+    "lat": -181.0272,
+    "lng": 36.6339
+  },
+  {
+    "id": "TWN_Naha_KurastDocks_Service_Healer@-157.17366,24.1264",
+    "type": "healers",
+    "lat": -157.1737,
+    "lng": 24.1264
+  },
+  {
+    "id": "TWN_Naha_Keyroom_Healer@-134.32734,68.90065",
+    "type": "healers",
+    "lat": -134.3273,
+    "lng": 68.9006
+  },
+  {
+    "id": "TWN_Hawe_Zarbinzet_Vendor_Gambler@-144.26668,90.86172",
+    "type": "gamblers",
+    "lat": -144.2667,
+    "lng": 90.8617
+  },
+  {
+    "id": "TWN_Kehj_GeaKul_Vendor_Gambler@-148.8523,30.30458",
+    "type": "gamblers",
+    "lat": -148.8523,
+    "lng": 30.3046
+  },
+  {
+    "id": "TWN_Naha_Samuk_Vendor_Gambler@-191.83159,15.36611",
+    "type": "gamblers",
+    "lat": -191.8316,
+    "lng": 15.3661
+  },
+  {
+    "id": "TWN_Naha_Kurast_Vendor_Gambler@-182.06476,37.00737",
+    "type": "gamblers",
+    "lat": -182.0648,
+    "lng": 37.0074
+  },
+  {
+    "id": "TWN_Step_KedBardu_Vendor_Gambler@-133.176,67.94389",
+    "type": "gamblers",
+    "lat": -133.176,
+    "lng": 67.9439
+  },
+  {
+    "id": "TWN_Hawe_Zarbinzet_Crafter_Alchemist@-145.7501,89.8096",
+    "type": "alchemists",
+    "lat": -145.7501,
+    "lng": 89.8096
+  },
+  {
+    "id": "TWN_Kehj_GeaKul_Crafter_Alchemist@-144.94826,30.37281",
+    "type": "alchemists",
+    "lat": -144.9483,
+    "lng": 30.3728
+  },
+  {
+    "id": "TWN_Naha_Kurast_Crafter_Alchemist@-180.57511,35.61791",
+    "type": "alchemists",
+    "lat": -180.5751,
+    "lng": 35.6179
+  },
+  {
+    "id": "TWN_Naha_KurastDocks_Crafter_Alchemist@-157.72961,23.77246",
+    "type": "alchemists",
+    "lat": -157.7296,
+    "lng": 23.7725
+  },
+  {
+    "id": "TWN_Naha_Keyroom_Crafter_Alchemist@-134.12082,69.34617",
+    "type": "alchemists",
+    "lat": -134.1208,
+    "lng": 69.3462
+  },
+  {
+    "id": "TWN_Hawe_Zarbinzet_Vendor_Silversmith@-145.08104,90.46456",
+    "type": "silversmiths",
+    "lat": -145.081,
+    "lng": 90.4646
+  },
+  {
+    "id": "TWN_Kehj_GeaKul_Vendor_Silversmith@-148.01458,31.03611",
+    "type": "silversmiths",
+    "lat": -148.0146,
+    "lng": 31.0361
+  },
+  {
+    "id": "TWN_Kehj_Tarsarak_Vendor_Silversmith@-131.09762,76.31691",
+    "type": "silversmiths",
+    "lat": -131.0976,
+    "lng": 76.3169
+  },
+  {
+    "id": "TWN_Kehj_Tarsarak_Vendor_Silversmith@-131.2124,76.2882",
+    "type": "silversmiths",
+    "lat": -131.2124,
+    "lng": 76.2882
+  },
+  {
+    "id": "TWN_Naha_Ichorfall_Vendor_Silversmith@-186.18553,73.72986",
+    "type": "silversmiths",
+    "lat": -186.1855,
+    "lng": 73.7299
+  },
+  {
+    "id": "TWN_Naha_Samuk_Vendor_Silversmith@-190.99295,14.43158",
+    "type": "silversmiths",
+    "lat": -190.993,
+    "lng": 14.4316
+  },
+  {
+    "id": "TWN_Naha_Kurast_Vendor_Silversmith@-181.61117,37.44329",
+    "type": "silversmiths",
+    "lat": -181.6112,
+    "lng": 37.4433
+  },
+  {
+    "id": "TWN_Kehj_GeaKul_Vendor_Weapons@-149.13837,30.01215",
+    "type": "weapons",
+    "lat": -149.1384,
+    "lng": 30.0121
+  },
+  {
+    "id": "TWN_Kehj_PvPTown_Vendor_Weapons@-143.7313,54.07608",
+    "type": "weapons",
+    "lat": -143.7313,
+    "lng": 54.0761
+  },
+  {
+    "id": "TWN_Kehj_Tarsarak_Vendor_Weapons@-130.98821,75.36679",
+    "type": "weapons",
+    "lat": -130.9882,
+    "lng": 75.3668
+  },
+  {
+    "id": "TWN_Naha_Kichuk_Vendor_Weapons@-156.18904,86.70015",
+    "type": "weapons",
+    "lat": -156.189,
+    "lng": 86.7001
+  },
+  {
+    "id": "TWN_Naha_Ichorfall_Vendor_Weapons@-186.6584,72.93932",
+    "type": "weapons",
+    "lat": -186.6584,
+    "lng": 72.9393
+  },
+  {
+    "id": "TWN_Naha_Kurast_Vendor_Weapons@-180.37736,37.73014",
+    "type": "weapons",
+    "lat": -180.3774,
+    "lng": 37.7301
+  },
+  {
+    "id": "TWN_Kehj_GeaKul_Vendor_Weapons@-137.61299,68.64046",
+    "type": "weapons",
+    "lat": -137.613,
+    "lng": 68.6405
+  },
+  {
+    "id": "TWN_Naha_Keyroom_Vendor_Weapons@-134.38461,68.32966",
+    "type": "weapons",
+    "lat": -134.3846,
+    "lng": 68.3297
+  },
+  {
+    "id": "TWN_Kehj_PvPTown_Vendor_PvPCursedScroll@-142.92624,53.25435",
+    "type": "pvpCursedScrolls",
+    "lat": -142.9262,
+    "lng": 53.2544
+  },
+  {
+    "id": "TWN_Kehj_PvPTown_Vendor_PvPCosmetic@-143.29449,51.19854",
+    "type": "pvpCosmetics",
+    "lat": -143.2945,
+    "lng": 51.1985
+  },
+  {
+    "id": "TWN_Kehj_PvPTown_Vendor_PvPGamble@-144.12309,54.8561",
+    "type": "pvpGambles",
+    "lat": -144.1231,
+    "lng": 54.8561
+  },
+  {
+    "id": "TWN_Kehj_PvPTown_Vendor_PvPMount@-144.11764,55.65055",
+    "type": "pvpMounts",
+    "lat": -144.1176,
+    "lng": 55.6506
+  },
+  {
+    "id": "QST_Hawe_TheHeretic_Cave",
+    "type": "sideQuestDungeons",
+    "lat": -146.5779,
+    "lng": 94.1679
+  },
+  {
+    "id": "QST_Merc_Hideout",
+    "type": "sideQuestDungeons",
+    "lat": -162.0916,
+    "lng": 53.3307
+  },
+  {
+    "id": "QST_Naha_CursedChild_CitadelBackroom_Cellar",
+    "type": "sideQuestDungeons",
+    "lat": -178.3756,
+    "lng": 50.1146
+  },
+  {
+    "id": "QST_Naha_CursedChild_Cellar",
+    "type": "sideQuestDungeons",
+    "lat": -169.8806,
+    "lng": 44.3725
+  },
+  {
+    "id": "QST_Naha_FiveHills_02_Cellar",
+    "type": "sideQuestDungeons",
+    "lat": -189.7226,
+    "lng": 14.3033
+  },
+  {
+    "id": "QST_Naha_GoNative_Cellar_01",
+    "type": "sideQuestDungeons",
+    "lat": -167.6613,
+    "lng": 14.6105
+  },
+  {
+    "id": "QST_Naha_SevenStones_GoingNative",
+    "type": "sideQuestDungeons",
+    "lat": -179.0073,
+    "lng": 25.2188
+  },
+  {
+    "id": "QST_Naha_SevenStones_EverythingOld_03",
+    "type": "sideQuestDungeons",
+    "lat": -184.9235,
+    "lng": 6.284
+  },
+  {
+    "id": "QST_Naha_SevenStones_EverythingOld_02",
+    "type": "sideQuestDungeons",
+    "lat": -184.9353,
+    "lng": 6.8998
+  },
+  {
+    "id": "QST_Naha_BestialSoulOfTeganze",
+    "type": "sideQuestDungeons",
+    "lat": -147.5992,
+    "lng": 74.3957
+  },
+  {
+    "id": "QST_Naha_TheWitness_Cellar",
+    "type": "sideQuestDungeons",
+    "lat": -166.3437,
+    "lng": 24.7377
+  },
+  {
+    "id": "QST_Naha_TheWitness",
+    "type": "sideQuestDungeons",
+    "lat": -154.2735,
+    "lng": 57.443
+  },
+  {
+    "id": "QST_Naha_ScalesOfHistory_Cellar",
+    "type": "sideQuestDungeons",
+    "lat": -201.3076,
+    "lng": 44.1128
+  },
+  {
+    "id": "QST_Naha_ShroudofWrath_Cellar",
+    "type": "sideQuestDungeons",
+    "lat": -168.9111,
+    "lng": 78.4925
+  },
+  {
+    "id": "QST_Naha_SinProxy3_Cellar",
+    "type": "sideQuestDungeons",
+    "lat": -190.8125,
+    "lng": 71.6886
+  },
+  {
+    "id": "QST_Naha_LingeringHatred_02_Cellar",
+    "type": "sideQuestDungeons",
+    "lat": -157.3377,
+    "lng": 23.7988
+  },
+  {
+    "id": "DGN_Kehj_CrumblingHekma",
+    "type": "dungeons",
+    "lat": -146.2175,
+    "lng": 47.8684
+  },
+  {
+    "id": "DGN_Kehj_AbandonedMineworks",
+    "type": "dungeons",
+    "lat": -138.0062,
+    "lng": 67.8875
+  },
+  {
+    "id": "DGN_Kehj_Conclave",
+    "type": "dungeons",
+    "lat": -138.237,
+    "lng": 43.4663
+  },
+  {
+    "id": "DGN_Kehj_HakansRefuge",
+    "type": "dungeons",
+    "lat": -144.5868,
+    "lng": 36.8075
+  },
+  {
+    "id": "DGN_Kehj_CorruptedGrotto",
+    "type": "dungeons",
+    "lat": -136.0275,
+    "lng": 31.8881
+  },
+  {
+    "id": "DGN_Kehj_HereticsAsylum",
+    "type": "dungeons",
+    "lat": -132.8589,
+    "lng": 19.0035
+  },
+  {
+    "id": "DGN_Kehj_DesertedUnderpass",
+    "type": "dungeons",
+    "lat": -140.9114,
+    "lng": 48.7009
+  },
+  {
+    "id": "DGN_Hawe_EndlessGates",
+    "type": "dungeons",
+    "lat": -132.6842,
+    "lng": 93.4016
+  },
+  {
+    "id": "DGN_Hawe_EarthenWound",
+    "type": "dungeons",
+    "lat": -147.4577,
+    "lng": 85.1425
+  },
+  {
+    "id": "DGN_Hawe_LostKeep",
+    "type": "dungeons",
+    "lat": -131.1095,
+    "lng": 89.3487
+  },
+  {
+    "id": "DGN_Kehj_RenegadesRetreat",
+    "type": "dungeons",
+    "lat": -131.7558,
+    "lng": 55.876
+  },
+  {
+    "id": "DGN_Kehj_PrisonofCaldeum",
+    "type": "dungeons",
+    "lat": -133.212,
+    "lng": 45.1854
+  },
+  {
+    "id": "DGN_Naha_UlarianSepulcher",
+    "type": "dungeons",
+    "lat": -198.9145,
+    "lng": 48.4786
+  },
+  {
+    "id": "DGN_Naha_HallowedStones",
+    "type": "dungeons",
+    "lat": -180.7905,
+    "lng": 48.9984
+  },
+  {
+    "id": "DGN_Naha_VileHive",
+    "type": "dungeons",
+    "lat": -195.0296,
+    "lng": 63.9253
+  },
+  {
+    "id": "DGN_Naha_RemnantsofRage",
+    "type": "dungeons",
+    "lat": -165.2579,
+    "lng": 16.4973
+  },
+  {
+    "id": "DGN_Naha_ForgeofMalice",
+    "type": "dungeons",
+    "lat": -158.9764,
+    "lng": 37.0097
+  },
+  {
+    "id": "DGN_Naha_HierophantPyre",
+    "type": "dungeons",
+    "lat": -170.0003,
+    "lng": 40.8916
+  },
+  {
+    "id": "DGN_Naha_MurmuringSpiral",
+    "type": "dungeons",
+    "lat": -174.499,
+    "lng": 20.0586
+  },
+  {
+    "id": "DGN_Naha_IronCenotaph",
+    "type": "dungeons",
+    "lat": -185.3967,
+    "lng": 10.0869
+  },
+  {
+    "id": "DGN_Naha_RazaksDescent",
+    "type": "dungeons",
+    "lat": -186.681,
+    "lng": 22.413
+  },
+  {
+    "id": "DGN_Naha_FeedingGrounds",
+    "type": "dungeons",
+    "lat": -204.7291,
+    "lng": 28.0983
+  },
+  {
+    "id": "DGN_Naha_PutrescentLarder",
+    "type": "dungeons",
+    "lat": -197.1943,
+    "lng": 36.0864
+  },
+  {
+    "id": "DGN_Naha_SeethingUnderpass",
+    "type": "dungeons",
+    "lat": -183.4562,
+    "lng": 30.8219
+  },
+  {
+    "id": "DGN_Naha_BetrayedTomb",
+    "type": "dungeons",
+    "lat": -201.9052,
+    "lng": 53.8852
+  },
+  {
+    "id": "DGN_Naha_CavesofKutokue",
+    "type": "dungeons",
+    "lat": -148.0856,
+    "lng": 78.8672
+  },
+  {
+    "id": "DGN_Naha_SleeplessHollow",
+    "type": "dungeons",
+    "lat": -160.8681,
+    "lng": 60.3407
+  },
+  {
+    "id": "DGN_Naha_FaraiCliffs",
+    "type": "dungeons",
+    "lat": -163.087,
+    "lng": 73.4337
+  },
+  {
+    "id": "DGN_Naha_RuinedWild",
+    "type": "dungeons",
+    "lat": -175.6635,
+    "lng": 81.2189
+  },
+  {
+    "id": "DGN_Naha_BeastGraveyard",
+    "type": "dungeons",
+    "lat": -187.6049,
+    "lng": 65.5746
+  },
+  {
+    "id": "DGN_Naha_ForgottenRemains",
+    "type": "dungeons",
+    "lat": -170.8839,
+    "lng": 68.3562
+  },
+  {
+    "id": "DGN_Naha_SkatsimiFane",
+    "type": "dungeons",
+    "lat": -158.0335,
+    "lng": 90.1834
+  },
+  {
+    "id": "CSD_Naha_Teganze_DuranceOfHate_02",
+    "type": "campaignDungeons",
+    "lat": -167.9337,
+    "lng": 27.0118
+  },
+  {
+    "id": "CSD_Naha_Teganze01_Cellar",
+    "type": "campaignDungeons",
+    "lat": -156.7717,
+    "lng": 68.1274
+  },
+  {
+    "id": "CSD_Naha_Teganze_AkaratsApostles",
+    "type": "campaignDungeons",
+    "lat": -165.4407,
+    "lng": 57.4148
+  },
+  {
+    "id": "CSD_Naha_FiveHills_TombOfAkarat01",
+    "type": "campaignDungeons",
+    "lat": -195.8833,
+    "lng": 17.0778
+  },
+  {
+    "id": "CSD_Kehj_Prologue_BlacksmithCellar",
+    "type": "campaignDungeons",
+    "lat": -149.341,
+    "lng": 30.9368
+  },
+  {
+    "id": "CSD_Frac_Underworld_AncientCity",
+    "type": "campaignDungeons",
+    "lat": -134.7811,
+    "lng": 75.0768
+  },
+  {
+    "id": "OWC_Kehj_Ridge_05",
+    "type": "cellars",
+    "lat": -130.4855,
+    "lng": 63.8418
+  },
+  {
+    "id": "OWC_Kehj_Ridge_01",
+    "type": "cellars",
+    "lat": -133.4909,
+    "lng": 70.4549
+  },
+  {
+    "id": "OWC_Kehj_LowDesert_01",
+    "type": "cellars",
+    "lat": -149.4656,
+    "lng": 42.2525
+  },
+  {
+    "id": "OWC_Kehj_LowDesert_04",
+    "type": "cellars",
+    "lat": -141.1406,
+    "lng": 27.0529
+  },
+  {
+    "id": "OWC_Kehj_LowDesert_02",
+    "type": "cellars",
+    "lat": -153.9239,
+    "lng": 37.0555
+  },
+  {
+    "id": "OWC_Kehj_LowDesert_03",
+    "type": "cellars",
+    "lat": -139.2842,
+    "lng": 41.3456
+  },
+  {
+    "id": "OWC_Kehj_Oasis_01",
+    "type": "cellars",
+    "lat": -133.15,
+    "lng": 34.2724
+  },
+  {
+    "id": "OWC_Kehj_Caldeum_05",
+    "type": "cellars",
+    "lat": -140.1324,
+    "lng": 53.9204
+  },
+  {
+    "id": "OWC_Hawe_Crossway_03",
+    "type": "cellars",
+    "lat": -152.0266,
+    "lng": 91.8408
+  },
+  {
+    "id": "OWC_Hawe_Crossway_01",
+    "type": "cellars",
+    "lat": -145.3513,
+    "lng": 82.2137
+  },
+  {
+    "id": "OWC_Hawe_Crossway_02",
+    "type": "cellars",
+    "lat": -136.1519,
+    "lng": 98.0037
+  },
+  {
+    "id": "OWC_Kehj_Caldeum_04",
+    "type": "cellars",
+    "lat": -133.5219,
+    "lng": 49.0788
+  },
+  {
+    "id": "OWC_Kehj_Caldeum_01",
+    "type": "cellars",
+    "lat": -133.2348,
+    "lng": 57.0832
+  },
+  {
+    "id": "QST_Kehj_Penitent_02_Cellar",
+    "type": "cellars",
+    "lat": -145.2036,
+    "lng": 28.3234
+  },
+  {
+    "id": "QST_Kehj_Caldeum_Remnants",
+    "type": "cellars",
+    "lat": -131.4868,
+    "lng": 45.0296
+  },
+  {
+    "id": "OWC_Naha_RestlessCanopy_04",
+    "type": "cellars",
+    "lat": -192.1517,
+    "lng": 62.7899
+  },
+  {
+    "id": "OWC_Naha_RestlessCanopy_03",
+    "type": "cellars",
+    "lat": -201.8344,
+    "lng": 42.608
+  },
+  {
+    "id": "OWC_Naha_RestlessCanopy_05",
+    "type": "cellars",
+    "lat": -197.0359,
+    "lng": 55.8378
+  },
+  {
+    "id": "OWC_Naha_RestlessCanopy_01",
+    "type": "cellars",
+    "lat": -172.8105,
+    "lng": 47.871
+  },
+  {
+    "id": "OWC_Naha_RestlessCanopy_02",
+    "type": "cellars",
+    "lat": -189.3654,
+    "lng": 47.2213
+  },
+  {
+    "id": "OWC_Naha_LingeringHatred_02",
+    "type": "cellars",
+    "lat": -162.4538,
+    "lng": 16.1226
+  },
+  {
+    "id": "OWC_Naha_LingeringHatred_03",
+    "type": "cellars",
+    "lat": -157.2016,
+    "lng": 33.1999
+  },
+  {
+    "id": "OWC_Naha_LingeringHatred_04",
+    "type": "cellars",
+    "lat": -160.0003,
+    "lng": 54.7024
+  },
+  {
+    "id": "OWC_Naha_LingeringHatred_01",
+    "type": "cellars",
+    "lat": -169.2324,
+    "lng": 22.776
+  },
+  {
+    "id": "OWC_Naha_LingeringHatred_05",
+    "type": "cellars",
+    "lat": -177.437,
+    "lng": 40.6075
+  },
+  {
+    "id": "OWC_Naha_SevenStones_01",
+    "type": "cellars",
+    "lat": -171.6444,
+    "lng": 9.768
+  },
+  {
+    "id": "OWC_Naha_SevenStones_04",
+    "type": "cellars",
+    "lat": -184.3479,
+    "lng": 19.2871
+  },
+  {
+    "id": "OWC_Naha_SevenStones_05",
+    "type": "cellars",
+    "lat": -180.9966,
+    "lng": 12.1281
+  },
+  {
+    "id": "OWC_Naha_SevenStones_02",
+    "type": "cellars",
+    "lat": -175.3059,
+    "lng": 15.8219
+  },
+  {
+    "id": "OWC_Naha_SevenStones_03",
+    "type": "cellars",
+    "lat": -181.248,
+    "lng": 26.9084
+  },
+  {
+    "id": "OWC_Naha_FiveHills_03",
+    "type": "cellars",
+    "lat": -200.9799,
+    "lng": 34.1566
+  },
+  {
+    "id": "OWC_Naha_FiveHills_01",
+    "type": "cellars",
+    "lat": -190.1374,
+    "lng": 29.5334
+  },
+  {
+    "id": "OWC_Naha_FiveHills_04",
+    "type": "cellars",
+    "lat": -207.1472,
+    "lng": 27.6919
+  },
+  {
+    "id": "OWC_Naha_FiveHills_05",
+    "type": "cellars",
+    "lat": -197.6744,
+    "lng": 23.2534
+  },
+  {
+    "id": "OWC_Naha_FiveHills_02",
+    "type": "cellars",
+    "lat": -200.0714,
+    "lng": 30.1781
+  },
+  {
+    "id": "OWC_Naha_TeganzePlateau_04",
+    "type": "cellars",
+    "lat": -157.1167,
+    "lng": 74.5522
+  },
+  {
+    "id": "OWC_Naha_TeganzePlateau_01",
+    "type": "cellars",
+    "lat": -153.2928,
+    "lng": 63.7223
+  },
+  {
+    "id": "OWC_Naha_TeganzePlateau_02",
+    "type": "cellars",
+    "lat": -164.2211,
+    "lng": 69.746
+  },
+  {
+    "id": "OWC_Naha_TeganzePlateau_03",
+    "type": "cellars",
+    "lat": -159.1935,
+    "lng": 79.653
+  },
+  {
+    "id": "CSD_Naha_Lingering_KurastSewers",
+    "type": "cellars",
+    "lat": -179.9602,
+    "lng": 38.6762
+  },
+  {
+    "id": "CSD_Naha_Teganze_BurntKnightHideout",
+    "type": "cellars",
+    "lat": -155.6656,
+    "lng": 90.0263
+  },
+  {
+    "id": "OWC_Naha_FieldOfGiants_04",
+    "type": "cellars",
+    "lat": -181.8194,
+    "lng": 76.7081
+  },
+  {
+    "id": "OWC_Naha_FieldOfGiants_01",
+    "type": "cellars",
+    "lat": -177.4202,
+    "lng": 77.4739
+  },
+  {
+    "id": "OWC_Naha_FieldOfGiants_02",
+    "type": "cellars",
+    "lat": -177.1554,
+    "lng": 65.6237
+  },
+  {
+    "id": "OWC_Naha_FieldOfGiants_03",
+    "type": "cellars",
+    "lat": -183.8352,
+    "lng": 63.1811
+  },
+  {
+    "id": "QST_BloomWhereYouArePlanted_Cellar",
+    "type": "cellars",
+    "lat": -207.4246,
+    "lng": 23.3715
+  },
+  {
+    "id": "QST_ThePitOfAnguish_Cellar",
+    "type": "cellars",
+    "lat": -200.1433,
+    "lng": 52.3186
+  },
+  {
+    "id": "X1_Undercity_QST_PlayerQuest_02_Snake",
+    "type": "cellars",
+    "lat": -196.3058,
+    "lng": 39.662
+  },
+  {
+    "id": "LevelArea_Kehj_PvP_Town",
+    "type": "waypoints",
+    "lat": -142.0013,
+    "lng": 53.7248
+  },
+  {
+    "id": "LevelArea_Hawe_Zarbinzet",
+    "type": "waypoints",
+    "lat": -143.2119,
+    "lng": 90.8572
+  },
+  {
+    "id": "LevelArea_Kehj_Gea_Kul",
+    "type": "waypoints",
+    "lat": -147.1918,
+    "lng": 29.3408
+  },
+  {
+    "id": "LevelArea_Naha_Kurast_Bazaar",
+    "type": "waypoints",
+    "lat": -180.4039,
+    "lng": 36.883
+  },
+  {
+    "id": "LevelArea_Naha_LingeringHatred_DocksTown",
+    "type": "waypoints",
+    "lat": -157.2388,
+    "lng": 24.6317
+  },
+  {
+    "id": "LevelArea_Naha_FieldOfGiants_Town",
+    "type": "waypoints",
+    "lat": -185.8416,
+    "lng": 72.356
+  },
+  {
+    "id": "LevelArea_Naha_FiveHills_Town",
+    "type": "waypoints",
+    "lat": -191.6745,
+    "lng": 13.4393
+  },
+  {
+    "id": "LevelArea_Naha_CMP_GatesOfTheNecropolis_Gates",
+    "type": "waypoints",
+    "lat": -200.5076,
+    "lng": 56.0821
+  },
+  {
+    "id": "LevelArea_Naha_CMP_Kichuk_Town",
+    "type": "waypoints",
+    "lat": -155.3165,
+    "lng": 84.7241
+  },
+  {
+    "id": "LevelArea_X1R_Naha_KeyRoom",
+    "type": "waypoints",
+    "lat": -134.364,
+    "lng": 68.6039
+  },
+  {
+    "id": "LevelArea_MERC_Hideout",
+    "type": "waypoints",
+    "lat": -135.0512,
+    "lng": 68.4286
+  },
+  {
+    "id": "LevelArea_S03_Hub_TWN",
+    "type": "waypoints",
+    "lat": -134.1233,
+    "lng": 68.8246
+  },
+  {
+    "id": "respawn:-149.04373,47.95429",
+    "type": "respawnPoints",
+    "lat": -149.0437,
+    "lng": 47.9543
+  },
+  {
+    "id": "respawn:-146.26774,48.80179",
+    "type": "respawnPoints",
+    "lat": -146.2677,
+    "lng": 48.8018
+  },
+  {
+    "id": "respawn:-147.16021,47.58064",
+    "type": "respawnPoints",
+    "lat": -147.1602,
+    "lng": 47.5806
+  },
+  {
+    "id": "respawn:-147.5987,48.03595",
+    "type": "respawnPoints",
+    "lat": -147.5987,
+    "lng": 48.0359
+  },
+  {
+    "id": "respawn:-143.55966,54.30368",
+    "type": "respawnPoints",
+    "lat": -143.5597,
+    "lng": 54.3037
+  },
+  {
+    "id": "respawn:-154.13168,99.07824",
+    "type": "respawnPoints",
+    "lat": -154.1317,
+    "lng": 99.0782
+  },
+  {
+    "id": "respawn:-135.54491,39.60807",
+    "type": "respawnPoints",
+    "lat": -135.5449,
+    "lng": 39.6081
+  },
+  {
+    "id": "respawn:-135.80485,41.64681",
+    "type": "respawnPoints",
+    "lat": -135.8048,
+    "lng": 41.6468
+  },
+  {
+    "id": "respawn:-134.44577,43.45243",
+    "type": "respawnPoints",
+    "lat": -134.4458,
+    "lng": 43.4524
+  },
+  {
+    "id": "respawn:-148.49518,31.16614",
+    "type": "respawnPoints",
+    "lat": -148.4952,
+    "lng": 31.1661
+  },
+  {
+    "id": "respawn:-133.65473,50.93635",
+    "type": "respawnPoints",
+    "lat": -133.6547,
+    "lng": 50.9363
+  },
+  {
+    "id": "respawn:-144.30361,94.04826",
+    "type": "respawnPoints",
+    "lat": -144.3036,
+    "lng": 94.0483
+  },
+  {
+    "id": "respawn:-133.24118,95.27957",
+    "type": "respawnPoints",
+    "lat": -133.2412,
+    "lng": 95.2796
+  },
+  {
+    "id": "respawn:-151.89182,93.65041",
+    "type": "respawnPoints",
+    "lat": -151.8918,
+    "lng": 93.6504
+  },
+  {
+    "id": "respawn:-142.30466,86.14783",
+    "type": "respawnPoints",
+    "lat": -142.3047,
+    "lng": 86.1478
+  },
+  {
+    "id": "respawn:-136.24767,97.82607",
+    "type": "respawnPoints",
+    "lat": -136.2477,
+    "lng": 97.8261
+  },
+  {
+    "id": "respawn:-140.04702,89.57541",
+    "type": "respawnPoints",
+    "lat": -140.047,
+    "lng": 89.5754
+  },
+  {
+    "id": "respawn:-136.3836,93.18609",
+    "type": "respawnPoints",
+    "lat": -136.3836,
+    "lng": 93.1861
+  },
+  {
+    "id": "respawn:-147.62247,84.89625",
+    "type": "respawnPoints",
+    "lat": -147.6225,
+    "lng": 84.8962
+  },
+  {
+    "id": "respawn:-140.31537,81.11133",
+    "type": "respawnPoints",
+    "lat": -140.3154,
+    "lng": 81.1113
+  },
+  {
+    "id": "respawn:-136.75325,89.75292",
+    "type": "respawnPoints",
+    "lat": -136.7533,
+    "lng": 89.7529
+  },
+  {
+    "id": "respawn:-146.82981,94.40331",
+    "type": "respawnPoints",
+    "lat": -146.8298,
+    "lng": 94.4033
+  },
+  {
+    "id": "respawn:-142.79431,94.22279",
+    "type": "respawnPoints",
+    "lat": -142.7943,
+    "lng": 94.2228
+  },
+  {
+    "id": "respawn:-141.92513,82.59135",
+    "type": "respawnPoints",
+    "lat": -141.9251,
+    "lng": 82.5914
+  },
+  {
+    "id": "respawn:-145.13271,86.56055",
+    "type": "respawnPoints",
+    "lat": -145.1327,
+    "lng": 86.5606
+  },
+  {
+    "id": "respawn:-131.31226,89.14637",
+    "type": "respawnPoints",
+    "lat": -131.3123,
+    "lng": 89.1464
+  },
+  {
+    "id": "respawn:-130.68513,96.47532",
+    "type": "respawnPoints",
+    "lat": -130.6851,
+    "lng": 96.4753
+  },
+  {
+    "id": "respawn:-133.83177,89.4553",
+    "type": "respawnPoints",
+    "lat": -133.8318,
+    "lng": 89.4553
+  },
+  {
+    "id": "respawn:-141.42249,87.83992",
+    "type": "respawnPoints",
+    "lat": -141.4225,
+    "lng": 87.8399
+  },
+  {
+    "id": "respawn:-132.93247,93.24001",
+    "type": "respawnPoints",
+    "lat": -132.9325,
+    "lng": 93.24
+  },
+  {
+    "id": "respawn:-139.35724,94.84487",
+    "type": "respawnPoints",
+    "lat": -139.3572,
+    "lng": 94.8449
+  },
+  {
+    "id": "respawn:-148.06785,89.63302",
+    "type": "respawnPoints",
+    "lat": -148.0678,
+    "lng": 89.633
+  },
+  {
+    "id": "respawn:-147.12167,97.97116",
+    "type": "respawnPoints",
+    "lat": -147.1217,
+    "lng": 97.9712
+  },
+  {
+    "id": "respawn:-148.34612,88.39684",
+    "type": "respawnPoints",
+    "lat": -148.3461,
+    "lng": 88.3968
+  },
+  {
+    "id": "respawn:-146.35529,99.78047",
+    "type": "respawnPoints",
+    "lat": -146.3553,
+    "lng": 99.7805
+  },
+  {
+    "id": "respawn:-149.10677,93.89605",
+    "type": "respawnPoints",
+    "lat": -149.1068,
+    "lng": 93.8961
+  },
+  {
+    "id": "respawn:-143.49955,84.28992",
+    "type": "respawnPoints",
+    "lat": -143.4995,
+    "lng": 84.2899
+  },
+  {
+    "id": "respawn:-140.78141,91.96172",
+    "type": "respawnPoints",
+    "lat": -140.7814,
+    "lng": 91.9617
+  },
+  {
+    "id": "respawn:-138.76533,84.76792",
+    "type": "respawnPoints",
+    "lat": -138.7653,
+    "lng": 84.7679
+  },
+  {
+    "id": "respawn:-145.63722,82.27655",
+    "type": "respawnPoints",
+    "lat": -145.6372,
+    "lng": 82.2766
+  },
+  {
+    "id": "respawn:-148.03232,92.5546",
+    "type": "respawnPoints",
+    "lat": -148.0323,
+    "lng": 92.5546
+  },
+  {
+    "id": "respawn:-137.14283,65.7237",
+    "type": "respawnPoints",
+    "lat": -137.1428,
+    "lng": 65.7237
+  },
+  {
+    "id": "respawn:-130.07142,61.27551",
+    "type": "respawnPoints",
+    "lat": -130.0714,
+    "lng": 61.2755
+  },
+  {
+    "id": "respawn:-138.22959,68.00417",
+    "type": "respawnPoints",
+    "lat": -138.2296,
+    "lng": 68.0042
+  },
+  {
+    "id": "respawn:-130.57736,68.48183",
+    "type": "respawnPoints",
+    "lat": -130.5774,
+    "lng": 68.4818
+  },
+  {
+    "id": "respawn:-138.80236,71.11095",
+    "type": "respawnPoints",
+    "lat": -138.8024,
+    "lng": 71.111
+  },
+  {
+    "id": "respawn:-130.27005,81.95057",
+    "type": "respawnPoints",
+    "lat": -130.27,
+    "lng": 81.9506
+  },
+  {
+    "id": "respawn:-133.69289,63.87962",
+    "type": "respawnPoints",
+    "lat": -133.6929,
+    "lng": 63.8796
+  },
+  {
+    "id": "respawn:-132.86073,73.27642",
+    "type": "respawnPoints",
+    "lat": -132.8607,
+    "lng": 73.2764
+  },
+  {
+    "id": "respawn:-138.03186,78.17934",
+    "type": "respawnPoints",
+    "lat": -138.0319,
+    "lng": 78.1793
+  },
+  {
+    "id": "respawn:-133.10543,36.22084",
+    "type": "respawnPoints",
+    "lat": -133.1054,
+    "lng": 36.2208
+  },
+  {
+    "id": "respawn:-133.03938,22.7744",
+    "type": "respawnPoints",
+    "lat": -133.0394,
+    "lng": 22.7744
+  },
+  {
+    "id": "respawn:-132.1298,28.71786",
+    "type": "respawnPoints",
+    "lat": -132.1298,
+    "lng": 28.7179
+  },
+  {
+    "id": "respawn:-138.60521,34.06325",
+    "type": "respawnPoints",
+    "lat": -138.6052,
+    "lng": 34.0632
+  },
+  {
+    "id": "respawn:-136.12512,32.10906",
+    "type": "respawnPoints",
+    "lat": -136.1251,
+    "lng": 32.1091
+  },
+  {
+    "id": "respawn:-133.47025,20.5938",
+    "type": "respawnPoints",
+    "lat": -133.4702,
+    "lng": 20.5938
+  },
+  {
+    "id": "respawn:-137.60611,26.81001",
+    "type": "respawnPoints",
+    "lat": -137.6061,
+    "lng": 26.81
+  },
+  {
+    "id": "respawn:-134.89885,31.72342",
+    "type": "respawnPoints",
+    "lat": -134.8989,
+    "lng": 31.7234
+  },
+  {
+    "id": "respawn:-132.2292,27.41509",
+    "type": "respawnPoints",
+    "lat": -132.2292,
+    "lng": 27.4151
+  },
+  {
+    "id": "respawn:-142.87579,44.58453",
+    "type": "respawnPoints",
+    "lat": -142.8758,
+    "lng": 44.5845
+  },
+  {
+    "id": "respawn:-138.10335,31.36833",
+    "type": "respawnPoints",
+    "lat": -138.1034,
+    "lng": 31.3683
+  },
+  {
+    "id": "respawn:-149.31026,45.46201",
+    "type": "respawnPoints",
+    "lat": -149.3103,
+    "lng": 45.462
+  },
+  {
+    "id": "respawn:-139.27065,27.69218",
+    "type": "respawnPoints",
+    "lat": -139.2706,
+    "lng": 27.6922
+  },
+  {
+    "id": "respawn:-142.62654,32.36035",
+    "type": "respawnPoints",
+    "lat": -142.6265,
+    "lng": 32.3603
+  },
+  {
+    "id": "respawn:-141.60515,29.97694",
+    "type": "respawnPoints",
+    "lat": -141.6052,
+    "lng": 29.9769
+  },
+  {
+    "id": "respawn:-144.89838,36.54344",
+    "type": "respawnPoints",
+    "lat": -144.8984,
+    "lng": 36.5434
+  },
+  {
+    "id": "respawn:-141.43798,45.21884",
+    "type": "respawnPoints",
+    "lat": -141.438,
+    "lng": 45.2188
+  },
+  {
+    "id": "respawn:-152.15563,42.07492",
+    "type": "respawnPoints",
+    "lat": -152.1556,
+    "lng": 42.0749
+  },
+  {
+    "id": "respawn:-145.00318,41.383",
+    "type": "respawnPoints",
+    "lat": -145.0032,
+    "lng": 41.383
+  },
+  {
+    "id": "respawn:-152.66389,39.87775",
+    "type": "respawnPoints",
+    "lat": -152.6639,
+    "lng": 39.8777
+  },
+  {
+    "id": "respawn:-142.92838,25.6299",
+    "type": "respawnPoints",
+    "lat": -142.9284,
+    "lng": 25.6299
+  },
+  {
+    "id": "respawn:-153.53139,30.94283",
+    "type": "respawnPoints",
+    "lat": -153.5314,
+    "lng": 30.9428
+  },
+  {
+    "id": "respawn:-138.03999,41.51514",
+    "type": "respawnPoints",
+    "lat": -138.04,
+    "lng": 41.5151
+  },
+  {
+    "id": "respawn:-140.64942,36.69082",
+    "type": "respawnPoints",
+    "lat": -140.6494,
+    "lng": 36.6908
+  },
+  {
+    "id": "respawn:-152.26902,35.24726",
+    "type": "respawnPoints",
+    "lat": -152.269,
+    "lng": 35.2473
+  },
+  {
+    "id": "respawn:-142.52474,37.29508",
+    "type": "respawnPoints",
+    "lat": -142.5247,
+    "lng": 37.2951
+  },
+  {
+    "id": "respawn:-150.69074,46.8671",
+    "type": "respawnPoints",
+    "lat": -150.6907,
+    "lng": 46.8671
+  },
+  {
+    "id": "respawn:-151.46524,41.44773",
+    "type": "respawnPoints",
+    "lat": -151.4652,
+    "lng": 41.4477
+  },
+  {
+    "id": "respawn:-151.04974,51.35595",
+    "type": "respawnPoints",
+    "lat": -151.0497,
+    "lng": 51.3559
+  },
+  {
+    "id": "respawn:-138.436,43.40256",
+    "type": "respawnPoints",
+    "lat": -138.436,
+    "lng": 43.4026
+  },
+  {
+    "id": "respawn:-139.71641,32.42057",
+    "type": "respawnPoints",
+    "lat": -139.7164,
+    "lng": 32.4206
+  },
+  {
+    "id": "respawn:-149.36987,41.06759",
+    "type": "respawnPoints",
+    "lat": -149.3699,
+    "lng": 41.0676
+  },
+  {
+    "id": "respawn:-151.91845,48.16394",
+    "type": "respawnPoints",
+    "lat": -151.9185,
+    "lng": 48.1639
+  },
+  {
+    "id": "respawn:-141.47734,40.7465",
+    "type": "respawnPoints",
+    "lat": -141.4773,
+    "lng": 40.7465
+  },
+  {
+    "id": "respawn:-130.94164,47.37984",
+    "type": "respawnPoints",
+    "lat": -130.9416,
+    "lng": 47.3798
+  },
+  {
+    "id": "respawn:-133.39779,58.70998",
+    "type": "respawnPoints",
+    "lat": -133.3978,
+    "lng": 58.71
+  },
+  {
+    "id": "respawn:-139.27291,55.58172",
+    "type": "respawnPoints",
+    "lat": -139.2729,
+    "lng": 55.5817
+  },
+  {
+    "id": "respawn:-136.5269,51.31719",
+    "type": "respawnPoints",
+    "lat": -136.5269,
+    "lng": 51.3172
+  },
+  {
+    "id": "respawn:-141.38936,48.33944",
+    "type": "respawnPoints",
+    "lat": -141.3894,
+    "lng": 48.3394
+  },
+  {
+    "id": "respawn:-134.56245,43.72311",
+    "type": "respawnPoints",
+    "lat": -134.5625,
+    "lng": 43.7231
+  },
+  {
+    "id": "respawn:-140.68595,49.57154",
+    "type": "respawnPoints",
+    "lat": -140.6859,
+    "lng": 49.5715
+  },
+  {
+    "id": "respawn:-132.90378,60.31075",
+    "type": "respawnPoints",
+    "lat": -132.9038,
+    "lng": 60.3107
+  },
+  {
+    "id": "respawn:-135.1409,61.49087",
+    "type": "respawnPoints",
+    "lat": -135.1409,
+    "lng": 61.4909
+  },
+  {
+    "id": "respawn:-138.38498,46.14377",
+    "type": "respawnPoints",
+    "lat": -138.385,
+    "lng": 46.1438
+  },
+  {
+    "id": "respawn:-131.04419,44.93625",
+    "type": "respawnPoints",
+    "lat": -131.0442,
+    "lng": 44.9363
+  },
+  {
+    "id": "respawn:-132.07843,55.96031",
+    "type": "respawnPoints",
+    "lat": -132.0784,
+    "lng": 55.9603
+  },
+  {
+    "id": "respawn:-133.91471,45.7695",
+    "type": "respawnPoints",
+    "lat": -133.9147,
+    "lng": 45.7695
+  },
+  {
+    "id": "respawn:-180.40337,36.88382",
+    "type": "respawnPoints",
+    "lat": -180.4034,
+    "lng": 36.8838
+  },
+  {
+    "id": "respawn:-181.93166,9.06068",
+    "type": "respawnPoints",
+    "lat": -181.9317,
+    "lng": 9.0607
+  },
+  {
+    "id": "respawn:-179.32352,17.29688",
+    "type": "respawnPoints",
+    "lat": -179.3235,
+    "lng": 17.2969
+  },
+  {
+    "id": "respawn:-169.40385,12.10524",
+    "type": "respawnPoints",
+    "lat": -169.4039,
+    "lng": 12.1052
+  },
+  {
+    "id": "respawn:-181.28278,16.57333",
+    "type": "respawnPoints",
+    "lat": -181.2828,
+    "lng": 16.5733
+  },
+  {
+    "id": "respawn:-174.79729,20.03409",
+    "type": "respawnPoints",
+    "lat": -174.7973,
+    "lng": 20.0341
+  },
+  {
+    "id": "respawn:-177.82957,10.75217",
+    "type": "respawnPoints",
+    "lat": -177.8296,
+    "lng": 10.7522
+  },
+  {
+    "id": "respawn:-174.59112,10.81196",
+    "type": "respawnPoints",
+    "lat": -174.5911,
+    "lng": 10.812
+  },
+  {
+    "id": "respawn:-174.91454,15.24942",
+    "type": "respawnPoints",
+    "lat": -174.9145,
+    "lng": 15.2494
+  },
+  {
+    "id": "respawn:-187.63628,13.0464",
+    "type": "respawnPoints",
+    "lat": -187.6363,
+    "lng": 13.0464
+  },
+  {
+    "id": "respawn:-180.21311,27.57313",
+    "type": "respawnPoints",
+    "lat": -180.2131,
+    "lng": 27.5731
+  },
+  {
+    "id": "respawn:-183.58139,24.27407",
+    "type": "respawnPoints",
+    "lat": -183.5814,
+    "lng": 24.2741
+  },
+  {
+    "id": "respawn:-186.85884,19.33632",
+    "type": "respawnPoints",
+    "lat": -186.8588,
+    "lng": 19.3363
+  },
+  {
+    "id": "respawn:-184.02285,12.83284",
+    "type": "respawnPoints",
+    "lat": -184.0229,
+    "lng": 12.8328
+  },
+  {
+    "id": "respawn:-167.85423,14.58236",
+    "type": "respawnPoints",
+    "lat": -167.8542,
+    "lng": 14.5824
+  },
+  {
+    "id": "respawn:-171.18346,16.3487",
+    "type": "respawnPoints",
+    "lat": -171.1835,
+    "lng": 16.3487
+  },
+  {
+    "id": "respawn:-181.17143,39.9955",
+    "type": "respawnPoints",
+    "lat": -181.1714,
+    "lng": 39.9955
+  },
+  {
+    "id": "respawn:-205.2465,30.86272",
+    "type": "respawnPoints",
+    "lat": -205.2465,
+    "lng": 30.8627
+  },
+  {
+    "id": "respawn:-192.72605,11.98337",
+    "type": "respawnPoints",
+    "lat": -192.726,
+    "lng": 11.9834
+  },
+  {
+    "id": "respawn:-197.54232,36.48104",
+    "type": "respawnPoints",
+    "lat": -197.5423,
+    "lng": 36.481
+  },
+  {
+    "id": "respawn:-202.40578,27.90393",
+    "type": "respawnPoints",
+    "lat": -202.4058,
+    "lng": 27.9039
+  },
+  {
+    "id": "respawn:-190.12324,30.79445",
+    "type": "respawnPoints",
+    "lat": -190.1232,
+    "lng": 30.7945
+  },
+  {
+    "id": "respawn:-207.6713,25.15749",
+    "type": "respawnPoints",
+    "lat": -207.6713,
+    "lng": 25.1575
+  },
+  {
+    "id": "respawn:-203.08117,37.2203",
+    "type": "respawnPoints",
+    "lat": -203.0812,
+    "lng": 37.2203
+  },
+  {
+    "id": "respawn:-206.21522,32.67228",
+    "type": "respawnPoints",
+    "lat": -206.2152,
+    "lng": 32.6723
+  },
+  {
+    "id": "respawn:-190.59274,13.18695",
+    "type": "respawnPoints",
+    "lat": -190.5927,
+    "lng": 13.1869
+  },
+  {
+    "id": "respawn:-185.07651,31.91628",
+    "type": "respawnPoints",
+    "lat": -185.0765,
+    "lng": 31.9163
+  },
+  {
+    "id": "respawn:-194.13877,38.0288",
+    "type": "respawnPoints",
+    "lat": -194.1388,
+    "lng": 38.0288
+  },
+  {
+    "id": "respawn:-186.58315,34.61441",
+    "type": "respawnPoints",
+    "lat": -186.5831,
+    "lng": 34.6144
+  },
+  {
+    "id": "respawn:-199.15255,48.33235",
+    "type": "respawnPoints",
+    "lat": -199.1525,
+    "lng": 48.3323
+  },
+  {
+    "id": "respawn:-193.37314,52.71281",
+    "type": "respawnPoints",
+    "lat": -193.3731,
+    "lng": 52.7128
+  },
+  {
+    "id": "respawn:-200.84181,39.7104",
+    "type": "respawnPoints",
+    "lat": -200.8418,
+    "lng": 39.7104
+  },
+  {
+    "id": "respawn:-178.62018,49.06159",
+    "type": "respawnPoints",
+    "lat": -178.6202,
+    "lng": 49.0616
+  },
+  {
+    "id": "respawn:-194.03912,40.9161",
+    "type": "respawnPoints",
+    "lat": -194.0391,
+    "lng": 40.9161
+  },
+  {
+    "id": "respawn:-181.38765,61.09742",
+    "type": "respawnPoints",
+    "lat": -181.3877,
+    "lng": 61.0974
+  },
+  {
+    "id": "respawn:-198.30154,55.43034",
+    "type": "respawnPoints",
+    "lat": -198.3015,
+    "lng": 55.4303
+  },
+  {
+    "id": "respawn:-198.40409,44.3293",
+    "type": "respawnPoints",
+    "lat": -198.4041,
+    "lng": 44.3293
+  },
+  {
+    "id": "respawn:-184.79596,47.01731",
+    "type": "respawnPoints",
+    "lat": -184.796,
+    "lng": 47.0173
+  },
+  {
+    "id": "respawn:-192.6497,41.18689",
+    "type": "respawnPoints",
+    "lat": -192.6497,
+    "lng": 41.1869
+  },
+  {
+    "id": "respawn:-177.03983,44.34423",
+    "type": "respawnPoints",
+    "lat": -177.0398,
+    "lng": 44.3442
+  },
+  {
+    "id": "respawn:-189.55068,44.48184",
+    "type": "respawnPoints",
+    "lat": -189.5507,
+    "lng": 44.4818
+  },
+  {
+    "id": "respawn:-188.25296,62.47859",
+    "type": "respawnPoints",
+    "lat": -188.253,
+    "lng": 62.4786
+  },
+  {
+    "id": "respawn:-175.78944,49.33209",
+    "type": "respawnPoints",
+    "lat": -175.7894,
+    "lng": 49.3321
+  },
+  {
+    "id": "respawn:-180.85835,48.67484",
+    "type": "respawnPoints",
+    "lat": -180.8584,
+    "lng": 48.6748
+  },
+  {
+    "id": "respawn:-201.68695,49.65451",
+    "type": "respawnPoints",
+    "lat": -201.6869,
+    "lng": 49.6545
+  },
+  {
+    "id": "respawn:-191.87244,58.90498",
+    "type": "respawnPoints",
+    "lat": -191.8724,
+    "lng": 58.905
+  },
+  {
+    "id": "respawn:-188.91522,52.59871",
+    "type": "respawnPoints",
+    "lat": -188.9152,
+    "lng": 52.5987
+  },
+  {
+    "id": "respawn:-195.24661,64.12642",
+    "type": "respawnPoints",
+    "lat": -195.2466,
+    "lng": 64.1264
+  },
+  {
+    "id": "respawn:-189.23241,52.9295",
+    "type": "respawnPoints",
+    "lat": -189.2324,
+    "lng": 52.9295
+  },
+  {
+    "id": "respawn:-176.48942,47.03581",
+    "type": "respawnPoints",
+    "lat": -176.4894,
+    "lng": 47.0358
+  },
+  {
+    "id": "respawn:-193.20526,47.97612",
+    "type": "respawnPoints",
+    "lat": -193.2053,
+    "lng": 47.9761
+  },
+  {
+    "id": "respawn:-199.34716,62.5836",
+    "type": "respawnPoints",
+    "lat": -199.3472,
+    "lng": 62.5836
+  },
+  {
+    "id": "respawn:-188.43183,40.40179",
+    "type": "respawnPoints",
+    "lat": -188.4318,
+    "lng": 40.4018
+  },
+  {
+    "id": "respawn:-201.95097,50.56759",
+    "type": "respawnPoints",
+    "lat": -201.951,
+    "lng": 50.5676
+  },
+  {
+    "id": "respawn:-185.59032,53.97493",
+    "type": "respawnPoints",
+    "lat": -185.5903,
+    "lng": 53.9749
+  },
+  {
+    "id": "respawn:-157.40256,48.86163",
+    "type": "respawnPoints",
+    "lat": -157.4026,
+    "lng": 48.8616
+  },
+  {
+    "id": "respawn:-160.94116,54.91875",
+    "type": "respawnPoints",
+    "lat": -160.9412,
+    "lng": 54.9188
+  },
+  {
+    "id": "respawn:-177.10345,37.39809",
+    "type": "respawnPoints",
+    "lat": -177.1035,
+    "lng": 37.3981
+  },
+  {
+    "id": "respawn:-159.40632,36.83502",
+    "type": "respawnPoints",
+    "lat": -159.4063,
+    "lng": 36.835
+  },
+  {
+    "id": "respawn:-164.4416,28.83232",
+    "type": "respawnPoints",
+    "lat": -164.4416,
+    "lng": 28.8323
+  },
+  {
+    "id": "respawn:-167.36386,42.68544",
+    "type": "respawnPoints",
+    "lat": -167.3639,
+    "lng": 42.6854
+  },
+  {
+    "id": "respawn:-172.88203,37.39462",
+    "type": "respawnPoints",
+    "lat": -172.882,
+    "lng": 37.3946
+  },
+  {
+    "id": "respawn:-170.29705,40.82184",
+    "type": "respawnPoints",
+    "lat": -170.2971,
+    "lng": 40.8218
+  },
+  {
+    "id": "respawn:-175.16794,27.53507",
+    "type": "respawnPoints",
+    "lat": -175.1679,
+    "lng": 27.5351
+  },
+  {
+    "id": "respawn:-160.5385,46.15004",
+    "type": "respawnPoints",
+    "lat": -160.5385,
+    "lng": 46.15
+  },
+  {
+    "id": "respawn:-168.67128,22.46319",
+    "type": "respawnPoints",
+    "lat": -168.6713,
+    "lng": 22.4632
+  },
+  {
+    "id": "respawn:-180.7259,33.10018",
+    "type": "respawnPoints",
+    "lat": -180.7259,
+    "lng": 33.1002
+  },
+  {
+    "id": "respawn:-161.14894,23.7847",
+    "type": "respawnPoints",
+    "lat": -161.1489,
+    "lng": 23.7847
+  },
+  {
+    "id": "respawn:-178.00877,30.34298",
+    "type": "respawnPoints",
+    "lat": -178.0088,
+    "lng": 30.343
+  },
+  {
+    "id": "respawn:-163.40071,31.62731",
+    "type": "respawnPoints",
+    "lat": -163.4007,
+    "lng": 31.6273
+  },
+  {
+    "id": "respawn:-164.65853,41.47888",
+    "type": "respawnPoints",
+    "lat": -164.6585,
+    "lng": 41.4789
+  },
+  {
+    "id": "respawn:-155.73389,51.43817",
+    "type": "respawnPoints",
+    "lat": -155.7339,
+    "lng": 51.4382
+  },
+  {
+    "id": "respawn:-160.05056,50.2526",
+    "type": "respawnPoints",
+    "lat": -160.0506,
+    "lng": 50.2526
+  },
+  {
+    "id": "respawn:-170.26832,35.32821",
+    "type": "respawnPoints",
+    "lat": -170.2683,
+    "lng": 35.3282
+  },
+  {
+    "id": "respawn:-168.68076,18.32786",
+    "type": "respawnPoints",
+    "lat": -168.6808,
+    "lng": 18.3279
+  },
+  {
+    "id": "respawn:-166.09204,47.77174",
+    "type": "respawnPoints",
+    "lat": -166.092,
+    "lng": 47.7717
+  },
+  {
+    "id": "respawn:-166.4847,24.67832",
+    "type": "respawnPoints",
+    "lat": -166.4847,
+    "lng": 24.6783
+  },
+  {
+    "id": "respawn:-176.49632,41.60938",
+    "type": "respawnPoints",
+    "lat": -176.4963,
+    "lng": 41.6094
+  },
+  {
+    "id": "respawn:-153.58656,54.02509",
+    "type": "respawnPoints",
+    "lat": -153.5866,
+    "lng": 54.0251
+  },
+  {
+    "id": "respawn:-165.60559,34.85687",
+    "type": "respawnPoints",
+    "lat": -165.6056,
+    "lng": 34.8569
+  },
+  {
+    "id": "respawn:-178.47666,26.7641",
+    "type": "respawnPoints",
+    "lat": -178.4767,
+    "lng": 26.7641
+  },
+  {
+    "id": "respawn:-162.39576,41.7166",
+    "type": "respawnPoints",
+    "lat": -162.3958,
+    "lng": 41.7166
+  },
+  {
+    "id": "respawn:-163.5833,20.39078",
+    "type": "respawnPoints",
+    "lat": -163.5833,
+    "lng": 20.3908
+  },
+  {
+    "id": "respawn:-170.3184,43.92638",
+    "type": "respawnPoints",
+    "lat": -170.3184,
+    "lng": 43.9264
+  },
+  {
+    "id": "respawn:-169.69961,24.12698",
+    "type": "respawnPoints",
+    "lat": -169.6996,
+    "lng": 24.127
+  },
+  {
+    "id": "respawn:-158.01407,57.5138",
+    "type": "respawnPoints",
+    "lat": -158.0141,
+    "lng": 57.5138
+  },
+  {
+    "id": "respawn:-168.42386,27.03754",
+    "type": "respawnPoints",
+    "lat": -168.4239,
+    "lng": 27.0375
+  },
+  {
+    "id": "respawn:-171.80386,22.30754",
+    "type": "respawnPoints",
+    "lat": -171.8039,
+    "lng": 22.3075
+  },
+  {
+    "id": "respawn:-165.48016,16.60213",
+    "type": "respawnPoints",
+    "lat": -165.4802,
+    "lng": 16.6021
+  },
+  {
+    "id": "respawn:-159.6688,86.72079",
+    "type": "respawnPoints",
+    "lat": -159.6688,
+    "lng": 86.7208
+  },
+  {
+    "id": "respawn:-159.71242,64.67411",
+    "type": "respawnPoints",
+    "lat": -159.7124,
+    "lng": 64.6741
+  },
+  {
+    "id": "respawn:-150.30805,75.2095",
+    "type": "respawnPoints",
+    "lat": -150.3081,
+    "lng": 75.2095
+  },
+  {
+    "id": "respawn:-167.93824,61.75933",
+    "type": "respawnPoints",
+    "lat": -167.9382,
+    "lng": 61.7593
+  },
+  {
+    "id": "respawn:-166.28959,67.23621",
+    "type": "respawnPoints",
+    "lat": -166.2896,
+    "lng": 67.2362
+  },
+  {
+    "id": "respawn:-163.27061,73.81398",
+    "type": "respawnPoints",
+    "lat": -163.2706,
+    "lng": 73.814
+  },
+  {
+    "id": "respawn:-165.12873,62.3463",
+    "type": "respawnPoints",
+    "lat": -165.1287,
+    "lng": 62.3463
+  },
+  {
+    "id": "respawn:-167.51514,83.76535",
+    "type": "respawnPoints",
+    "lat": -167.5151,
+    "lng": 83.7653
+  },
+  {
+    "id": "respawn:-167.40615,73.97968",
+    "type": "respawnPoints",
+    "lat": -167.4061,
+    "lng": 73.9797
+  },
+  {
+    "id": "respawn:-156.30119,66.34012",
+    "type": "respawnPoints",
+    "lat": -156.3012,
+    "lng": 66.3401
+  },
+  {
+    "id": "respawn:-152.43597,75.119",
+    "type": "respawnPoints",
+    "lat": -152.436,
+    "lng": 75.119
+  },
+  {
+    "id": "respawn:-155.45072,70.19536",
+    "type": "respawnPoints",
+    "lat": -155.4507,
+    "lng": 70.1954
+  },
+  {
+    "id": "respawn:-152.25277,70.70476",
+    "type": "respawnPoints",
+    "lat": -152.2528,
+    "lng": 70.7048
+  },
+  {
+    "id": "respawn:-155.82949,88.67539",
+    "type": "respawnPoints",
+    "lat": -155.8295,
+    "lng": 88.6754
+  },
+  {
+    "id": "respawn:-162.63623,82.79409",
+    "type": "respawnPoints",
+    "lat": -162.6362,
+    "lng": 82.7941
+  },
+  {
+    "id": "respawn:-160.39708,70.11936",
+    "type": "respawnPoints",
+    "lat": -160.3971,
+    "lng": 70.1194
+  },
+  {
+    "id": "respawn:-155.7745,77.10131",
+    "type": "respawnPoints",
+    "lat": -155.7745,
+    "lng": 77.1013
+  },
+  {
+    "id": "respawn:-160.19031,78.92976",
+    "type": "respawnPoints",
+    "lat": -160.1903,
+    "lng": 78.9298
+  },
+  {
+    "id": "respawn:-153.51611,65.04737",
+    "type": "respawnPoints",
+    "lat": -153.5161,
+    "lng": 65.0474
+  },
+  {
+    "id": "respawn:-169.36674,65.62805",
+    "type": "respawnPoints",
+    "lat": -169.3667,
+    "lng": 65.6281
+  },
+  {
+    "id": "respawn:-156.4602,79.4123",
+    "type": "respawnPoints",
+    "lat": -156.4602,
+    "lng": 79.4123
+  },
+  {
+    "id": "respawn:-156.37257,60.53113",
+    "type": "respawnPoints",
+    "lat": -156.3726,
+    "lng": 60.5311
+  },
+  {
+    "id": "respawn:-170.38835,80.08808",
+    "type": "respawnPoints",
+    "lat": -170.3884,
+    "lng": 80.0881
+  },
+  {
+    "id": "respawn:-164.68262,71.32849",
+    "type": "respawnPoints",
+    "lat": -164.6826,
+    "lng": 71.3285
+  },
+  {
+    "id": "respawn:-165.19428,58.1733",
+    "type": "respawnPoints",
+    "lat": -165.1943,
+    "lng": 58.1733
+  },
+  {
+    "id": "respawn:-160.97311,60.56344",
+    "type": "respawnPoints",
+    "lat": -160.9731,
+    "lng": 60.5634
+  },
+  {
+    "id": "respawn:-164.30399,78.86808",
+    "type": "respawnPoints",
+    "lat": -164.304,
+    "lng": 78.8681
+  },
+  {
+    "id": "respawn:-158.23096,89.98744",
+    "type": "respawnPoints",
+    "lat": -158.231,
+    "lng": 89.9874
+  },
+  {
+    "id": "respawn:-159.79282,73.09",
+    "type": "respawnPoints",
+    "lat": -159.7928,
+    "lng": 73.09
+  },
+  {
+    "id": "respawn:-162.36358,64.63908",
+    "type": "respawnPoints",
+    "lat": -162.3636,
+    "lng": 64.6391
+  },
+  {
+    "id": "respawn:-170.28891,64.33098",
+    "type": "respawnPoints",
+    "lat": -170.2889,
+    "lng": 64.331
+  },
+  {
+    "id": "respawn:-199.94952,55.65568",
+    "type": "respawnPoints",
+    "lat": -199.9495,
+    "lng": 55.6557
+  },
+  {
+    "id": "respawn:-200.57947,57.23668",
+    "type": "respawnPoints",
+    "lat": -200.5795,
+    "lng": 57.2367
+  },
+  {
+    "id": "respawn:-203.02721,52.24351",
+    "type": "respawnPoints",
+    "lat": -203.0272,
+    "lng": 52.2435
+  },
+  {
+    "id": "respawn:-203.63537,55.48225",
+    "type": "respawnPoints",
+    "lat": -203.6354,
+    "lng": 55.4823
+  },
+  {
+    "id": "respawn:-201.85962,54.36701",
+    "type": "respawnPoints",
+    "lat": -201.8596,
+    "lng": 54.367
+  },
+  {
+    "id": "respawn:-197.70927,58.38498",
+    "type": "respawnPoints",
+    "lat": -197.7093,
+    "lng": 58.385
+  },
+  {
+    "id": "respawn:-201.25286,63.00019",
+    "type": "respawnPoints",
+    "lat": -201.2529,
+    "lng": 63.0002
+  },
+  {
+    "id": "respawn:-199.76543,60.88031",
+    "type": "respawnPoints",
+    "lat": -199.7654,
+    "lng": 60.8803
+  },
+  {
+    "id": "respawn:-197.21228,57.46757",
+    "type": "respawnPoints",
+    "lat": -197.2123,
+    "lng": 57.4676
+  },
+  {
+    "id": "respawn:-203.15062,52.29035",
+    "type": "respawnPoints",
+    "lat": -203.1506,
+    "lng": 52.2903
+  },
+  {
+    "id": "respawn:-199.80947,61.15485",
+    "type": "respawnPoints",
+    "lat": -199.8095,
+    "lng": 61.1549
+  },
+  {
+    "id": "respawn:-200.57629,57.30505",
+    "type": "respawnPoints",
+    "lat": -200.5763,
+    "lng": 57.3051
+  },
+  {
+    "id": "respawn:-180.28147,74.16474",
+    "type": "respawnPoints",
+    "lat": -180.2815,
+    "lng": 74.1647
+  },
+  {
+    "id": "respawn:-173.81858,67.56589",
+    "type": "respawnPoints",
+    "lat": -173.8186,
+    "lng": 67.5659
+  },
+  {
+    "id": "respawn:-181.3176,78.62956",
+    "type": "respawnPoints",
+    "lat": -181.3176,
+    "lng": 78.6296
+  },
+  {
+    "id": "respawn:-185.02112,74.2364",
+    "type": "respawnPoints",
+    "lat": -185.0211,
+    "lng": 74.2364
+  },
+  {
+    "id": "respawn:-176.41764,71.85593",
+    "type": "respawnPoints",
+    "lat": -176.4176,
+    "lng": 71.8559
+  },
+  {
+    "id": "respawn:-172.65271,77.82536",
+    "type": "respawnPoints",
+    "lat": -172.6527,
+    "lng": 77.8254
+  },
+  {
+    "id": "respawn:-172.28396,59.4848",
+    "type": "respawnPoints",
+    "lat": -172.284,
+    "lng": 59.4848
+  },
+  {
+    "id": "respawn:-173.7994,62.83235",
+    "type": "respawnPoints",
+    "lat": -173.7994,
+    "lng": 62.8323
+  },
+  {
+    "id": "respawn:-190.56241,68.19376",
+    "type": "respawnPoints",
+    "lat": -190.5624,
+    "lng": 68.1938
+  },
+  {
+    "id": "respawn:-185.29528,70.36582",
+    "type": "respawnPoints",
+    "lat": -185.2953,
+    "lng": 70.3658
+  },
+  {
+    "id": "respawn:-177.19394,76.43905",
+    "type": "respawnPoints",
+    "lat": -177.1939,
+    "lng": 76.439
+  },
+  {
+    "id": "respawn:-180.25717,68.66746",
+    "type": "respawnPoints",
+    "lat": -180.2572,
+    "lng": 68.6675
+  },
+  {
+    "id": "respawn:-177.41173,60.88296",
+    "type": "respawnPoints",
+    "lat": -177.4117,
+    "lng": 60.883
+  },
+  {
+    "id": "respawn:-170.3935,71.7926",
+    "type": "respawnPoints",
+    "lat": -170.3935,
+    "lng": 71.7926
+  },
+  {
+    "id": "respawn:-174.47651,82.03651",
+    "type": "respawnPoints",
+    "lat": -174.4765,
+    "lng": 82.0365
+  },
+  {
+    "id": "respawn:-178.66519,65.09524",
+    "type": "respawnPoints",
+    "lat": -178.6652,
+    "lng": 65.0952
+  },
+  {
+    "id": "respawn:-183.34993,65.29054",
+    "type": "respawnPoints",
+    "lat": -183.3499,
+    "lng": 65.2905
+  },
+  {
+    "id": "respawn:-186.43903,65.64551",
+    "type": "respawnPoints",
+    "lat": -186.439,
+    "lng": 65.6455
+  },
+  {
+    "id": "respawn:-183.11091,54.66746",
+    "type": "respawnPoints",
+    "lat": -183.1109,
+    "lng": 54.6675
+  },
+  {
+    "id": "respawn:-150.79478,52.36197",
+    "type": "respawnPoints",
+    "lat": -150.7948,
+    "lng": 52.362
+  },
+  {
+    "id": "respawn:-169.1765,82.93767",
+    "type": "respawnPoints",
+    "lat": -169.1765,
+    "lng": 82.9377
+  },
+  {
+    "id": "respawn:-176.34308,5.56454",
+    "type": "respawnPoints",
+    "lat": -176.3431,
+    "lng": 5.5645
+  },
+  {
+    "id": "respawn:-175.06582,8.22958",
+    "type": "respawnPoints",
+    "lat": -175.0658,
+    "lng": 8.2296
+  },
+  {
+    "id": "respawn:-174.29898,5.55134",
+    "type": "respawnPoints",
+    "lat": -174.299,
+    "lng": 5.5513
+  },
+  {
+    "id": "respawn:-179.89371,7.13509",
+    "type": "respawnPoints",
+    "lat": -179.8937,
+    "lng": 7.1351
+  },
+  {
+    "id": "respawn:-178.16981,3.68442",
+    "type": "respawnPoints",
+    "lat": -178.1698,
+    "lng": 3.6844
+  },
+  {
+    "id": "respawn:-178.81225,6.05362",
+    "type": "respawnPoints",
+    "lat": -178.8123,
+    "lng": 6.0536
+  },
+  {
+    "id": "respawn:-176.93868,6.9974",
+    "type": "respawnPoints",
+    "lat": -176.9387,
+    "lng": 6.9974
+  },
+  {
+    "id": "respawn:-179.8257,4.17243",
+    "type": "respawnPoints",
+    "lat": -179.8257,
+    "lng": 4.1724
+  },
+  {
+    "id": "respawn:-177.84578,9.01371",
+    "type": "respawnPoints",
+    "lat": -177.8458,
+    "lng": 9.0137
+  },
+  {
+    "id": "respawn:-160.36406,83.11307",
+    "type": "respawnPoints",
+    "lat": -160.3641,
+    "lng": 83.1131
+  },
+  {
+    "id": "respawn:-154.78224,80.53386",
+    "type": "respawnPoints",
+    "lat": -154.7822,
+    "lng": 80.5339
+  },
+  {
+    "id": "respawn:-155.31945,84.72347",
+    "type": "respawnPoints",
+    "lat": -155.3194,
+    "lng": 84.7235
+  },
+  {
+    "id": "respawn:-148.38049,78.75069",
+    "type": "respawnPoints",
+    "lat": -148.3805,
+    "lng": 78.7507
+  },
+  {
+    "id": "respawn:-150.60829,78.96634",
+    "type": "respawnPoints",
+    "lat": -150.6083,
+    "lng": 78.9663
+  },
+  {
+    "id": "respawn:-152.52062,80.80731",
+    "type": "respawnPoints",
+    "lat": -152.5206,
+    "lng": 80.8073
+  },
+  {
+    "id": "respawn:-154.00953,83.91547",
+    "type": "respawnPoints",
+    "lat": -154.0095,
+    "lng": 83.9155
+  },
+  {
+    "id": "respawn:-198.14086,13.90601",
+    "type": "respawnPoints",
+    "lat": -198.1409,
+    "lng": 13.906
+  },
+  {
+    "id": "respawn:-199.54023,15.9666",
+    "type": "respawnPoints",
+    "lat": -199.5402,
+    "lng": 15.9666
+  },
+  {
+    "id": "respawn:-201.15568,17.76954",
+    "type": "respawnPoints",
+    "lat": -201.1557,
+    "lng": 17.7695
+  },
+  {
+    "id": "respawn:-198.86752,19.292",
+    "type": "respawnPoints",
+    "lat": -198.8675,
+    "lng": 19.292
+  },
+  {
+    "id": "respawn:-194.60789,25.49458",
+    "type": "respawnPoints",
+    "lat": -194.6079,
+    "lng": 25.4946
+  },
+  {
+    "id": "respawn:-191.21677,19.83283",
+    "type": "respawnPoints",
+    "lat": -191.2168,
+    "lng": 19.8328
+  },
+  {
+    "id": "respawn:-192.44596,23.0507",
+    "type": "respawnPoints",
+    "lat": -192.446,
+    "lng": 23.0507
+  },
+  {
+    "id": "respawn:-201.1647,23.94997",
+    "type": "respawnPoints",
+    "lat": -201.1647,
+    "lng": 23.95
+  },
+  {
+    "id": "respawn:-195.64996,29.79768",
+    "type": "respawnPoints",
+    "lat": -195.65,
+    "lng": 29.7977
+  },
+  {
+    "id": "respawn:-187.78105,24.31819",
+    "type": "respawnPoints",
+    "lat": -187.781,
+    "lng": 24.3182
+  },
+  {
+    "id": "respawn:-198.1849,25.3082",
+    "type": "respawnPoints",
+    "lat": -198.1849,
+    "lng": 25.3082
+  },
+  {
+    "id": "respawn:-189.88757,18.0435",
+    "type": "respawnPoints",
+    "lat": -189.8876,
+    "lng": 18.0435
+  },
+  {
+    "id": "respawn:-191.5077,18.19018",
+    "type": "respawnPoints",
+    "lat": -191.5077,
+    "lng": 18.1902
+  },
+  {
+    "id": "respawn:-177.02534,4.64312",
+    "type": "respawnPoints",
+    "lat": -177.0253,
+    "lng": 4.6431
+  },
+  {
+    "id": "respawn:-190.25843,23.28551",
+    "type": "respawnPoints",
+    "lat": -190.2584,
+    "lng": 23.2855
+  },
+  {
+    "id": "respawn:-132.30896,72.1684",
+    "type": "respawnPoints",
+    "lat": -132.309,
+    "lng": 72.1684
+  },
+  {
+    "id": "respawn:-138.34825,71.52564",
+    "type": "respawnPoints",
+    "lat": -138.3483,
+    "lng": 71.5256
+  },
+  {
+    "id": "respawn:-139.21411,71.50591",
+    "type": "respawnPoints",
+    "lat": -139.2141,
+    "lng": 71.5059
+  },
+  {
+    "id": "respawn:-136.50412,72.26085",
+    "type": "respawnPoints",
+    "lat": -136.5041,
+    "lng": 72.2609
+  },
+  {
+    "id": "respawn:-136.03946,73.81492",
+    "type": "respawnPoints",
+    "lat": -136.0395,
+    "lng": 73.8149
+  },
+  {
+    "id": "respawn:-133.61479,70.02667",
+    "type": "respawnPoints",
+    "lat": -133.6148,
+    "lng": 70.0267
+  },
+  {
+    "id": "respawn:-132.74113,75.66696",
+    "type": "respawnPoints",
+    "lat": -132.7411,
+    "lng": 75.667
+  },
+  {
+    "id": "respawn:-135.43956,71.02445",
+    "type": "respawnPoints",
+    "lat": -135.4396,
+    "lng": 71.0245
+  },
+  {
+    "id": "respawn:-133.92161,70.37838",
+    "type": "respawnPoints",
+    "lat": -133.9216,
+    "lng": 70.3784
+  },
+  {
+    "id": "respawn:-148.44023,63.68414",
+    "type": "respawnPoints",
+    "lat": -148.4402,
+    "lng": 63.6841
+  },
+  {
+    "id": "respawn:-144.75307,75.03217",
+    "type": "respawnPoints",
+    "lat": -144.7531,
+    "lng": 75.0322
+  },
+  {
+    "id": "respawn:-153.25706,72.94534",
+    "type": "respawnPoints",
+    "lat": -153.2571,
+    "lng": 72.9453
+  },
+  {
+    "id": "respawn:-146.17343,77.18993",
+    "type": "respawnPoints",
+    "lat": -146.1734,
+    "lng": 77.1899
+  },
+  {
+    "id": "respawn:-150.45443,74.76664",
+    "type": "respawnPoints",
+    "lat": -150.4544,
+    "lng": 74.7666
+  },
+  {
+    "id": "respawn:-141.34154,74.7367",
+    "type": "respawnPoints",
+    "lat": -141.3415,
+    "lng": 74.7367
+  },
+  {
+    "id": "respawn:-138.47191,74.97626",
+    "type": "respawnPoints",
+    "lat": -138.4719,
+    "lng": 74.9763
+  },
+  {
+    "id": "respawn:-136.89056,69.94308",
+    "type": "respawnPoints",
+    "lat": -136.8906,
+    "lng": 69.9431
+  },
+  {
+    "id": "respawn:-135.42028,68.60425",
+    "type": "respawnPoints",
+    "lat": -135.4203,
+    "lng": 68.6042
+  },
+  {
+    "id": "respawn:-132.4952,67.2899",
+    "type": "respawnPoints",
+    "lat": -132.4952,
+    "lng": 67.2899
+  },
+  {
+    "id": "respawn:-151.49283,69.20445",
+    "type": "respawnPoints",
+    "lat": -151.4928,
+    "lng": 69.2044
+  },
+  {
+    "id": "Hawe_WorldBoss",
+    "type": "worldBossArenas",
+    "lat": -154.1317,
+    "lng": 99.0782
+  },
+  {
+    "id": "Naha_WorldBoss",
+    "type": "worldBossArenas",
+    "lat": -169.283,
+    "lng": 82.9135
+  },
+  {
+    "id": "Kehj_CaldeumOverlook",
+    "type": "altarsOfLilith",
+    "lat": -139.3796,
+    "lng": 54.5588
+  },
+  {
+    "id": "Kehj_Caldeum_Bazaar",
+    "type": "altarsOfLilith",
+    "lat": -132.0772,
+    "lng": 57.4807
+  },
+  {
+    "id": "Kehj_LowDesert_Eastern_Basin",
+    "type": "altarsOfLilith",
+    "lat": -152.996,
+    "lng": 35.8307
+  },
+  {
+    "id": "Kehj_LowDesert_Oasis",
+    "type": "altarsOfLilith",
+    "lat": -150.2094,
+    "lng": 43.6294
+  },
+  {
+    "id": "Kehj_Oasis_Coast_South",
+    "type": "altarsOfLilith",
+    "lat": -132.0722,
+    "lng": 23.7823
+  },
+  {
+    "id": "Kehj_Oasis",
+    "type": "altarsOfLilith",
+    "lat": -134.4069,
+    "lng": 27.812
+  },
+  {
+    "id": "Kehj_CMP_Omaths_Fortress",
+    "type": "altarsOfLilith",
+    "lat": -147.152,
+    "lng": 46.6891
+  },
+  {
+    "id": "Kehj_Riverfront",
+    "type": "altarsOfLilith",
+    "lat": -140.9035,
+    "lng": 57.5134
+  },
+  {
+    "id": "Hawe_CrosswayNorth",
+    "type": "altarsOfLilith",
+    "lat": -136.437,
+    "lng": 91.0218
+  },
+  {
+    "id": "Hawe_Crossway",
+    "type": "altarsOfLilith",
+    "lat": -143.0655,
+    "lng": 81.1045
+  },
+  {
+    "id": "Hawe_CrosswayEast",
+    "type": "altarsOfLilith",
+    "lat": -142.8525,
+    "lng": 98.5927
+  },
+  {
+    "id": "Hawe_CrosswaySouth",
+    "type": "altarsOfLilith",
+    "lat": -150.6819,
+    "lng": 88.7837
+  },
+  {
+    "id": "Kehj_Ridge_Excavation",
+    "type": "altarsOfLilith",
+    "lat": -138.4912,
+    "lng": 67.4199
+  },
+  {
+    "id": "Naha_SevenStones_Cave",
+    "type": "tenetOfAkarat",
+    "lat": -182.1034,
+    "lng": 26.1287
+  },
+  {
+    "id": "Naha_FiveHills_3_Lacuni",
+    "type": "tenetOfAkarat",
+    "lat": -196.3401,
+    "lng": 29.5568
+  },
+  {
+    "id": "Naha_FiveHills_2",
+    "type": "tenetOfAkarat",
+    "lat": -189.9236,
+    "lng": 32.8919
+  },
+  {
+    "id": "Naha_FiveHills_11_MistyHills",
+    "type": "tenetOfAkarat",
+    "lat": -206.0657,
+    "lng": 34.4972
+  },
+  {
+    "id": "Naha_FiveHills_4",
+    "type": "tenetOfAkarat",
+    "lat": -188.4729,
+    "lng": 21.0413
+  },
+  {
+    "id": "Naha_FiveHills_1",
+    "type": "tenetOfAkarat",
+    "lat": -203.2759,
+    "lng": 19.7939
+  },
+  {
+    "id": "Naha_RestlessCanopy_South",
+    "type": "tenetOfAkarat",
+    "lat": -198.8882,
+    "lng": 43.2827
+  },
+  {
+    "id": "Naha_RestlessCanopy_3",
+    "type": "tenetOfAkarat",
+    "lat": -184.8082,
+    "lng": 49.5318
+  },
+  {
+    "id": "Naha_RestlessCanopy_DregHive",
+    "type": "tenetOfAkarat",
+    "lat": -197.4065,
+    "lng": 66.2471
+  },
+  {
+    "id": "Naha_LingeringHatred_1",
+    "type": "tenetOfAkarat",
+    "lat": -161.8421,
+    "lng": 50.3051
+  },
+  {
+    "id": "Naha_LingeringHatred_2",
+    "type": "tenetOfAkarat",
+    "lat": -157.9705,
+    "lng": 40.7986
+  },
+  {
+    "id": "Naha_LingeringHatred_5",
+    "type": "tenetOfAkarat",
+    "lat": -164.078,
+    "lng": 18.3845
+  },
+  {
+    "id": "Naha_LingeringHatred_3",
+    "type": "tenetOfAkarat",
+    "lat": -164.9965,
+    "lng": 30.538
+  },
+  {
+    "id": "Naha_LingeringHatred_6",
+    "type": "tenetOfAkarat",
+    "lat": -173.6251,
+    "lng": 39.2834
+  },
+  {
+    "id": "Naha_FieldOfGiants_Ridge_1",
+    "type": "tenetOfAkarat",
+    "lat": -172.5993,
+    "lng": 64.6324
+  },
+  {
+    "id": "Naha_FieldOfGiants_Scar_2",
+    "type": "tenetOfAkarat",
+    "lat": -173.0539,
+    "lng": 75.9597
+  },
+  {
+    "id": "Naha_FieldOfGiants_Scar_1",
+    "type": "tenetOfAkarat",
+    "lat": -172.3804,
+    "lng": 70.636
+  },
+  {
+    "id": "Naha_Plateau_LowerPlateau_1",
+    "type": "tenetOfAkarat",
+    "lat": -159.3297,
+    "lng": 59.5951
+  },
+  {
+    "id": "Naha_Plateau_GreenBelt_1",
+    "type": "tenetOfAkarat",
+    "lat": -155.4171,
+    "lng": 77.1933
+  },
+  {
+    "id": "Naha_Plateau_RockPillars_1",
+    "type": "tenetOfAkarat",
+    "lat": -163.9233,
+    "lng": 88.5988
+  },
+  {
+    "id": "Naha_Plateau_UpperPlateau_1",
+    "type": "tenetOfAkarat",
+    "lat": -162.0565,
+    "lng": 65.9952
+  },
+  {
+    "id": "Naha_Plateau_RockFormations_1",
+    "type": "tenetOfAkarat",
+    "lat": -162.5811,
+    "lng": 78.9259
+  },
+  {
+    "id": "strongholds:MarkerLocation_CampIcon@-148.21258,48.76526",
+    "type": "strongholds",
+    "lat": -148.2126,
+    "lng": 48.7653
+  },
+  {
+    "id": "strongholds:MarkerLocation_CampIcon@-177.81841,5.05907",
+    "type": "strongholds",
+    "lat": -177.8184,
+    "lng": 5.0591
+  },
+  {
+    "id": "strongholds:MarkerLocation_CampIcon@-200.88006,62.74032",
+    "type": "strongholds",
+    "lat": -200.8801,
+    "lng": 62.7403
+  },
+  {
+    "id": "strongholds:MarkerLocation_CampIcon@-154.04942,82.42132",
+    "type": "strongholds",
+    "lat": -154.0494,
+    "lng": 82.4213
+  },
+  {
+    "id": "strongholds:MarkerLocation_CampIcon@-135.14914,68.64183",
+    "type": "strongholds",
+    "lat": -135.1491,
+    "lng": 68.6418
+  },
+  {
+    "id": "armory:-142.90069,89.37415",
+    "type": "armory",
+    "lat": -142.9007,
+    "lng": 89.3742
+  },
+  {
+    "id": "armory:-148.91063,30.08653",
+    "type": "armory",
+    "lat": -148.9106,
+    "lng": 30.0865
+  },
+  {
+    "id": "armory:-180.202,37.7895",
+    "type": "armory",
+    "lat": -180.202,
+    "lng": 37.7895
+  },
+  {
+    "id": "armory:-137.64777,68.23232",
+    "type": "armory",
+    "lat": -137.6478,
+    "lng": 68.2323
+  },
+  {
+    "id": "armory:-137.64877,68.25375",
+    "type": "armory",
+    "lat": -137.6488,
+    "lng": 68.2537
+  },
+  {
+    "id": "armory:-134.44746,68.92008",
+    "type": "armory",
+    "lat": -134.4475,
+    "lng": 68.9201
+  },
+  {
+    "id": "Gizmo_World_Tier_Select",
+    "type": "worldTierStatue",
+    "lat": -137.8182,
+    "lng": 68.6061
+  }
+]

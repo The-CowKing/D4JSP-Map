@@ -1,0 +1,21 @@
+=== map_tabs_deploy start Tue, Apr 28, 2026  9:39:43 AM ===
+[master 8c7326c] fix: static JSON imports (count=0), tabs panel, route viz
+ 3 files changed, 250 insertions(+), 23 deletions(-)
+To https://github.com/The-CowKing/D4JSP-Map.git
+   72a410c..8c7326c  HEAD -> main
+SHA: 8c7326c90769c0b19f0e61af9f65baa41b0b6677
+
+> d4jsp-map@1.0.0 build
+> vite build
+
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+[36mvite v5.4.21 [32mbuilding for production...[36m[39m
+transforming...
+[32m✓[39m 17 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mindex.html                 [39m[1m[2m  4.75 kB[22m[1m[22m[2m │ gzip:   1.60 kB[22m
+[2mdist/[22m[35massets/index-DAIoqKSc.css  [39m[1m[2m 17.15 kB[22m[1m[22m[2m │ gzip:   3.34 kB[22m
+[2mdist/[22m[36massets/index-C7x8MzYn.js   [39m[1m[2m443.76 kB[22m[1m[22m[2m │ gzip: 128.32 kB[22m
+[32m✓ built in 522ms[39m
+=== DEPLOY COMPLETE ===

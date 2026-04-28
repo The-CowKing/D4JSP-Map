@@ -278,5 +278,29 @@
     "y": -438.056,
     "lat": -110.65117277301792,
     "lng": 64.47129968676913
+  },
+  {
+    "name": "Kurast",
+    "lat": -52,
+    "lng": 135,
+    "description": "Ancient city in the heart of Nahantu"
+  },
+  {
+    "name": "Garan Hold",
+    "lat": -49.16,
+    "lng": 127.85,
+    "description": "Stronghold in western Nahantu"
+  },
+  {
+    "name": "Ziggurat of the Dead",
+    "lat": -58,
+    "lng": 145,
+    "description": "Towering burial monument"
+  },
+  {
+    "name": "Mercenary's Gate",
+    "lat": -45,
+    "lng": 140,
+    "description": "Gateway to the Nahantu jungles"
   }
 ]

@@ -11,27 +11,42 @@ import livingsteelRaw from './data/livingsteel.json'
 import eventsRaw      from './data/events.json'
 import sideQuestsRaw  from './data/sidequests.json'
 
+// Nahantu (expansion) POI data
+import nahantuWaypointsRaw   from './data/nahantu_waypoints.json'
+import nahantuDungeonsRaw    from './data/nahantu_dungeons.json'
+import nahantuStrongholdsRaw from './data/nahantu_strongholds.json'
+import nahantuCellarsRaw     from './data/nahantu_cellars.json'
+
 const DATA_MAP = {
-  'waypoints.json':   waypointsRaw,
-  'dungeons.json':    dungeonsRaw,
-  'altars.json':      altarsRaw,
-  'cellars.json':     cellarsRaw,
-  'chests.json':      chestsRaw,
-  'livingsteel.json': livingsteelRaw,
-  'events.json':      eventsRaw,
-  'sidequests.json':  sideQuestsRaw,
+  'waypoints.json':          waypointsRaw,
+  'dungeons.json':           dungeonsRaw,
+  'altars.json':             altarsRaw,
+  'cellars.json':            cellarsRaw,
+  'chests.json':             chestsRaw,
+  'livingsteel.json':        livingsteelRaw,
+  'events.json':             eventsRaw,
+  'sidequests.json':         sideQuestsRaw,
+  'nahantu_waypoints.json':  nahantuWaypointsRaw,
+  'nahantu_dungeons.json':   nahantuDungeonsRaw,
+  'nahantu_strongholds.json':nahantuStrongholdsRaw,
+  'nahantu_cellars.json':    nahantuCellarsRaw,
 }
 
 // Layer config: id, label, icon key, color, data file name
 export const LAYER_CONFIGS = [
-  { id: 'waypoints',    label: 'Waypoints',         iconKey: 'waypoints',    color: '#D4AF37', file: 'waypoints.json'    },
-  { id: 'dungeons',     label: 'Dungeons',           iconKey: 'dungeons',     color: '#8b5cf6', file: 'dungeons.json'     },
-  { id: 'altars',       label: 'Altars of Lilith',   iconKey: 'altars',       color: '#dc2626', file: 'altars.json'       },
-  { id: 'cellars',      label: 'Cellars',            iconKey: 'cellars',      color: '#92400e', file: 'cellars.json'      },
-  { id: 'chests',       label: 'Helltide Chests',    iconKey: 'chests',       color: '#D4AF37', file: 'chests.json'       },
-  { id: 'livingsteel',  label: 'Living Steel',       iconKey: 'livingsteel',  color: '#38bdf8', file: 'livingsteel.json'  },
-  { id: 'events',       label: 'Events',             iconKey: 'events',       color: '#f97316', file: 'events.json'       },
-  { id: 'sidequests',   label: 'Side Quests',        iconKey: 'sidequests',   color: '#3b82f6', file: 'sidequests.json'   },
+  { id: 'waypoints',           label: 'Waypoints',              iconKey: 'waypoints',   color: '#D4AF37', file: 'waypoints.json'          },
+  { id: 'dungeons',            label: 'Dungeons',               iconKey: 'dungeons',    color: '#8b5cf6', file: 'dungeons.json'            },
+  { id: 'altars',              label: 'Altars of Lilith',       iconKey: 'altars',      color: '#dc2626', file: 'altars.json'              },
+  { id: 'cellars',             label: 'Cellars',                iconKey: 'cellars',     color: '#92400e', file: 'cellars.json'             },
+  { id: 'chests',              label: 'Helltide Chests',        iconKey: 'chests',      color: '#D4AF37', file: 'chests.json'              },
+  { id: 'livingsteel',         label: 'Living Steel',           iconKey: 'livingsteel', color: '#38bdf8', file: 'livingsteel.json'         },
+  { id: 'events',              label: 'Events',                 iconKey: 'events',      color: '#f97316', file: 'events.json'              },
+  { id: 'sidequests',          label: 'Side Quests',            iconKey: 'sidequests',  color: '#3b82f6', file: 'sidequests.json'          },
+  // ── Nahantu (expansion) ──────────────────────────────────────
+  { id: 'nahantu_waypoints',   label: 'Nahantu — Waypoints',   iconKey: 'waypoints',   color: '#4ade80', file: 'nahantu_waypoints.json'   },
+  { id: 'nahantu_dungeons',    label: 'Nahantu — Dungeons',    iconKey: 'dungeons',    color: '#c084fc', file: 'nahantu_dungeons.json'    },
+  { id: 'nahantu_strongholds', label: 'Nahantu — Strongholds', iconKey: 'dungeons',    color: '#f43f5e', file: 'nahantu_strongholds.json' },
+  { id: 'nahantu_cellars',     label: 'Nahantu — Cellars',     iconKey: 'cellars',     color: '#a16207', file: 'nahantu_cellars.json'     },
 ]
 
 // Decode HTML entities from source data

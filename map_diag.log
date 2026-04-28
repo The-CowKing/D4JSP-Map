@@ -1,0 +1,17 @@
+ M docs/conventions.md
+M  index.html
+ M src/data/dungeons.json
+ M src/data/waypoints.json
+M  src/main.js
+M  src/style.css
+ M start.md
+?? .claude/
+?? map_deploy.done
+?? map_deploy.log
+?? map_diag.log
+?? src/data/cities.json
+GIT_LOG: 
+6bc5715 docs: map-app conventions + start.md for next-bot handoff
+e1fb7fc docs: sync — kill verify-docs CI red (#86, mirrors D4JSP)
+d493552 docs: sync MAIN DIRECTIVE — bot owns DB (mirrors D4JSP)
+=== done Tue 04/28/2026  2:22:58.57 === 

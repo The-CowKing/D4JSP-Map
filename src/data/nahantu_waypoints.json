@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Kurast Bazaar",
+    "lat": -180.4039,
+    "lng": 36.883
+  },
+  {
+    "name": "Kurast Docks",
+    "lat": -157.2388,
+    "lng": 24.6317
+  },
+  {
+    "name": "Ichorfall",
+    "lat": -185.8416,
+    "lng": 72.356
+  },
+  {
+    "name": "Samuk",
+    "lat": -191.6745,
+    "lng": 13.4393
+  },
+  {
+    "name": "Gates of the Necropolis",
+    "lat": -200.5076,
+    "lng": 56.0821
+  },
+  {
+    "name": "Kichuk",
+    "lat": -155.3165,
+    "lng": 84.7241
+  },
+  {
+    "name": "The Den",
+    "lat": -135.0512,
+    "lng": 68.4286
+  },
+  {
+    "name": "The Gatehall",
+    "lat": -134.1233,
+    "lng": 68.8246
+  }
+]

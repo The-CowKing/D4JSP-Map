@@ -1,0 +1,28 @@
+ M docs/conventions.md
+ M index.html
+ M src/data/dungeons.json
+ M src/data/waypoints.json
+ M src/main.js
+ M src/style.css
+ M start.md
+?? .claude/
+?? map_deploy.log
+?? src/data/cities.json
+[2] Staging files... 
+[3] Committing... 
+fatal: cannot lock ref 'HEAD': Unable to create 'C:/Users/Owner/D4JSP-Map/.git/HEAD.lock': File exists.
+
+Another git process seems to be running in this repository, e.g.
+an editor opened by 'git commit'. Please make sure all processes
+are terminated then try again. If it still fails, a git process
+may have crashed in this repository earlier:
+remove the file manually to continue.
+[4] Pushing to origin/main... 
+To https://github.com/The-CowKing/D4JSP-Map.git
+ ! [rejected]        HEAD -> main (non-fast-forward)
+error: failed to push some refs to 'https://github.com/The-CowKing/D4JSP-Map.git'
+hint: Updates were rejected because a pushed branch tip is behind its remote
+hint: counterpart. If you want to integrate the remote changes, use 'git pull'
+hint: before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+PUSH_RESULT=FAIL 
