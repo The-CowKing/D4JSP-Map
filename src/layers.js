@@ -47,10 +47,10 @@ export const LAYER_CONFIGS = [
   // Nahantu source image has the markers painted on the tiles themselves —
   // we use 'hotspot' (invisible click-target) so popups open without
   // double-rendering the icons.
-  { id: 'nahantu_waypoints',   region: 'Nahantu',   label: 'Waypoints',           iconKey: 'hotspot',     color: '#4ade80', file: 'nahantu_waypoints.json'   },
-  { id: 'nahantu_dungeons',    region: 'Nahantu',   label: 'Dungeons',            iconKey: 'hotspot',     color: '#c084fc', file: 'nahantu_dungeons.json'    },
-  { id: 'nahantu_strongholds', region: 'Nahantu',   label: 'Strongholds',         iconKey: 'hotspot',     color: '#f43f5e', file: 'nahantu_strongholds.json' },
-  { id: 'nahantu_cellars',     region: 'Nahantu',   label: 'Cellars',             iconKey: 'hotspot',     color: '#a16207', file: 'nahantu_cellars.json'     },
+  { id: 'nahantu_waypoints',   region: 'Nahantu',   label: 'Waypoints',           iconKey: 'waypoints',   color: '#4ade80', file: 'nahantu_waypoints.json'   },
+  { id: 'nahantu_dungeons',    region: 'Nahantu',   label: 'Dungeons',            iconKey: 'dungeons',    color: '#c084fc', file: 'nahantu_dungeons.json'    },
+  { id: 'nahantu_strongholds', region: 'Nahantu',   label: 'Strongholds',         iconKey: 'strongholds', color: '#f43f5e', file: 'nahantu_strongholds.json' },
+  { id: 'nahantu_cellars',     region: 'Nahantu',   label: 'Cellars',             iconKey: 'cellars',     color: '#a16207', file: 'nahantu_cellars.json'     },
 ]
 
 // Decode HTML entities from source data
