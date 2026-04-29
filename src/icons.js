@@ -41,9 +41,9 @@ function makeImgIcon(url, { size = 36, anchor = 'center' } = {}) {
 }
 
 // Branded PNG icons (D4JSP-supplied)
-icons.waypoints = makeImgIcon('./icons/waypoint.png',         { size: 36, anchor: 'center' })
-icons.dungeons  = makeImgIcon('./icons/dungeon.png',          { size: 36, anchor: 'bottom' })
-icons.altars    = makeImgIcon('./icons/altar_of_lilith.png',  { size: 36, anchor: 'bottom' })
+icons.waypoints = makeImgIcon('./icons/waypoint.webp',         { size: 36, anchor: 'center' })
+icons.dungeons  = makeImgIcon('./icons/dungeon.webp',          { size: 36, anchor: 'bottom' })
+icons.altars    = makeImgIcon('./icons/altar_of_lilith.webp',  { size: 36, anchor: 'bottom' })
 
 // Cellar — brown wooden door
 icons.cellars = makeDivIcon(`
@@ -58,7 +58,7 @@ icons.cellars = makeDivIcon(`
 `, '#92400e', 30)
 
 // Helltide Chest — branded PNG (D4JSP-supplied)
-icons.chests = makeImgIcon('./icons/helltide_chest.png', { size: 36, anchor: 'bottom' })
+icons.chests = makeImgIcon('./icons/helltide_chest.webp', { size: 36, anchor: 'bottom' })
 
 // Living Steel — silver/blue chest
 icons.livingsteel = makeDivIcon(`
@@ -73,8 +73,8 @@ icons.livingsteel = makeDivIcon(`
 `, '#38bdf8', 32)
 
 // Branded PNG icons (D4JSP-supplied)
-icons.events     = makeImgIcon('./icons/event.png', { size: 36, anchor: 'center' })
-icons.sidequests = makeImgIcon('./icons/quest.png', { size: 36, anchor: 'bottom' })
+icons.events     = makeImgIcon('./icons/event.webp', { size: 36, anchor: 'center' })
+icons.sidequests = makeImgIcon('./icons/quest.webp', { size: 36, anchor: 'bottom' })
 
 // Build Rotation — gold dungeon arch with star (used for saved build rotation markers)
 icons.rotation = makeDivIcon(`
@@ -89,7 +89,7 @@ icons.rotation = makeDivIcon(`
 `, '#D4AF37', 32)
 
 // Stronghold — branded PNG (D4JSP-supplied)
-icons.strongholds = makeImgIcon('./icons/stronghold.png', { size: 36, anchor: 'bottom' })
+icons.strongholds = makeImgIcon('./icons/stronghold.webp', { size: 36, anchor: 'bottom' })
 
 // World Boss — red skull
 icons.world_bosses = makeDivIcon(`

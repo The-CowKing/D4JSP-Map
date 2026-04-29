@@ -8,7 +8,7 @@
 // bottom-left ocean. POIs from every region all live in this same coord
 // space and render side-by-side. No region toggle.
 
-const TILE_URL = './tiles/Sanctuary/{z}/{x}/{y}.png'
+const TILE_URL = './tiles/Sanctuary/{z}/{x}/{y}.webp'
 const TILE_MAX_NATIVE_ZOOM = 4
 const TILE_MAX_ZOOM = 6
 
@@ -40,12 +40,12 @@ const TILE_BOUNDS = L.latLngBounds(
 const REGION_OVERLAYS = [
   {
     name: 'Nahantu',
-    url: './maps/nahantu.jpg',
+    url: './maps/nahantu.webp',
     bounds: L.latLngBounds(L.latLng(-230.13, -2.08), L.latLng(-135.66, 91.83)),
   },
   {
     name: 'Skovos',
-    url: './maps/skovos.png',
+    url: './maps/skovos.webp',
     bounds: L.latLngBounds(L.latLng(-330, -210), L.latLng(-200, -50)),
   },
 ]
@@ -77,7 +77,7 @@ requestAnimationFrame(() => {
 // framed parchment-ocean square holding all three regions.
 map.createPane('oceanPane')
 map.getPane('oceanPane').style.zIndex = '100'
-L.imageOverlay('./maps/ocean.png', WORLD_BOUNDS, {
+L.imageOverlay('./maps/ocean.webp', WORLD_BOUNDS, {
   pane: 'oceanPane',
   interactive: false,
   opacity: 1,
