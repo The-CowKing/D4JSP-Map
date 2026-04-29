@@ -45,17 +45,29 @@ html, body {
 ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
 /* ── Map Container ─────────────────────────────────────────── */
-/* Outer-frame color — what shows OUTSIDE the WORLD_BOUNDS rectangle
-   (e.g. when the viewport is wider than the world's aspect ratio).
-   The actual ocean/fog texture is an in-map L.imageOverlay so the
-   user sees one cohesive framed world. */
+/* Water + fog-of-war atmosphere via layered CSS gradients.
+   Layer order (top → bottom in declared order; CSS paints last-listed
+   first, so first-listed sits ON TOP):
+     1. outer fog vignette — heavy black ONLY at the far edges
+     2. warm sepia hint top-right (where Sanctuary's parchment tiles sit)
+     3. deeper navy swell on the west side (open ocean)
+     4. diagonal grain striations 45° (subtle wave texture)
+     5. counter-diagonal grain striations -45° (cross-weave)
+     6. base ocean gradient top-to-bottom */
 #map {
   position: fixed;
   top: 0; left: 0;
   width: 100%;
   height: 100%;
   z-index: 1;
-  background: #050a14;
+  background-color: #1a2c46;
+  background-image:
+    radial-gradient(ellipse 90% 90% at 50% 50%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.45) 85%, rgba(0,0,0,0.78) 100%),
+    radial-gradient(ellipse 60% 70% at 75% 25%, rgba(120,82,40,0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 60% at 25% 60%, rgba(36,62,98,0.55) 0%, transparent 75%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 90px),
+    repeating-linear-gradient(-45deg, rgba(255,255,255,0.018) 0 1px, transparent 1px 130px),
+    linear-gradient(180deg, #243b5a 0%, #18293f 55%, #0d1828 100%);
 }
 
 /* ── Left Layer Panel ──────────────────────────────────────── */

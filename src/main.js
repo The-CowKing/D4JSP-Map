@@ -71,17 +71,11 @@ requestAnimationFrame(() => {
   if (map.getSize().x > 0) map.fitBounds(WORLD_BOUNDS, { animate: false })
 })
 
-// ── Ocean + fog base layer ──────────────────────────────────
-// Custom pane below tilePane (z-index 100 < tilePane 200) so the ocean
-// sits UNDER Sanctuary tiles AND the region overlays. Reads as one
-// framed parchment-ocean square holding all three regions.
-map.createPane('oceanPane')
-map.getPane('oceanPane').style.zIndex = '100'
-L.imageOverlay('./maps/ocean.webp', WORLD_BOUNDS, {
-  pane: 'oceanPane',
-  interactive: false,
-  opacity: 1,
-}).addTo(map)
+// Ocean + fog atmosphere is supplied by a rich CSS gradient on #map
+// (see src/style.css). The previous attempt of using ocean.webp as an
+// L.imageOverlay rendered as a flat medium-blue rectangle at typical
+// zoom levels (the visible viewport showed only the bright CENTER of
+// the texture, not the vignette/grain at the edges).
 
 // ── Sanctuary base tile layer ───────────────────────────────
 L.tileLayer(TILE_URL, {
