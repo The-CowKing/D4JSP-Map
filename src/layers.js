@@ -198,8 +198,11 @@ const DEFAULTS_BY_REGION = {
 // Position is the JSON-waypoint centroid (or canvas center for regions
 // without POI data yet); CSS hides at zoom >= 3.
 const REGION_LABELS = {
-  Nahantu: { lat: -167.5, lng: 53.2,  text: 'NAHANTU' },
-  Skovos:  { lat: -90,    lng: 95,    text: 'SKOVOS'  },
+  // Sanctuary centroid is roughly the middle of the painted tile area
+  // (TILE_BOUNDS in main.js: lat=[-185, -5], lng=[5, 185] -> center ~ (-95, 95))
+  Sanctuary: { lat: -95,    lng: 95,    text: 'SANCTUARY' },
+  Nahantu:   { lat: -167.5, lng: 53.2,  text: 'NAHANTU'   },
+  Skovos:    { lat: -90,    lng: 95,    text: 'SKOVOS'    },
 }
 
 let activeRegion = 'Sanctuary'
@@ -250,10 +253,11 @@ export function initLayers(map) {
           className: '',
         })
 
-      // Painted-tile regions (Nahantu, Skovos): the source image already shows
-      // the icon. Attach a permanent tooltip with the city name as a readable
-      // label so the zoomed-in view names every waypoint.
-      if (config.iconKey === 'hotspot' && config.id.endsWith('_waypoints')) {
+      // City/waypoint name labels — every waypoint gets a permanent tooltip
+      // showing its name. Applies to Sanctuary, Nahantu, Skovos waypoint
+      // layers. CSS gates visibility by zoom (hidden at zoom <= 2).
+      const isWaypointConfig = config.id === 'waypoints' || config.id.endsWith('_waypoints')
+      if (isWaypointConfig) {
         marker.bindTooltip(decodeHtml(item.name || ''), {
           permanent: true,
           direction: 'bottom',
