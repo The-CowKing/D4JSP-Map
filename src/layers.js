@@ -187,47 +187,17 @@ function activateBuildRoute(map, build) {
   console.log(`[MAP-LAYER] route activated: "${build.name}" — ${dungeonPts.length} dungeons, start WP: ${nearestWp.name}`)
 }
 
-// ── Region state ─────────────────────────────────────────────
-// Default-on layers per region (id only; region is implicit per LAYER_CONFIGS)
-const DEFAULTS_BY_REGION = {
-  Sanctuary: new Set(['waypoints']),
-  Nahantu:   new Set(['nahantu_waypoints', 'nahantu_dungeons', 'nahantu_strongholds', 'nahantu_cellars']),
-}
-
-// Big region-name labels rendered at low zoom on painted-tile regions.
-// Position is the JSON-waypoint centroid (or canvas center for regions
-// without POI data yet); CSS hides at zoom >= 3.
-const REGION_LABELS = {
-  // Sanctuary centroid is roughly the middle of the painted tile area
-  // (TILE_BOUNDS in main.js: lat=[-185, -5], lng=[5, 185] -> center ~ (-95, 95))
-  Sanctuary: { lat: -95,    lng: 95,    text: 'SANCTUARY' },
-  Nahantu:   { lat: -167.5, lng: 53.2,  text: 'NAHANTU'   },
-  Skovos:    { lat: -90,    lng: 95,    text: 'SKOVOS'    },
-}
-
-let activeRegion = 'Sanctuary'
-let regionLabelMarker = null
-export function getActiveRegion() { return activeRegion }
-
-function syncRegionLabel(map) {
-  if (regionLabelMarker) {
-    map.removeLayer(regionLabelMarker)
-    regionLabelMarker = null
-  }
-  const cfg = REGION_LABELS[activeRegion]
-  if (!cfg) return
-  regionLabelMarker = L.marker([cfg.lat, cfg.lng], {
-    icon: L.divIcon({ html: '', className: '', iconSize: [0, 0] }),
-    interactive: false,
-    keyboard: false,
-  })
-    .bindTooltip(cfg.text, {
-      permanent: true,
-      direction: 'center',
-      className: 'd4-region-label',
-    })
-    .addTo(map)
-}
+// ── Default-on layers (unified world) ────────────────────────
+// All regions live on one map. POIs from every region render in the same
+// coord space. By default the most-used categories are on; the rest are
+// off but toggleable from the sidebar panel.
+const DEFAULT_ON = new Set([
+  'waypoints',
+  'nahantu_waypoints',
+  'nahantu_dungeons',
+  'nahantu_strongholds',
+  'nahantu_cellars',
+])
 
 // ── initLayers ───────────────────────────────────────────────
 export function initLayers(map) {
@@ -279,56 +249,40 @@ export function initLayers(map) {
       })
     }
 
-    const enabled = config.region === activeRegion && DEFAULTS_BY_REGION[activeRegion]?.has(config.id)
+    const enabled = DEFAULT_ON.has(config.id)
     if (enabled) group.addTo(map)
     console.log(`[MAP-LAYER] init: ${config.id} (${config.region}) — ${data.length} markers, enabled=${enabled}`)
   }
 
   console.log(`[MAP-LAYER] initLayers complete — ${allPOIs.length} total POIs indexed`)
   buildSidebarPanel(map)
-  syncRegionLabel(map)
-}
-
-// ── setActiveRegion ──────────────────────────────────────────
-// Called when the user toggles the region selector. Removes all currently-
-// rendered layer groups, switches the active region, and re-renders the
-// sidebar panel so only the new region's layers are listed.
-export function setActiveRegion(region, map) {
-  if (region === activeRegion) return
-  for (const config of LAYER_CONFIGS) {
-    const group = layerGroups[config.id]
-    if (group && map.hasLayer(group)) map.removeLayer(group)
-  }
-  activeRegion = region
-  const defaults = DEFAULTS_BY_REGION[region] || new Set()
-  for (const config of LAYER_CONFIGS) {
-    if (config.region === region && defaults.has(config.id)) {
-      layerGroups[config.id]?.addTo(map)
-    }
-  }
-  buildSidebarPanel(map)
-  syncRegionLabel(map)
-  console.log(`[MAP-LAYER] active region -> ${region}`)
 }
 
 // ── buildSidebarPanel ────────────────────────────────────────
 function buildSidebarPanel(map) {
-  // ── LAYERS tab: layer checkboxes (filtered to active region) ─
+  // Sidebar lists every layer across all regions on the unified world map.
+  // Group sections by region in the displayed order: Sanctuary, then Nahantu.
   const list = document.getElementById('layer-list')
   if (!list) return
-  list.innerHTML = ''  // clear (re-render on region switch)
+  list.innerHTML = ''
 
-  // Update panel title to reflect active region
   const titleEl = document.querySelector('.panel-title')
-  if (titleEl) titleEl.textContent = activeRegion.toUpperCase()
+  if (titleEl) titleEl.textContent = 'WORLD MAP'
 
-  const defaults = DEFAULTS_BY_REGION[activeRegion] || new Set()
+  let lastRegion = null
   for (const config of LAYER_CONFIGS) {
-    if (config.region !== activeRegion) continue
+    // Section header on region transitions
+    if (config.region !== lastRegion) {
+      const header = document.createElement('div')
+      header.className = 'layer-section-header'
+      header.textContent = config.region
+      list.appendChild(header)
+      lastRegion = config.region
+    }
 
     const group = layerGroups[config.id]
     const count = allPOIs.filter(p => p.config.id === config.id).length
-    const isEnabled = defaults.has(config.id)
+    const isEnabled = DEFAULT_ON.has(config.id)
 
     const item = document.createElement('div')
     item.className = 'layer-item' + (isEnabled ? ' checked' : '')

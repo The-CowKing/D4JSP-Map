@@ -91,40 +91,6 @@ html, body {
   border-width: 0 2px 2px 0;
 }
 
-/* Region switcher — top-center segmented control */
-#region-switcher {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1001;
-  display: flex;
-  gap: 0;
-  background: linear-gradient(180deg, #110f14 0%, #0a0810 100%);
-  border: 1px solid var(--border-strong);
-  border-radius: 6px;
-  box-shadow: var(--shadow);
-  overflow: hidden;
-}
-#region-switcher .region-btn {
-  background: transparent;
-  border: 0;
-  color: var(--gold-dim);
-  padding: 8px 14px;
-  font-family: 'Cinzel', serif;
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: color 0.15s, background 0.15s;
-}
-#region-switcher .region-btn + .region-btn { border-left: 1px solid var(--border-strong); }
-#region-switcher .region-btn:hover { color: var(--gold); }
-#region-switcher .region-btn.active {
-  color: var(--gold);
-  background: rgba(212,175,55,0.12);
-}
-
 /* Invisible click-target marker (Nahantu — diamonds painted on tiles) */
 .d4-hotspot {
   border-radius: 50%;
@@ -156,26 +122,6 @@ html, body {
 body[data-zoom="1"] .leaflet-tooltip.d4-city-label,
 body[data-zoom="2"] .leaflet-tooltip.d4-city-label { display: none; }
 
-/* Big region label — visible only at low zoom */
-.leaflet-tooltip.d4-region-label {
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-  color: #d4c4a0;
-  font-family: 'Cinzel', serif;
-  font-size: 38px;
-  font-weight: 900;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  text-shadow: 0 0 8px #000, 2px 2px 0 #000, -1px -1px 0 #000;
-  pointer-events: none;
-  white-space: nowrap;
-}
-.leaflet-tooltip.d4-region-label::before { display: none; }
-body[data-zoom="3"] .leaflet-tooltip.d4-region-label,
-body[data-zoom="4"] .leaflet-tooltip.d4-region-label,
-body[data-zoom="5"] .leaflet-tooltip.d4-region-label,
-body[data-zoom="6"] .leaflet-tooltip.d4-region-label { display: none; }
 
 /* Panel toggle button (shown when panel is closed) */
 #panel-toggle-btn {
