@@ -32,21 +32,25 @@ const DATA_MAP = {
   'nahantu_cellars.json':    nahantuCellarsRaw,
 }
 
-// Layer config: id, label, icon key, color, data file name
+// Layer config: id, label, icon key, color, data file name, region
+// region groups configs by tile pyramid (Sanctuary, Nahantu, Skovos…)
 export const LAYER_CONFIGS = [
-  { id: 'waypoints',           label: 'Waypoints',              iconKey: 'waypoints',   color: '#D4AF37', file: 'waypoints.json'          },
-  { id: 'dungeons',            label: 'Dungeons',               iconKey: 'dungeons',    color: '#8b5cf6', file: 'dungeons.json'            },
-  { id: 'altars',              label: 'Altars of Lilith',       iconKey: 'altars',      color: '#dc2626', file: 'altars.json'              },
-  { id: 'cellars',             label: 'Cellars',                iconKey: 'cellars',     color: '#92400e', file: 'cellars.json'             },
-  { id: 'chests',              label: 'Helltide Chests',        iconKey: 'chests',      color: '#D4AF37', file: 'chests.json'              },
-  { id: 'livingsteel',         label: 'Living Steel',           iconKey: 'livingsteel', color: '#38bdf8', file: 'livingsteel.json'         },
-  { id: 'events',              label: 'Events',                 iconKey: 'events',      color: '#f97316', file: 'events.json'              },
-  { id: 'sidequests',          label: 'Side Quests',            iconKey: 'sidequests',  color: '#3b82f6', file: 'sidequests.json'          },
-  // ── Nahantu (expansion) ──────────────────────────────────────
-  { id: 'nahantu_waypoints',   label: 'Nahantu — Waypoints',   iconKey: 'waypoints',   color: '#4ade80', file: 'nahantu_waypoints.json'   },
-  { id: 'nahantu_dungeons',    label: 'Nahantu — Dungeons',    iconKey: 'dungeons',    color: '#c084fc', file: 'nahantu_dungeons.json'    },
-  { id: 'nahantu_strongholds', label: 'Nahantu — Strongholds', iconKey: 'dungeons',    color: '#f43f5e', file: 'nahantu_strongholds.json' },
-  { id: 'nahantu_cellars',     label: 'Nahantu — Cellars',     iconKey: 'cellars',     color: '#a16207', file: 'nahantu_cellars.json'     },
+  { id: 'waypoints',           region: 'Sanctuary', label: 'Waypoints',           iconKey: 'waypoints',   color: '#D4AF37', file: 'waypoints.json'          },
+  { id: 'dungeons',            region: 'Sanctuary', label: 'Dungeons',            iconKey: 'dungeons',    color: '#8b5cf6', file: 'dungeons.json'            },
+  { id: 'altars',              region: 'Sanctuary', label: 'Altars of Lilith',    iconKey: 'altars',      color: '#dc2626', file: 'altars.json'              },
+  { id: 'cellars',             region: 'Sanctuary', label: 'Cellars',             iconKey: 'cellars',     color: '#92400e', file: 'cellars.json'             },
+  { id: 'chests',              region: 'Sanctuary', label: 'Helltide Chests',     iconKey: 'chests',      color: '#D4AF37', file: 'chests.json'              },
+  { id: 'livingsteel',         region: 'Sanctuary', label: 'Living Steel',        iconKey: 'livingsteel', color: '#38bdf8', file: 'livingsteel.json'         },
+  { id: 'events',              region: 'Sanctuary', label: 'Events',              iconKey: 'events',      color: '#f97316', file: 'events.json'              },
+  { id: 'sidequests',          region: 'Sanctuary', label: 'Side Quests',         iconKey: 'sidequests',  color: '#3b82f6', file: 'sidequests.json'          },
+  // ── Nahantu (Vessel of Hatred) ──────────────────────────────
+  // Nahantu source image has the markers painted on the tiles themselves —
+  // we use 'hotspot' (invisible click-target) so popups open without
+  // double-rendering the icons.
+  { id: 'nahantu_waypoints',   region: 'Nahantu',   label: 'Waypoints',           iconKey: 'hotspot',     color: '#4ade80', file: 'nahantu_waypoints.json'   },
+  { id: 'nahantu_dungeons',    region: 'Nahantu',   label: 'Dungeons',            iconKey: 'hotspot',     color: '#c084fc', file: 'nahantu_dungeons.json'    },
+  { id: 'nahantu_strongholds', region: 'Nahantu',   label: 'Strongholds',         iconKey: 'hotspot',     color: '#f43f5e', file: 'nahantu_strongholds.json' },
+  { id: 'nahantu_cellars',     region: 'Nahantu',   label: 'Cellars',             iconKey: 'hotspot',     color: '#a16207', file: 'nahantu_cellars.json'     },
 ]
 
 // Decode HTML entities from source data
@@ -183,10 +187,47 @@ function activateBuildRoute(map, build) {
   console.log(`[MAP-LAYER] route activated: "${build.name}" — ${dungeonPts.length} dungeons, start WP: ${nearestWp.name}`)
 }
 
+// ── Region state ─────────────────────────────────────────────
+// Default-on layers per region (id only; region is implicit per LAYER_CONFIGS)
+const DEFAULTS_BY_REGION = {
+  Sanctuary: new Set(['waypoints']),
+  Nahantu:   new Set(['nahantu_waypoints', 'nahantu_dungeons', 'nahantu_strongholds', 'nahantu_cellars']),
+}
+
+// Big region-name labels rendered at low zoom on painted-tile regions.
+// Position is the JSON-waypoint centroid (or canvas center for regions
+// without POI data yet); CSS hides at zoom >= 3.
+const REGION_LABELS = {
+  Nahantu: { lat: -167.5, lng: 53.2,  text: 'NAHANTU' },
+  Skovos:  { lat: -90,    lng: 95,    text: 'SKOVOS'  },
+}
+
+let activeRegion = 'Sanctuary'
+let regionLabelMarker = null
+export function getActiveRegion() { return activeRegion }
+
+function syncRegionLabel(map) {
+  if (regionLabelMarker) {
+    map.removeLayer(regionLabelMarker)
+    regionLabelMarker = null
+  }
+  const cfg = REGION_LABELS[activeRegion]
+  if (!cfg) return
+  regionLabelMarker = L.marker([cfg.lat, cfg.lng], {
+    icon: L.divIcon({ html: '', className: '', iconSize: [0, 0] }),
+    interactive: false,
+    keyboard: false,
+  })
+    .bindTooltip(cfg.text, {
+      permanent: true,
+      direction: 'center',
+      className: 'd4-region-label',
+    })
+    .addTo(map)
+}
+
 // ── initLayers ───────────────────────────────────────────────
 export function initLayers(map) {
-  const enabledByDefault = new Set(['waypoints'])
-
   for (const config of LAYER_CONFIGS) {
     const data = DATA_MAP[config.file] || []
     const group = L.layerGroup()
@@ -209,6 +250,18 @@ export function initLayers(map) {
           className: '',
         })
 
+      // Painted-tile regions (Nahantu, Skovos): the source image already shows
+      // the icon. Attach a permanent tooltip with the city name as a readable
+      // label so the zoomed-in view names every waypoint.
+      if (config.iconKey === 'hotspot' && config.id.endsWith('_waypoints')) {
+        marker.bindTooltip(decodeHtml(item.name || ''), {
+          permanent: true,
+          direction: 'bottom',
+          offset: [0, 14],
+          className: 'd4-city-label',
+        })
+      }
+
       marker.addTo(group)
 
       // Index for search
@@ -222,25 +275,56 @@ export function initLayers(map) {
       })
     }
 
-    const enabled = enabledByDefault.has(config.id)
+    const enabled = config.region === activeRegion && DEFAULTS_BY_REGION[activeRegion]?.has(config.id)
     if (enabled) group.addTo(map)
-    console.log(`[MAP-LAYER] init: ${config.id} — ${data.length} markers, enabled=${enabled}`)
+    console.log(`[MAP-LAYER] init: ${config.id} (${config.region}) — ${data.length} markers, enabled=${enabled}`)
   }
 
   console.log(`[MAP-LAYER] initLayers complete — ${allPOIs.length} total POIs indexed`)
-  buildSidebarPanel(map, enabledByDefault)
+  buildSidebarPanel(map)
+  syncRegionLabel(map)
+}
+
+// ── setActiveRegion ──────────────────────────────────────────
+// Called when the user toggles the region selector. Removes all currently-
+// rendered layer groups, switches the active region, and re-renders the
+// sidebar panel so only the new region's layers are listed.
+export function setActiveRegion(region, map) {
+  if (region === activeRegion) return
+  for (const config of LAYER_CONFIGS) {
+    const group = layerGroups[config.id]
+    if (group && map.hasLayer(group)) map.removeLayer(group)
+  }
+  activeRegion = region
+  const defaults = DEFAULTS_BY_REGION[region] || new Set()
+  for (const config of LAYER_CONFIGS) {
+    if (config.region === region && defaults.has(config.id)) {
+      layerGroups[config.id]?.addTo(map)
+    }
+  }
+  buildSidebarPanel(map)
+  syncRegionLabel(map)
+  console.log(`[MAP-LAYER] active region -> ${region}`)
 }
 
 // ── buildSidebarPanel ────────────────────────────────────────
-function buildSidebarPanel(map, enabledByDefault) {
-  // ── LAYERS tab: layer checkboxes ──────────────────────────
+function buildSidebarPanel(map) {
+  // ── LAYERS tab: layer checkboxes (filtered to active region) ─
   const list = document.getElementById('layer-list')
   if (!list) return
+  list.innerHTML = ''  // clear (re-render on region switch)
 
+  // Update panel title to reflect active region
+  const titleEl = document.querySelector('.panel-title')
+  if (titleEl) titleEl.textContent = activeRegion.toUpperCase()
+
+  const defaults = DEFAULTS_BY_REGION[activeRegion] || new Set()
   for (const config of LAYER_CONFIGS) {
+    if (config.region !== activeRegion) continue
+
     const group = layerGroups[config.id]
     const count = allPOIs.filter(p => p.config.id === config.id).length
-    const isEnabled = enabledByDefault.has(config.id)
+    const isEnabled = defaults.has(config.id)
 
     const item = document.createElement('div')
     item.className = 'layer-item' + (isEnabled ? ' checked' : '')
@@ -338,6 +422,15 @@ function renderBuildsTab(map) {
 
     const isActive = build.id === activeBuildId
 
+    // 2026-04-28 (Bug 2 fix): the prior label "▶ Show Dungeons" implied a
+    // build-specific route, but trade-core BuildPlanner doesn't save a
+    // build.dungeons[] route — clicking just toggles the global dungeon +
+    // waypoint layers. Use a label that matches actual behavior. When the
+    // farm-route feature lands (per agent-outputs/investigations/boss_builds_menu.md),
+    // hasRoute will be true and the original label fits.
+    const hasRoute = Array.isArray(build.dungeons) && build.dungeons.length > 0
+    const inactiveLabel = hasRoute ? '▶ Show Dungeons' : '▶ Highlight Dungeons + Waypoints'
+
     const item = document.createElement('div')
     item.className = 'build-item' + (isActive ? ' active' : '')
     item.dataset.buildId = build.id
@@ -360,8 +453,8 @@ function renderBuildsTab(map) {
       <div class="build-gear-expand">
         <div class="build-gear-title">Gear Slots</div>
         ${gearHtml}
-        <button class="build-activate-btn${isActive ? ' active-route' : ''}">
-          ${isActive ? '✓ Active Route' : '▶ Show Dungeons'}
+        <button class="build-activate-btn${isActive ? ' active-route' : ''}" data-inactive-label="${escapeHtml(inactiveLabel)}">
+          ${isActive ? '✓ Active Route' : inactiveLabel}
         </button>
       </div>
     `
@@ -393,13 +486,16 @@ function renderBuildsTab(map) {
       e.stopPropagation()
       if (activeBuildId === build.id) {
         clearBuildRoute(map)
-        activateBtn.textContent = '▶ Show Dungeons'
+        activateBtn.textContent = inactiveLabel
         activateBtn.classList.remove('active-route')
         document.querySelectorAll('.build-item').forEach(el => el.classList.remove('active'))
       } else {
         document.querySelectorAll('.build-item').forEach(el => el.classList.remove('active'))
+        // 2026-04-28: each button carries its own inactive label (depends on
+        // whether the build has a saved dungeon route). Use data-inactive-label
+        // so we restore the right text per button, not a hardcoded string.
         document.querySelectorAll('.build-activate-btn').forEach(btn => {
-          btn.textContent = '▶ Show Dungeons'
+          btn.textContent = btn.dataset.inactiveLabel || '▶ Highlight Dungeons + Waypoints'
           btn.classList.remove('active-route')
         })
         item.classList.add('active')

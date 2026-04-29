@@ -3,6 +3,17 @@
 
 const icons = {}
 
+// Invisible click-hotspot — used when the underlying tile already has the
+// marker painted on (e.g. Nahantu source image with diamond waypoints baked in).
+// Same hit area as a normal marker so popups still open on click/hover.
+icons.hotspot = L.divIcon({
+  html: '<div class="d4-hotspot" style="width:36px;height:36px;cursor:pointer"></div>',
+  className: '',
+  iconSize: [36, 36],
+  iconAnchor: [18, 18],
+  popupAnchor: [0, -20],
+})
+
 function makeDivIcon(svgContent, color, size = 32) {
   const half = size / 2
   return L.divIcon({

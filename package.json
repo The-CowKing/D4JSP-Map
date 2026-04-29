@@ -8,10 +8,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "leaflet": "^1.9.4",
-    "fuse.js": "^7.0.0"
+    "fuse.js": "^7.0.0",
+    "leaflet": "^1.9.4"
   },
   "devDependencies": {
+    "sharp": "^0.34.5",
     "vite": "^5.0.0"
   }
 }
