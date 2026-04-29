@@ -45,22 +45,17 @@ html, body {
 ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
 /* ── Map Container ─────────────────────────────────────────── */
-/* Water + fog-of-war atmospheric fill behind tiles + image overlays.
-   Layered radial-vignette + dark-ocean base so the gaps between Sanctuary
-   tiles, the Nahantu painted overlay, and the Skovos overlay read as
-   continuous deep-ocean / unexplored fog instead of harsh black. */
+/* Outer-frame color — what shows OUTSIDE the WORLD_BOUNDS rectangle
+   (e.g. when the viewport is wider than the world's aspect ratio).
+   The actual ocean/fog texture is an in-map L.imageOverlay so the
+   user sees one cohesive framed world. */
 #map {
   position: fixed;
   top: 0; left: 0;
   width: 100%;
   height: 100%;
   z-index: 1;
-  background-color: #06101c;
-  background-image:
-    radial-gradient(ellipse 60% 60% at 50% 50%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.92) 100%),
-    radial-gradient(ellipse 35% 70% at 18% 38%, rgba(28,52,80,0.55) 0%, rgba(28,52,80,0) 70%),
-    radial-gradient(ellipse 45% 35% at 78% 70%, rgba(38,28,18,0.45) 0%, rgba(38,28,18,0) 65%),
-    linear-gradient(180deg, #0a1828 0%, #061018 55%, #020812 100%);
+  background: #050a14;
 }
 
 /* ── Left Layer Panel ──────────────────────────────────────── */

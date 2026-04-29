@@ -12,13 +12,21 @@ const TILE_URL = './tiles/Sanctuary/{z}/{x}/{y}.png'
 const TILE_MAX_NATIVE_ZOOM = 4
 const TILE_MAX_ZOOM = 6
 
-// World pan-bounds (generous; the visible content sits inside)
-const MAP_BOUNDS = L.latLngBounds(
-  L.latLng(-800, -500),
-  L.latLng(500, 800)
+// Unified WORLD_BOUNDS — the framed rectangle that holds all three regions
+// plus surrounding ocean/fog. Aspect ~1.22:1 matches public/maps/ocean.png.
+// Sanctuary tile bounds: lat=[-185,-5], lng=[5,185]
+// Nahantu overlay:        lat=[-230,-136], lng=[-2,92]
+// Skovos overlay:         lat=[-330,-200], lng=[-210,-50]
+// Padding all around so regions don't kiss the frame edge.
+const WORLD_BOUNDS = L.latLngBounds(
+  L.latLng(-360, -230),
+  L.latLng(0, 210)
 )
 
-// Sanctuary's painted-tile coverage — also the canonical world tile bounds
+// Pan-bounds is the same — user can't pan past the framed world
+const MAP_BOUNDS = WORLD_BOUNDS
+
+// Sanctuary's painted-tile coverage — sits inside WORLD_BOUNDS
 const TILE_BOUNDS = L.latLngBounds(
   L.latLng(-185, 5),
   L.latLng(-5, 185)
@@ -51,10 +59,29 @@ const map = new L.Map('map', {
   zoomControl: false,
   preferCanvas: false,
   maxBounds: MAP_BOUNDS,
-  maxBoundsViscosity: 0.85,
+  maxBoundsViscosity: 1.0,
   zoomSnap: 0.5,
   zoomDelta: 0.5,
-}).setView([-90, 95], 3)
+}).setView([-180, -10], 1)
+
+// fitBounds after the map element has actual dimensions — guards against
+// initial 0x0 layout (some embeds, preview tools) where fitBounds can't
+// compute a zoom and tiles never load.
+requestAnimationFrame(() => {
+  if (map.getSize().x > 0) map.fitBounds(WORLD_BOUNDS, { animate: false })
+})
+
+// ── Ocean + fog base layer ──────────────────────────────────
+// Custom pane below tilePane (z-index 100 < tilePane 200) so the ocean
+// sits UNDER Sanctuary tiles AND the region overlays. Reads as one
+// framed parchment-ocean square holding all three regions.
+map.createPane('oceanPane')
+map.getPane('oceanPane').style.zIndex = '100'
+L.imageOverlay('./maps/ocean.png', WORLD_BOUNDS, {
+  pane: 'oceanPane',
+  interactive: false,
+  opacity: 1,
+}).addTo(map)
 
 // ── Sanctuary base tile layer ───────────────────────────────
 L.tileLayer(TILE_URL, {
