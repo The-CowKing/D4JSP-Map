@@ -146,11 +146,20 @@ if (brandFrameOverlay._image) {
   brandFrameOverlay._image.style.zIndex = '500'
 }
 
-// Y.32: default viewport shows the ENTIRE frame. Override the initial
-// setView (zoom 1) above with a fitBounds against FRAME_BOUNDS so the
-// outer frame edges land just inside the shell on first load. Padding 0
-// because we already factored the outset into FRAME_BOUNDS itself.
-map.fitBounds(FRAME_BOUNDS, { animate: false, padding: [0, 0] })
+// Y.33 (Adam: "border perfect. view port default is a bit small it
+// should pack the width for mobile pc we will have to tune size
+// later"). fitBounds(FRAME_BOUNDS) chose a zoom that fit BOTH the
+// frame width and height inside the shell — leaving empty bands on
+// the sides because the frame is slightly taller than wide. Pack the
+// WIDTH instead: compute zoom so the frame's outer width = container
+// width. Top/bottom of the frame may bleed slightly past the shell on
+// portrait mobile (Adam's OK with that on mobile). PC will be tuned
+// later with a width clamp.
+const containerSize = map.getSize()
+const viewportW = containerSize.x || 360 // fallback if container not laid out yet
+const frameNativeW = NATIVE_WIDTH * (1 + 2 * FRAME_OUTSET_X)
+const zoomToFitWidth = TILE_MAX_NATIVE_ZOOM - Math.log2(frameNativeW / viewportW)
+map.setView(center, zoomToFitWidth, { animate: false })
 
 L.control.zoom({ position: 'bottomright' }).addTo(map)
 
