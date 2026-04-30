@@ -67,42 +67,25 @@ html, body {
   overscroll-behavior: contain;
 }
 
-/* Y.21 (Adam: it's like none of anything has applied since gold border
-   revert to that): straight revert to the Y.14 CSS gold border that he
-   confirmed worked. No PNG, no blend mode, no parent-page frame. Just a
-   simple double gold border drawn from CSS — vector, no compositing,
-   guaranteed not to drift. D4JSP banner via ::before pseudo-element. */
+/* Y.24 (Adam: maybe use css but display my border with it?): use the
+   PNG via CSS `border-image` property. The PNG is sliced into 9 regions
+   (4 corners + 4 edges + middle) and rendered AS a CSS border — same
+   GPU/vector pipeline as the Y.21 gold double border that locked
+   correctly. Raster bg-image was the problem; border-image isn't.
+   Slice value 100 = use 100px from each edge of the source PNG for the
+   corners/edges. `fill` keeps the middle slice rendered (transparent
+   parchment center). `stretch` stretches edge slices to fill. */
 #brand-frame {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 1000;
-  border: 6px double #c9a73e;
-  box-shadow:
-    inset 0 0 0 1px #6b4f10,
-    inset 0 0 0 8px #1a1208,
-    inset 0 0 0 9px #c9a73e,
-    0 0 30px rgba(0,0,0,0.6);
+  border-style: solid;
+  border-width: 12% 12% 12% 12%;        /* matches the visible art margin in the PNG */
+  border-color: transparent;
+  border-image: url('/branding-frame.png') 100 fill / 12% / 0 stretch;
   background: transparent;
   touch-action: none;
-}
-#brand-frame::before {
-  content: 'D4JSP';
-  position: absolute;
-  top: -16px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 4px 22px;
-  background: linear-gradient(180deg, #2a1a08 0%, #1a1004 100%);
-  color: #c9a73e;
-  font-family: 'Cinzel', serif;
-  font-weight: 900;
-  font-size: clamp(12px, 1.4vw, 18px);
-  letter-spacing: 4px;
-  border: 2px solid #c9a73e;
-  border-radius: 4px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.7);
-  z-index: 1001;
 }
 
 /* Y.19 (Adam: remove the bullshit u tried to embed in the scroll I bet
