@@ -304,32 +304,47 @@ async function boot() {
   // marker type, and stash L.layerGroups in poiGroups. Layer toggles in
   // the menu add/remove the groups from the map.
   //
-  // Coord transform — Y.34r (Adam: "they r super far off if I had to
-  // guess I'd say inverted would allign"). Maxroll's world Y is
-  // positive-up (game convention), but Leaflet's pyramid Y is positive-
-  // down (screen pixels). Negate Y. Sanctuary sits in the upper-right
-  // half of the maxroll pyramid, so x=0 (Sanctuary roughly-center) needs
-  // to land near pyramid x≈4800 — adjusted X bounds so that mapping holds.
-  const WORLD_X_MIN = -3000, WORLD_X_MAX = 3500
-  const WORLD_Y_MIN = -2000, WORLD_Y_MAX = 1500
-  const POI_PX_OFFSET_X = 600
-  const POI_PX_OFFSET_Y = 800
-  const POI_PX_W = NATIVE_WIDTH - 2 * POI_PX_OFFSET_X
-  const POI_PX_H = NATIVE_WIDTH - 2 * POI_PX_OFFSET_Y
+  // Y.34y — root cause analysis: maxroll's tile pyramid is rendered with
+  // a 45°-rotated coord system relative to the marker world coords (D4
+  // uses an iso-style projection internally; the rendered top-down map
+  // tiles bake in this rotation). Naive XY mappings will always look
+  // rotated/sheared. Apply 45° rotation in the world->tile transform.
+  //
+  // After 45° CW rotation: tx = (wx - wy)/√2, ty = (wx + wy)/√2
+  // (This rotates the source coord plane 45° CW so game-east maps to
+  // tile-NE, which matches how Sanctuary appears on maxroll's tiles.)
+  //
+  // Bounds (tx, ty) computed at boot from the actual markers so the
+  // cluster fits the pyramid centered with breathing room.
+  const POI_FILL = 0.78  // markers occupy ~78% of pyramid (rest is empty parchment around Sanctuary)
+  let POI_TRANSFORM = null
+  function buildPoiTransform(markers) {
+    let txMin = Infinity, txMax = -Infinity, tyMin = Infinity, tyMax = -Infinity
+    for (const m of markers) {
+      const tx = (m.x - m.y) / Math.SQRT2
+      const ty = (m.x + m.y) / Math.SQRT2
+      if (tx < txMin) txMin = tx
+      if (tx > txMax) txMax = tx
+      if (ty < tyMin) tyMin = ty
+      if (ty > tyMax) tyMax = ty
+    }
+    const txSpan = txMax - txMin
+    const tySpan = tyMax - tyMin
+    const span = Math.max(txSpan, tySpan)  // uniform scale across both axes
+    const targetSpan = NATIVE_WIDTH * POI_FILL
+    const scale = targetSpan / span
+    // Centered offset so cluster sits in middle of pyramid
+    const offsetX = (NATIVE_WIDTH - txSpan * scale) / 2 - txMin * scale
+    const offsetY = (NATIVE_WIDTH - tySpan * scale) / 2 - tyMin * scale
+    POI_TRANSFORM = { scale, offsetX, offsetY }
+  }
   function worldToLatLng(wx, wy) {
-    // Y.34x (Adam: "look at bottom tit of the pois it would align with
-    // the coast at the top"). The 90° CCW rotation (Y.34v) had the
-    // shape correct but Y-flipped — flipping Y on top of the rotation
-    // brings the cluster's bottom protrusion up to align with the
-    // northern coast.
-    // Steps:
-    //   1) Y.34u-style flip on both source axes -> oldPx, oldPy
-    //   2) 90° CCW rotation around pyramid center -> (NATIVE - oldPy, oldPx)
-    //   3) Y-flip the result -> (NATIVE - oldPy, NATIVE - oldPx)
-    const oldPx = POI_PX_OFFSET_X + (WORLD_X_MAX - wx) / (WORLD_X_MAX - WORLD_X_MIN) * POI_PX_W
-    const oldPy = POI_PX_OFFSET_Y + (WORLD_Y_MAX - wy) / (WORLD_Y_MAX - WORLD_Y_MIN) * POI_PX_H
-    const px = NATIVE_WIDTH - oldPy
-    const py = NATIVE_WIDTH - oldPx
+    // 45° CW rotation, then scale + offset onto pyramid.
+    const tx = (wx - wy) / Math.SQRT2
+    const ty = (wx + wy) / Math.SQRT2
+    const t = POI_TRANSFORM
+    const px = tx * t.scale + t.offsetX
+    const py = ty * t.scale + t.offsetY
     return map.unproject([px, py], TILE_MAX_NATIVE_ZOOM)
   }
   // Color + label per maxroll marker type.
@@ -366,6 +381,9 @@ async function boot() {
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       const markers = Array.isArray(data.markers) ? data.markers : []
+      // Y.34y: compute the 45°-rotated bounds across all markers and stash
+      // the scale/offset so worldToLatLng can use them.
+      buildPoiTransform(markers)
       const seen = new Set()
       for (const m of markers) {
         const t = m.type
