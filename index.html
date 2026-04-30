@@ -23,13 +23,11 @@
        the parchment scroll in the top-left of the frame. -->
   <div id="map-shell">
     <div id="map"></div>
-
-  <!-- Y.17 (Adam: lock it just like that gold render border): brand-frame
-       moved OUTSIDE map-shell as a body-level position:fixed sibling with the
-       same dimensions formula as the shell. This decouples it from any
-       transform/repaint inside map-shell so it stays anchored to the viewport
-       no matter what the iframe / map / Leaflet pane is doing. -->
-  <div id="brand-frame"></div>
+    <!-- Y.18 (Adam: it was working properly with the gold border): brand-frame
+         is back INSIDE map-shell as a sibling of #map. position:absolute inset:0
+         inside the position:fixed shell — exactly the same anchoring as the
+         Y.14 CSS gold border that worked. Layer panel hides on zoom-in. -->
+    <div id="brand-frame"></div>
 
   <!-- Panel reopen button (visible when panel is closed) — Y.10 hidden via CSS -->
   <button id="panel-toggle-btn" title="Show layer controls">&#9776;</button>

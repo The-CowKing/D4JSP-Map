@@ -67,19 +67,13 @@ html, body {
   overscroll-behavior: contain;
 }
 
-/* Y.17 (Adam: lock it just like that gold render border): brand-frame is
-   now a body-level position:fixed sibling of #map-shell, with identical
-   dimensions formula. Decoupling it from map-shell means nothing inside
-   the shell (Leaflet pane transforms, panel updates, etc) can drag it. */
+/* Y.18 (Adam: it was working properly with the gold border): back inside
+   map-shell, position:absolute inset:0 — same anchoring as the Y.14 CSS
+   border. The PNG is a normal background-image, alpha-channeled, no
+   blend mode. Map zooms inside, frame stays put. */
 #brand-frame {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  aspect-ratio: 1 / 1;
-  max-height: 100vh;
-  max-width: 100vh;
-  margin: 0 auto;
+  position: absolute;
+  inset: 0;
   pointer-events: none;
   z-index: 1000;
   background: url('/branding-frame.png') center/100% 100% no-repeat;
@@ -110,6 +104,16 @@ html, body {
   padding: 0.6vw 0.8vw !important;
   /* Dark text on parchment background — flip from the dark-panel default */
   color: #2a1f0c !important;
+  /* Y.18 (Adam: when you zoom in the layer should disappear if u r zooming
+     something in middle of sanctuary): smooth fade so the parchment doesn't
+     block the zoomed view. Hidden whenever body.dataset.zoom > 1. */
+  transition: opacity 0.2s ease, transform 0.2s ease !important;
+  opacity: 1;
+}
+body:not([data-zoom="1"]):not([data-zoom="0"]) #layer-panel {
+  opacity: 0 !important;
+  transform: translateY(-8px);
+  pointer-events: none !important;
 }
 #layer-panel .panel-header {
   background: transparent !important;
