@@ -67,15 +67,19 @@ html, body {
   overscroll-behavior: contain;
 }
 
-/* Y.16 (Adam: it works, but the gay border is rendered and not mine, use this one):
-   swapped CSS gold border back out for Adam's PNG. New PNG is properly alpha-
-   channeled (transparent middle, opaque parchment/quill/inkwell/D4JSP decorations)
-   so we DO NOT need mix-blend-mode — just position it as a normal background
-   image and the transparent middle lets the map show through. No blend mode =
-   no ghosting on repaint. */
+/* Y.17 (Adam: lock it just like that gold render border): brand-frame is
+   now a body-level position:fixed sibling of #map-shell, with identical
+   dimensions formula. Decoupling it from map-shell means nothing inside
+   the shell (Leaflet pane transforms, panel updates, etc) can drag it. */
 #brand-frame {
-  position: absolute;
-  inset: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  aspect-ratio: 1 / 1;
+  max-height: 100vh;
+  max-width: 100vh;
+  margin: 0 auto;
   pointer-events: none;
   z-index: 1000;
   background: url('/branding-frame.png') center/100% 100% no-repeat;
