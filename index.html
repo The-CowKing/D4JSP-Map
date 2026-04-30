@@ -114,11 +114,10 @@
     <span id="coords-text">Hover map for coordinates</span>
   </div>
 
-  <!-- D4JSP branded parchment frame overlay — pinned to viewport, clicks pass through to the map.
-       mix-blend-mode:multiply makes the PNG's white center transparent against the map below
-       while preserving the dark decorative elements (scroll, quill, ink swirls, D4JSP banner). -->
-  <div id="brand-frame"
-       style="position:fixed;inset:0;background:url('./branding-frame.png') center/100% 100% no-repeat;pointer-events:none;z-index:1000;mix-blend-mode:multiply;"></div>
+  <!-- Phase Y.7: brand frame moved into Leaflet as an ImageOverlay (see src/main.js)
+       so it pans/zooms with the map and sits at the edge of the world bounds, not the
+       viewport. No more blue outside the frame; pure black behind the world. -->
+
 
   <!-- Leaflet JS from CDN -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"

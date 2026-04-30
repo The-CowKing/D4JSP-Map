@@ -77,6 +77,19 @@ const worldLayer = new MaxrollTileLayer('', {
     'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
 }).addTo(map)
 
+// Phase Y.7 (Adam): brand frame embedded in the map at world bounds so it
+// pans/zooms WITH the world (not pinned to viewport). Sits above the tile
+// layer but below markers — z-index 400 keeps it under map controls/markers.
+// mix-blend-mode keeps the PNG's white middle transparent against the tiles.
+const brandFrameOverlay = L.imageOverlay('./branding-frame.png', WORLD_BOUNDS, {
+  opacity: 1,
+  interactive: false,
+  className: 'd4jsp-brand-frame',
+}).addTo(map)
+brandFrameOverlay.getElement().style.mixBlendMode = 'multiply'
+brandFrameOverlay.getElement().style.zIndex = '400'
+brandFrameOverlay.getElement().style.pointerEvents = 'none'
+
 L.control.zoom({ position: 'bottomright' }).addTo(map)
 
 // --- Coordinate display -------------------------------------------------
