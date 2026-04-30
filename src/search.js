@@ -87,29 +87,54 @@ export function initSearch(mapInstance) {
     input.focus()
   })
 
+  // Y.34o (Adam: "searching that toast stays popped up can't get rid of
+  // it.. it should have x and off click and timer 2 seconds"):
+  //  - close X button on the dropdown
+  //  - off-click anywhere outside dismisses it
+  //  - "No results" auto-dismisses after 2s
+  let noResultsTimer = null
+  function clearNoResultsTimer() {
+    if (noResultsTimer) { clearTimeout(noResultsTimer); noResultsTimer = null }
+  }
+
   function renderResults(fuseResults, query) {
     selectedIndex = -1
+    clearNoResultsTimer()
 
     if (fuseResults.length === 0) {
       results.style.display = 'block'
-      results.innerHTML = `<div class="search-no-results">No results for "${escapeHtml(query)}"</div>`
+      results.innerHTML =
+        `<button class="search-results-close" title="Close" aria-label="Close">&times;</button>` +
+        `<div class="search-no-results">No results for "${escapeHtml(query)}"</div>`
+      // Auto-dismiss after 2s
+      noResultsTimer = setTimeout(closeResults, 2000)
+      results.querySelector('.search-results-close')?.addEventListener('click', e => {
+        e.stopPropagation()
+        closeResults()
+      })
       return
     }
 
     results.style.display = 'block'
-    results.innerHTML = fuseResults.map((r, i) => {
-      const poi = r.item
-      const displayName = highlightMatch(poi.name, r.matches?.find(m => m.key === 'name'))
-      return `
-        <div class="search-result-item" data-index="${i}">
-          <div class="search-result-dot" style="background:${poi.config.color};box-shadow:0 0 6px ${poi.config.color}"></div>
-          <div class="search-result-name">${displayName}</div>
-          <div class="search-result-type" style="color:${poi.config.color}">${poi.config.label}</div>
-        </div>
-      `
-    }).join('')
+    results.innerHTML =
+      `<button class="search-results-close" title="Close" aria-label="Close">&times;</button>` +
+      fuseResults.map((r, i) => {
+        const poi = r.item
+        const displayName = highlightMatch(poi.name, r.matches?.find(m => m.key === 'name'))
+        return `
+          <div class="search-result-item" data-index="${i}">
+            <div class="search-result-dot" style="background:${poi.config.color};box-shadow:0 0 6px ${poi.config.color}"></div>
+            <div class="search-result-name">${displayName}</div>
+            <div class="search-result-type" style="color:${poi.config.color}">${poi.config.label}</div>
+          </div>
+        `
+      }).join('')
 
     // Click handlers
+    results.querySelector('.search-results-close')?.addEventListener('click', e => {
+      e.stopPropagation()
+      closeResults()
+    })
     results.querySelectorAll('.search-result-item').forEach(el => {
       el.addEventListener('click', () => {
         const idx = parseInt(el.dataset.index)
@@ -117,6 +142,14 @@ export function initSearch(mapInstance) {
       })
     })
   }
+
+  // Off-click to dismiss — anywhere outside the search input + results.
+  document.addEventListener('click', (e) => {
+    if (results.style.display === 'none') return
+    if (results.contains(e.target)) return
+    if (e.target === input) return
+    closeResults()
+  })
 
   function selectResult(idx) {
     if (idx < 0 || idx >= currentResults.length) return

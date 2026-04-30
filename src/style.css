@@ -548,8 +548,39 @@ html, body {
   display: none;
   z-index: 1;
   font-size: 0.9em;
+  padding-right: 1.4em; /* room for X */
 }
-#scroll-menu #search-results:not(:empty) { display: block; }
+#scroll-menu #search-results .search-results-close {
+  position: absolute;
+  top: 0.1em;
+  right: 0.2em;
+  background: transparent;
+  border: 0;
+  color: #2a160a;
+  font-family: inherit;
+  font-size: 1.1em;
+  line-height: 1;
+  padding: 0.1em 0.3em;
+  cursor: pointer;
+  opacity: 0.6;
+}
+#scroll-menu #search-results .search-results-close:hover { opacity: 1; }
+#scroll-menu #search-results .search-no-results {
+  padding: 0.4em 0.6em 0.4em 0.6em;
+  font-style: italic;
+  color: #2a160a;
+}
+#scroll-menu #search-results .search-result-item {
+  padding: 0.3em 0.5em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}
+#scroll-menu #search-results .search-result-item:hover,
+#scroll-menu #search-results .search-result-item.selected {
+  background: rgba(42,22,10,0.10);
+}
 
 /* ── Scrollbars ────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; }
