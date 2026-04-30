@@ -114,6 +114,10 @@
     <span id="coords-text">Hover map for coordinates</span>
   </div>
 
+  <!-- D4JSP branded parchment frame overlay — pinned to viewport, clicks pass through to the map -->
+  <div id="brand-frame"
+       style="position:fixed;inset:0;background:url('./branding-frame.png') center/100% 100% no-repeat;pointer-events:none;z-index:1000;"></div>
+
   <!-- Leaflet JS from CDN -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
           integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
