@@ -10,8 +10,9 @@
 // Custom branding overlay is added via CSS in index.html so we own the
 // frame around the map even though the bytes are hot-linked.
 //
-// Region toggle now flies-to-bounds inside the unified pyramid instead of
-// swapping tile sources.
+// Phase Y.1: removed the zone selector — it's one unified pyramid now.
+// Coord system uses Leaflet's project/unproject at maxNativeZoom so the
+// world bounds line up with the actual 8192×8192 pixel pyramid.
 
 import { initLayers, dungeonsData, refreshBuildRotationLayers, setParentBuilds } from './layers.js'
 import { initSearch } from './search.js'
@@ -23,41 +24,12 @@ import { initPlanner } from './planner.js'
 const TILE_BASE = 'https://assets-ng.maxroll.gg/d4-tools/map6/webp'
 const TILE_MAX_NATIVE_ZOOM = 5
 const TILE_MAX_ZOOM = 7  // allow over-zoom on top of native, Leaflet upscales
-
-// Pyramid dimensions at max-native: 32×32 tiles × 256px = 8192×8192 pixels.
-// CRS.Simple maps lat to -y and lng to +x in pixel space (Leaflet default).
-// Bounds at z=0: a single 256×256 tile spanning [0,0] to [256, 256] in
-// (y_pixel, x_pixel). We expose a generous world bounds so users can pan
-// to any tile.
 const TILE_PIXEL_SIZE = 256
 const NATIVE_WIDTH = TILE_PIXEL_SIZE * (1 << TILE_MAX_NATIVE_ZOOM)  // 8192
-const WORLD_BOUNDS = L.latLngBounds(
-  L.latLng(-NATIVE_WIDTH, 0),
-  L.latLng(0, NATIVE_WIDTH)
-)
-const MAP_BOUNDS = WORLD_BOUNDS
 
-// --- Region fly-to targets ----------------------------------------------
-// Approximate centers + zooms per region within the unified pyramid.
-// These were eyeballed from the visible map; we'll refine as POI alignment
-// settles. Each region's flyView is in CRS.Simple lat/lng.
-const REGIONS = {
-  Sanctuary: {
-    label: 'Sanctuary',
-    flyView: { center: [-3000, 4000], zoom: 2 },
-  },
-  Nahantu: {
-    label: 'Nahantu',
-    flyView: { center: [-5500, 3800], zoom: 3 },
-  },
-  Skovos: {
-    label: 'Skovos',
-    flyView: { center: [-6500, 2500], zoom: 3 },
-  },
-}
-
-const REGION_ORDER = ['Sanctuary', 'Nahantu', 'Skovos']
-
+// --- Leaflet map setup --------------------------------------------------
+// CRS.Simple: lng = +x_pixel, lat = -y_pixel (so the world ends up in
+// negative-lat space which is fine).
 const map = new L.Map('map', {
   minZoom: 1,
   maxZoom: TILE_MAX_ZOOM,
@@ -65,11 +37,20 @@ const map = new L.Map('map', {
   attributionControl: true,
   zoomControl: false,
   preferCanvas: false,
-  maxBounds: MAP_BOUNDS,
-  maxBoundsViscosity: 1.0,
   zoomSnap: 0.5,
   zoomDelta: 0.5,
-}).setView([-NATIVE_WIDTH / 2, NATIVE_WIDTH / 2], 2)
+})
+
+// World bounds: at max-native zoom (5), the pyramid is 8192×8192 pixels.
+// Convert pixel corners → latLng via unproject so the bounds match what
+// Leaflet expects given its CRS.Simple setup.
+const NW = map.unproject([0, 0], TILE_MAX_NATIVE_ZOOM)
+const SE = map.unproject([NATIVE_WIDTH, NATIVE_WIDTH], TILE_MAX_NATIVE_ZOOM)
+const WORLD_BOUNDS = L.latLngBounds(NW, SE)
+
+map.setMaxBounds(WORLD_BOUNDS.pad(0.1))
+map.options.maxBoundsViscosity = 1.0
+map.fitBounds(WORLD_BOUNDS, { animate: false })
 
 // --- Unified tile layer (maxroll CDN, x_y_z.webp ordering) --------------
 // L.TileLayer.extend so we can override getTileUrl and map Leaflet's
@@ -92,46 +73,14 @@ const worldLayer = new MaxrollTileLayer('', {
   bounds: WORLD_BOUNDS,
   attribution:
     'Map: <a href="https://us.shop.battle.net/family/diablo-iv" target="_blank">Diablo IV</a> &copy; Blizzard | ' +
-    'Tile rendering: maxroll.gg | <a href="https://d4jsp.org" target="_blank">D4JSP</a>',
+    '<a href="https://d4jsp.org" target="_blank">D4JSP</a>',
   errorTileUrl:
     'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
 }).addTo(map)
 
-requestAnimationFrame(() => {
-  if (map.getSize().x > 0) map.fitBounds(WORLD_BOUNDS, { animate: false })
-})
-
 L.control.zoom({ position: 'bottomright' }).addTo(map)
 
-function buildRegionToggle() {
-  const wrap = document.createElement('div')
-  wrap.id = 'region-toggle'
-  wrap.className = 'region-toggle'
-  for (const name of REGION_ORDER) {
-    const btn = document.createElement('button')
-    btn.className = 'region-btn' + (name === 'Sanctuary' ? ' active' : '')
-    btn.dataset.region = name
-    btn.textContent = REGIONS[name].label
-    btn.addEventListener('click', () => switchRegion(name))
-    wrap.appendChild(btn)
-  }
-  document.body.appendChild(wrap)
-}
-
-let activeRegion = 'Sanctuary'
-function switchRegion(name) {
-  if (!REGIONS[name]) return
-  activeRegion = name
-  document.querySelectorAll('.region-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.region === name)
-  })
-  const titleEl = document.querySelector('.panel-title')
-  if (titleEl) titleEl.textContent = REGIONS[name].label.toUpperCase()
-  const cfg = REGIONS[name]
-  map.flyTo(cfg.flyView.center, cfg.flyView.zoom, { duration: 0.6 })
-  console.log('[MAP-REGION] fly -> ' + name)
-}
-
+// --- Coordinate display -------------------------------------------------
 const coordsText = document.getElementById('coords-text')
 map.on('mousemove', e => {
   if (coordsText) {
@@ -146,12 +95,19 @@ function updateZoomClass() { document.body.dataset.zoom = String(Math.floor(map.
 map.on('zoomend', updateZoomClass)
 updateZoomClass()
 
+// Hide any leftover region-toggle DOM that older builds may have rendered.
+function hideLegacyRegionToggle() {
+  document.querySelectorAll('#region-toggle, .region-toggle').forEach(el => {
+    el.style.display = 'none'
+  })
+}
+
 async function boot() {
-  buildRegionToggle()
-  // Phase Y: POI layers temporarily disabled while we re-derive coordinates
-  // from maxroll's map.min.json. The old JSON files use coordinates aligned
-  // to the painted-overlay tiles, which won't line up on the unified pyramid.
-  // Re-enabling once the coord transform is dialed in.
+  hideLegacyRegionToggle()
+
+  // Phase Y: POI layers temporarily disabled — old data uses coordinates
+  // tied to the old painted tiles, won't align on the unified pyramid.
+  // Re-enabling once we've ported maxroll's map.min.json POI data.
   try {
     await initLayers(map)
     refreshBuildRotationLayers(map)
@@ -202,4 +158,7 @@ async function boot() {
 
 boot().catch(console.error)
 
-export { REGIONS, REGION_ORDER, switchRegion }
+// Re-export shims for any callers that still reference the old region API.
+export const REGIONS = {}
+export const REGION_ORDER = []
+export function switchRegion() { /* deprecated — single unified world */ }
