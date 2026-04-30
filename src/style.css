@@ -73,12 +73,10 @@ html, body {
   background: url('/branding-frame.png') center/100% 100% no-repeat;
   pointer-events: none;
   z-index: 1000;
-  mix-blend-mode: multiply;
-  /* Y.11 (Adam: it moves around): force the frame onto its own GPU layer
-     so it doesn't repaint with the Leaflet map's transform animations. */
-  will-change: transform;
-  transform: translateZ(0);
-  /* Belt-and-braces: also lock pointer/touch events from leaking */
+  /* Y.12 (Adam: it moves around even after Y.11): switched to an alpha PNG
+     (white pixels → real transparency, baked in by PIL) so we no longer
+     need mix-blend-mode. Without blend mode the frame is a normal layer
+     that won't drift when Leaflet animates the tile pane underneath. */
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
