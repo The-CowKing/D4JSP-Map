@@ -115,12 +115,11 @@ const worldLayer = new MaxrollTileLayer('', {
 // matting extends past the viewport at zoom 1 and gets clipped —
 // invisible. Frame appears LARGER (visible art at shell edge) not
 // smaller. Tunable.
-// Y.30 (Adam: "top and bottom perfect.. sides are a little too much"):
-// split the outset into X and Y. Y stays at 7% (top/bottom landed). X
-// drops to ~4% so the side scrollwork/ornaments don't push past the
-// shell edge.
+// Y.30 split into X/Y outsets. Y.31 (Adam: "sooooo close top and bottom
+// need a few pixels smaller"): Y was clipping the D4JSP banner at top
+// and the corner ornament at bottom. Drop Y 7%->5%.
 const FRAME_OUTSET_X = 0.04
-const FRAME_OUTSET_Y = 0.07
+const FRAME_OUTSET_Y = 0.05
 const FRAME_NW = map.unproject(
   [-NATIVE_WIDTH * FRAME_OUTSET_X, -NATIVE_WIDTH * FRAME_OUTSET_Y],
   TILE_MAX_NATIVE_ZOOM,
