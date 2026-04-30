@@ -102,16 +102,30 @@ const worldLayer = new MaxrollTileLayer('', {
 
 // Phase Y.27 (Adam: "embed the fucking thing into the map at the edge of
 // fog of war ... litterly part of the fuckin map. that way when I zoom in
-// on middle of map it's not even there"). Brand frame is now a Leaflet
-// ImageOverlay attached to WORLD_BOUNDS — it IS part of the map. At zoom
-// 1 (initial view) the user sees the entire 8192×8192 world plus the
-// parchment+quill frame around the fog-of-war edge. When the user zooms
-// in on the middle of the map, the frame zooms WITH the map content and
-// extends well past the viewport edges — exactly like the gold border
-// behavior they liked, but with our PNG branding instead of a CSS border.
-// CSS in style.css keeps any leftover #brand-frame div hidden so we don't
-// double-render anything.
-const brandFrameOverlay = L.imageOverlay('./branding-frame.png', WORLD_BOUNDS, {
+// on middle of map it's not even there"). Brand frame is a Leaflet
+// ImageOverlay — it IS part of the map.
+//
+// Phase Y.29 (Adam: "closer just need to get it that little bit to the
+// edges properly ... this time get it right and don't shrink it"). The
+// branding-frame.png has the gold scrollwork art INSET within the PNG
+// canvas with parchment-tan matting around it. At WORLD_BOUNDS the
+// visible art sits ~7% inward of the pyramid edge, leaving a gap. Outset
+// the overlay bounds 7% past WORLD_BOUNDS so the visible art lines up
+// with the pyramid (and therefore the fog) edge. The outer parchment
+// matting extends past the viewport at zoom 1 and gets clipped —
+// invisible. Frame appears LARGER (visible art at shell edge) not
+// smaller. Tunable.
+const FRAME_OUTSET = 0.07
+const FRAME_NW = map.unproject(
+  [-NATIVE_WIDTH * FRAME_OUTSET, -NATIVE_WIDTH * FRAME_OUTSET],
+  TILE_MAX_NATIVE_ZOOM,
+)
+const FRAME_SE = map.unproject(
+  [NATIVE_WIDTH * (1 + FRAME_OUTSET), NATIVE_WIDTH * (1 + FRAME_OUTSET)],
+  TILE_MAX_NATIVE_ZOOM,
+)
+const FRAME_BOUNDS = L.latLngBounds(FRAME_NW, FRAME_SE)
+const brandFrameOverlay = L.imageOverlay('./branding-frame.png', FRAME_BOUNDS, {
   opacity: 1,
   interactive: false,
   className: 'd4jsp-brand-frame',
