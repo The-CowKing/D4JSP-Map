@@ -312,26 +312,19 @@ async function boot() {
   //   Ked Bardu  ( -886, -989) -> pyramid (5000, 2700)  // N central Dry Steppes
   // Affine: px = a*wx + b*wy + c, py = d*wx + e*wy + f
   // Solved by least-squares on those 3 points.
-  // Y.34ac — Y.34ab's matrix was ill-conditioned because Kyo/Gea/Ked
-  // landmarks happened to lie nearly along one diagonal in pyramid
-  // space, collapsing the linear system. Replaced Ked Bardu with
-  // Zarbinzet (Hawezar, far south) so the three landmarks span 2D.
-  // Solved + back-substituted; X mirrored around pyramid center.
-  //   Kyovashad  (-1398,  154) -> pyramid (4400, 2200)  // NW Fractured Peaks
-  //   Gea Kul    (  680, -418) -> pyramid (6500, 3200)  // E Kehjistan coast
-  //   Zarbinzet  ( -235,  386) -> pyramid (5500, 5000)  // S Hawezar
-  // px = -0.973*wx + 0.136*wy + 2411  (X-flipped)
-  // py =  1.598*wx + 4.058*wy + 3809
-  const POI_AFFINE = {
-    a: -0.973,  b: 0.136,  c: 2411,
-    d:  1.598,  e: 4.058,  f: 3809,
-  }
-  // No-op kept for compatibility with loadAndRenderPOIs.
-  function buildPoiTransform(/* markers */) { /* affine constants are static */ }
+  // Y.34ad — calibration baseline. Iterative guesses kept producing wrong
+  // mappings because I never had a verified pyramid-pixel position for
+  // any landmark. Switch to a simple, transparent transform: world (0,0)
+  // at pyramid center (4096, 4096), uniform scale 1.0. Kyovashad will
+  // log to console at boot — Adam can visually compare where Kyovashad
+  // lands vs where it should be, and we calibrate from there.
+  const POI_TRANSFORM_SCALE = 1.0
+  const POI_TRANSFORM_OFFX  = 4096
+  const POI_TRANSFORM_OFFY  = 4096
+  function buildPoiTransform(/* markers */) { /* static constants */ }
   function worldToLatLng(wx, wy) {
-    const t = POI_AFFINE
-    const px = t.a * wx + t.b * wy + t.c
-    const py = t.d * wx + t.e * wy + t.f
+    const px = wx * POI_TRANSFORM_SCALE + POI_TRANSFORM_OFFX
+    const py = wy * POI_TRANSFORM_SCALE + POI_TRANSFORM_OFFY
     return map.unproject([px, py], TILE_MAX_NATIVE_ZOOM)
   }
   // Color + label per maxroll marker type.
@@ -398,6 +391,13 @@ async function boot() {
       }
       poisLoaded = true
       console.log(`[D4JSP Map] loaded ${markers.length} POIs across ${seen.size} types`)
+      // Y.34ad: log key landmarks so Adam can compare actual vs expected.
+      const KNOWN = ['Kyovashad', 'Gea Kul', 'Zarbinzet', 'Ked Bardu']
+      for (const m of markers) {
+        if (!KNOWN.includes(m.name)) continue
+        const ll = worldToLatLng(m.x, m.y)
+        console.log(`[D4JSP Map] ${m.name}: world(${m.x.toFixed(0)}, ${m.y.toFixed(0)}) -> pyramid(${(m.x * POI_TRANSFORM_SCALE + POI_TRANSFORM_OFFX).toFixed(0)}, ${(m.y * POI_TRANSFORM_SCALE + POI_TRANSFORM_OFFY).toFixed(0)})`)
+      }
       // Y.34q (Adam: "don't see any pois just the waypoint I saved"):
       // re-apply any toggles that were clicked before the fetch landed.
       document.querySelectorAll('.scroll-layer-item.on').forEach(item => {
