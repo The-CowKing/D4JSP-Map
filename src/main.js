@@ -359,12 +359,14 @@ async function boot() {
     'nahantu_strongholds': { region: 'Nahantu',  type: 'stronghold' },
     'nahantu_cellars':     { region: 'Nahantu',  type: 'cellar'     }, // no data yet
   }
-  // Region classification heuristic: Nahantu (Vessel of Hatred) sits east
-  // of Sanctuary in the unified maxroll world coords; markers with x>1500
-  // are Nahantu (323 of 2384 in current data — see derive_poi_transform.py).
-  // Skovos markers aren't in this dataset yet.
+  // Region classification — Y.34ai. Cross-referenced old
+  // nahantu_waypoints.json with the new maxroll data and verified that
+  // BOTH regions use the same (x+y) -> lat formula, but Nahantu sits
+  // at much higher (x+y) values. Threshold (x+y) > 350 cleanly
+  // separates Nahantu (Kurast Bazaar 1190, Kichuk 489, Athulua 2173)
+  // from Sanctuary (Gea Kul 262, Imperial Library -414, Kyo -1244).
   function regionForMarker(m) {
-    if (m.x > 1500) return 'Nahantu'
+    if (m.x + m.y > 350) return 'Nahantu'
     return 'Sanctuary'
   }
   // Y.34ah: poiGroups indexed by "region_type" so each tab can toggle
