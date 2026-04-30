@@ -325,19 +325,25 @@ async function boot() {
   // applied around pyramid center: (px, py) -> (NATIVE - py, px).
   function buildPoiTransform(/* markers */) { /* derived from data */ }
   function worldToLatLng(wx, wy) {
-    // Y.34ap — two-point calibration against Adam's hand-placed pins:
-    //   Kyovashad: world (-1398, 154) -> desired latLng (-101.55, 205.77)
-    //   Gea Kul  : world (  680,-418) -> desired latLng (-145.82, 127.76)
-    // Both fit cleanly with the same 45°-rotation structure as the old
-    // formula but rescaled — k=0.02942 (was 0.035724) and shifted
-    // offsets:
-    //   lat = -0.02942 * (x + y) - 138.12
-    //   lng =  0.02942 * (y - x) + 160.08
-    // Verified: both landmarks reproduce within 0.05 latLng units.
-    const lat = -0.02942 * (wx + wy) - 138.12
-    const lng =  0.02942 * (wy - wx) + 160.08
+    // Y.34aq (Adam: "all need to shift with one at top matching"):
+    // applied a uniform dLat shift south so the northernmost marker
+    // lands on the coast instead of floating above it. Tunable from
+    // console: window.setPoiOffset({dLat: -20})
+    const dLat = (window.__poiOffset && window.__poiOffset.dLat != null) ? window.__poiOffset.dLat : -15
+    const dLng = (window.__poiOffset && window.__poiOffset.dLng != null) ? window.__poiOffset.dLng : 0
+    const lat = -0.02942 * (wx + wy) - 138.12 + dLat
+    const lng =  0.02942 * (wy - wx) + 160.08 + dLng
     return L.latLng(lat, lng)
   }
+  window.setPoiOffset = (off) => {
+    window.__poiOffset = { ...(window.__poiOffset || {}), ...off }
+    try { localStorage.setItem('poi_offset', JSON.stringify(window.__poiOffset)) } catch {}
+    location.reload()
+  }
+  try {
+    const stored = localStorage.getItem('poi_offset')
+    if (stored) window.__poiOffset = JSON.parse(stored)
+  } catch {}
   // Color + label per maxroll marker type.
   const POI_TYPES = {
     waypoint:   { color: '#D4AF37', label: 'Waypoint' },
