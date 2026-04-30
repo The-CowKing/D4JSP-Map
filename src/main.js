@@ -617,9 +617,10 @@ async function boot() {
       const m = L.marker([wp.lat, wp.lng], {
         icon: L.divIcon({
           className: 'd4jsp-user-waypoint',
-          html: '<div class="d4jsp-wp-pin">&#9733;</div>',
-          iconSize: [20, 20],
-          iconAnchor: [10, 10],
+          // Y.34au: ornate gold star icon (Adam's PNG, converted to WebP)
+          html: '<img class="d4jsp-wp-pin-img" src="./icons/custom-waypoint.webp" alt="Waypoint" width="22" height="22"/>',
+          iconSize: [22, 22],
+          iconAnchor: [11, 11],
         }),
       })
       m.bindPopup(
