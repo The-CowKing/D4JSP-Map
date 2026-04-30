@@ -212,11 +212,11 @@ function blockBrowserPinchZoom() {
 // latLng, then on every map zoom/move recompute container points and
 // position the #scroll-menu div there. Font-size scales with the map
 // zoom so text stays proportional to the scroll texture.
-// Y.34b (Adam: "needs to move right and down to sit in parchment
-// properly"): shift the inset rectangle in from the scroll graphic's
-// outer edge so the menu sits in the writable area of the parchment,
-// past the top roller and the left handle.
-const SCROLL_FRAC = { x0: 0.09, y0: 0.12, x1: 0.50, y1: 0.31 }
+// Y.34b: nudged right+down so the menu sits past the scroll's top roller
+// and left handle. Y.34e (Adam: "it's got lots of space to be longer on
+// the scroll"): bumped y1 0.31->0.43 so the menu uses more of the
+// parchment's vertical real estate.
+const SCROLL_FRAC = { x0: 0.09, y0: 0.12, x1: 0.50, y1: 0.43 }
 const FRAME_W_PX = NATIVE_WIDTH * (1 + 2 * FRAME_OUTSET_X)
 const FRAME_H_PX = NATIVE_WIDTH * (1 + 2 * FRAME_OUTSET_Y)
 const SCROLL_NW_PX = [
@@ -331,6 +331,25 @@ async function boot() {
       console.log('[D4JSP Map] add waypoint — phase 3 will wire this')
     })
   }
+
+  // Y.34d (Adam: "when you click the invisible card it should take you
+  // centered zoomed in on the menu"). Map-level click handler — when the
+  // user taps an empty area of the scroll menu (pointer-events:none on
+  // the wrapper means non-interactive parts pass through to the map),
+  // fitBounds the scroll's latLng bounds so the menu fills the viewport.
+  // Skip if already zoomed in past the threshold (don't trap zooms).
+  const SCROLL_BOUNDS_LL = L.latLngBounds(SCROLL_NW_LL, SCROLL_SE_LL)
+  map.on('click', (e) => {
+    const cp = e.containerPoint
+    const nw = map.latLngToContainerPoint(SCROLL_NW_LL)
+    const se = map.latLngToContainerPoint(SCROLL_SE_LL)
+    const inScroll = cp.x >= nw.x && cp.x <= se.x && cp.y >= nw.y && cp.y <= se.y
+    if (!inScroll) return
+    // Already centered + zoomed on menu? Skip.
+    const targetZoom = map.getBoundsZoom(SCROLL_BOUNDS_LL, false)
+    if (Math.abs(map.getZoom() - targetZoom) < 0.1) return
+    map.fitBounds(SCROLL_BOUNDS_LL, { padding: [8, 8], maxZoom: 5, animate: true })
+  })
 
   console.log('[D4JSP Map] Ready — unified Blizzard tile pyramid (via maxroll CDN).')
 }
