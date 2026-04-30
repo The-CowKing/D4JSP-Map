@@ -317,11 +317,11 @@ async function boot() {
   const POI_PX_W = NATIVE_WIDTH - 2 * POI_PX_OFFSET_X
   const POI_PX_H = NATIVE_WIDTH - 2 * POI_PX_OFFSET_Y
   function worldToLatLng(wx, wy) {
-    // Y.34s (Adam: "all of them are opposite. need to invert them all
-    // like a picture"). 180° flip — invert BOTH X and Y, since Y.34r's
-    // Y-only invert produced a horizontally-mirrored cluster.
+    // Y.34t (Adam: "no no no. invert left right is what I meant.. not
+    // too bottom like u just did"). Invert ONLY X. Y stays normal
+    // (positive game-Y -> down on pyramid, which is what worked vertically).
     const px = POI_PX_OFFSET_X + (WORLD_X_MAX - wx) / (WORLD_X_MAX - WORLD_X_MIN) * POI_PX_W
-    const py = POI_PX_OFFSET_Y + (WORLD_Y_MAX - wy) / (WORLD_Y_MAX - WORLD_Y_MIN) * POI_PX_H
+    const py = POI_PX_OFFSET_Y + (wy - WORLD_Y_MIN) / (WORLD_Y_MAX - WORLD_Y_MIN) * POI_PX_H
     return map.unproject([px, py], TILE_MAX_NATIVE_ZOOM)
   }
   // Color + label per maxroll marker type.
