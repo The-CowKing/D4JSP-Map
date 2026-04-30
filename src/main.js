@@ -298,10 +298,101 @@ async function boot() {
     })
   })
 
-  // Y.34j (Adam: "vs their tabs only control their pois etc"): each
-  // region tab toggles ONLY that region's POIs. Layer ids include the
-  // region prefix (e.g. nahantu_waypoints) so each tab's clicks target
-  // its own L.layerGroup, independent of the other tabs.
+  // ── Y.34p: POI loading + rendering ──────────────────────────
+  // Maxroll's map.min.json lives in /public. We fetch it once at boot,
+  // transform world coords -> pyramid pixel coords -> latLng, group by
+  // marker type, and stash L.layerGroups in poiGroups. Layer toggles in
+  // the menu add/remove the groups from the map.
+  //
+  // Coord transform — calibrated empirically by mapping marker bounding
+  // box into ~75% of the 8192 pyramid (with offset for the empty-tan
+  // padding around Sanctuary's continents). This is approximate; we'll
+  // tune when Adam reports markers landing wrong.
+  const WORLD_X_MIN = -2500, WORLD_X_MAX = 3500
+  const WORLD_Y_MIN = -2000, WORLD_Y_MAX = 1500
+  const POI_PX_OFFSET_X = 500
+  const POI_PX_OFFSET_Y = 800
+  const POI_PX_W = NATIVE_WIDTH - 2 * POI_PX_OFFSET_X
+  const POI_PX_H = NATIVE_WIDTH - 2 * POI_PX_OFFSET_Y
+  function worldToLatLng(wx, wy) {
+    const px = POI_PX_OFFSET_X + (wx - WORLD_X_MIN) / (WORLD_X_MAX - WORLD_X_MIN) * POI_PX_W
+    const py = POI_PX_OFFSET_Y + (wy - WORLD_Y_MIN) / (WORLD_Y_MAX - WORLD_Y_MIN) * POI_PX_H
+    return map.unproject([px, py], TILE_MAX_NATIVE_ZOOM)
+  }
+  // Color + label per maxroll marker type.
+  const POI_TYPES = {
+    waypoint:   { color: '#D4AF37', label: 'Waypoint' },
+    dungeon:    { color: '#8b5cf6', label: 'Dungeon' },
+    altar:      { color: '#dc2626', label: 'Altar of Lilith' },
+    stronghold: { color: '#f43f5e', label: 'Stronghold' },
+    quest:      { color: '#3b82f6', label: 'Side Quest' },
+    npc:        { color: '#9aa3af', label: 'NPC' },
+  }
+  // Mapping from menu layer id -> marker type(s). Sanctuary + Nahantu
+  // tabs share the same maxroll types — we toggle the global group on
+  // each tab for now (phase 2: split per-region by coord region check).
+  const LAYER_ID_TO_TYPES = {
+    'waypoints':           ['waypoint'],
+    'dungeons':            ['dungeon'],
+    'altars':              ['altar'],
+    'sidequests':          ['quest'],
+    'cellars':             [],
+    'chests':              [],
+    'livingsteel':         [],
+    'events':              [],
+    'nahantu_waypoints':   ['waypoint'],
+    'nahantu_dungeons':    ['dungeon'],
+    'nahantu_strongholds': ['stronghold'],
+    'nahantu_cellars':     [],
+  }
+  const poiGroups = {}
+  async function loadAndRenderPOIs() {
+    try {
+      const res = await fetch('./maxroll-map.json')
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data = await res.json()
+      const markers = Array.isArray(data.markers) ? data.markers : []
+      const seen = new Set()
+      for (const m of markers) {
+        const t = m.type
+        if (!POI_TYPES[t]) continue
+        if (!poiGroups[t]) poiGroups[t] = L.layerGroup()
+        seen.add(t)
+        const ll = worldToLatLng(m.x, m.y)
+        const cfg = POI_TYPES[t]
+        const marker = L.circleMarker(ll, {
+          radius: 4,
+          color: cfg.color,
+          weight: 1,
+          opacity: 0.9,
+          fillColor: cfg.color,
+          fillOpacity: 0.7,
+        })
+        const popup =
+          `<div class="d4-poi-popup">` +
+          `<div class="d4-poi-popup-type" style="color:${cfg.color}">${cfg.label}</div>` +
+          (m.name ? `<div class="d4-poi-popup-name">${escapeHtml(m.name)}</div>` : '') +
+          (m.desc ? `<div class="d4-poi-popup-desc">${escapeHtml(m.desc)}</div>` : '') +
+          `</div>`
+        marker.bindPopup(popup)
+        poiGroups[t].addLayer(marker)
+      }
+      console.log(`[D4JSP Map] loaded ${markers.length} POIs across ${seen.size} types`)
+    } catch (e) {
+      console.error('[D4JSP Map] POI load failed:', e)
+    }
+  }
+  // Toggle a marker type on/off — adds/removes the L.layerGroup from
+  // the map. Idempotent.
+  function setTypeVisible(type, on) {
+    const g = poiGroups[type]
+    if (!g) return
+    if (on) g.addTo(map)
+    else map.removeLayer(g)
+  }
+
+  // Y.34j: per-region tabs, each toggles only its own POIs. Phase 1:
+  // toggle by type (no per-region split yet — see LAYER_ID_TO_TYPES).
   function renderLayerList(rootId, items) {
     const root = document.getElementById(rootId)
     if (!root) return
@@ -316,18 +407,22 @@ async function boot() {
       item.classList.toggle('on')
       const on = item.classList.contains('on')
       const id = item.dataset.layerId
-      // Phase 2 (POI wiring): toggle the layerGroups[id] on/off.
-      console.log(`[D4JSP Map] toggle ${id}: ${on ? 'on' : 'off'} (POI wiring pending)`)
+      const types = LAYER_ID_TO_TYPES[id] || []
+      types.forEach(t => setTypeVisible(t, on))
+      if (types.length === 0) {
+        console.log(`[D4JSP Map] no POI data for ${id} yet`)
+      }
     })
   }
-  // Sanctuary tab — Sanctuary POIs only.
   renderLayerList('layer-list-sanctuary', LAYER_CONFIGS
     .filter(c => c.region === 'Sanctuary')
     .map(c => ({ id: c.id, label: c.label })))
-  // Nahantu tab — Nahantu POIs only.
   renderLayerList('layer-list-nahantu', LAYER_CONFIGS
     .filter(c => c.region === 'Nahantu')
     .map(c => ({ id: c.id, label: c.label })))
+
+  // Kick off POI load (non-blocking).
+  loadAndRenderPOIs()
 
   // ── Y.34k: Custom waypoints ────────────────────────────────────
   // Long-press / right-click map → context menu → "Save waypoint" →
