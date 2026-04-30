@@ -323,14 +323,12 @@ async function boot() {
   // applied around pyramid center: (px, py) -> (NATIVE - py, px).
   function buildPoiTransform(/* markers */) { /* derived from data */ }
   function worldToLatLng(wx, wy) {
+    // Y.34ag (Adam: "u got them on the old pyramid.. surely u can get
+    // them on this one"): drop the rotation, use the OLD formula
+    // exactly as-is. CRS.Simple's L.latLng(lat, lng) takes (lat, lng).
     const lat = -0.035724 * (wx + wy) - 137.7816
     const lng =  0.035724 * (wy - wx) +  68.6388
-    const px = lng * 32
-    const py = -lat * 32
-    // 90° CW around pyramid center
-    const rpx = NATIVE_WIDTH - py
-    const rpy = px
-    return map.unproject([rpx, rpy], TILE_MAX_NATIVE_ZOOM)
+    return L.latLng(lat, lng)
   }
   // Color + label per maxroll marker type.
   const POI_TYPES = {
