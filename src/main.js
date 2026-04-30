@@ -358,6 +358,11 @@ async function boot() {
     'nahantu_dungeons':    { region: 'Nahantu',  type: 'dungeon'    },
     'nahantu_strongholds': { region: 'Nahantu',  type: 'stronghold' },
     'nahantu_cellars':     { region: 'Nahantu',  type: 'cellar'     }, // no data yet
+    // Skovos (Lord of Hatred) tab — slot for when data lands
+    'skovos_waypoints':    { region: 'Skovos',   type: 'waypoint'   },
+    'skovos_dungeons':     { region: 'Skovos',   type: 'dungeon'    },
+    'skovos_strongholds':  { region: 'Skovos',   type: 'stronghold' },
+    'skovos_cellars':      { region: 'Skovos',   type: 'cellar'     },
   }
   // Region classification — Y.34ai. Cross-referenced old
   // nahantu_waypoints.json with the new maxroll data and verified that
@@ -460,6 +465,14 @@ async function boot() {
   renderLayerList('layer-list-nahantu', LAYER_CONFIGS
     .filter(c => c.region === 'Nahantu')
     .map(c => ({ id: c.id, label: c.label })))
+  // Y.34aj: Skovos tab — same standard items as Nahantu (no data yet,
+  // but the toggles are wired so they'll work once Skovos POIs land).
+  renderLayerList('layer-list-skovos', [
+    { id: 'skovos_waypoints',   label: 'Waypoints'   },
+    { id: 'skovos_dungeons',    label: 'Dungeons'    },
+    { id: 'skovos_strongholds', label: 'Strongholds' },
+    { id: 'skovos_cellars',     label: 'Cellars'     },
+  ])
 
   // Kick off POI load (non-blocking).
   loadAndRenderPOIs()
