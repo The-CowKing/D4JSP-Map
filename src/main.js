@@ -346,6 +346,7 @@ async function boot() {
     'nahantu_cellars':     [],
   }
   const poiGroups = {}
+  let poisLoaded = false
   async function loadAndRenderPOIs() {
     try {
       const res = await fetch('./maxroll-map.json')
@@ -377,7 +378,14 @@ async function boot() {
         marker.bindPopup(popup)
         poiGroups[t].addLayer(marker)
       }
+      poisLoaded = true
       console.log(`[D4JSP Map] loaded ${markers.length} POIs across ${seen.size} types`)
+      // Y.34q (Adam: "don't see any pois just the waypoint I saved"):
+      // re-apply any toggles that were clicked before the fetch landed.
+      document.querySelectorAll('.scroll-layer-item.on').forEach(item => {
+        const id = item.dataset.layerId
+        ;(LAYER_ID_TO_TYPES[id] || []).forEach(t => setTypeVisible(t, true))
+      })
     } catch (e) {
       console.error('[D4JSP Map] POI load failed:', e)
     }
