@@ -212,7 +212,11 @@ function blockBrowserPinchZoom() {
 // latLng, then on every map zoom/move recompute container points and
 // position the #scroll-menu div there. Font-size scales with the map
 // zoom so text stays proportional to the scroll texture.
-const SCROLL_FRAC = { x0: 0.04, y0: 0.07, x1: 0.50, y1: 0.31 }
+// Y.34b (Adam: "needs to move right and down to sit in parchment
+// properly"): shift the inset rectangle in from the scroll graphic's
+// outer edge so the menu sits in the writable area of the parchment,
+// past the top roller and the left handle.
+const SCROLL_FRAC = { x0: 0.09, y0: 0.12, x1: 0.50, y1: 0.31 }
 const FRAME_W_PX = NATIVE_WIDTH * (1 + 2 * FRAME_OUTSET_X)
 const FRAME_H_PX = NATIVE_WIDTH * (1 + 2 * FRAME_OUTSET_Y)
 const SCROLL_NW_PX = [

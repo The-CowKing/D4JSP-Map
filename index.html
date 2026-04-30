@@ -33,59 +33,56 @@
   <button id="panel-toggle-btn" title="Show layer controls">&#9776;</button>
 
   <!-- Y.34 (Adam): in-scroll menu. Anchored via JS to the parchment scroll
-       graphic in the brand frame so it pans/zooms WITH the map. Mostly
-       transparent — just text on the parchment, ink color, script font.
-       Two columns inside the scroll: left = search + tabs + tab content,
-       right = custom waypoints (phase 2). -->
+       graphic in the brand frame so it pans/zooms WITH the map. Y.34c
+       layout: search bar full-width at top, then below it a 2-column
+       row: left = tabs + tab content, right = My Waypoints (independent
+       of which tab is active). -->
   <div id="scroll-menu">
     <div id="scroll-menu-inner">
 
-      <!-- Left column -->
-      <div id="scroll-menu-left">
-        <!-- Search row -->
-        <div class="scroll-search">
-          <svg class="scroll-search-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
-            <line x1="15.5" y1="15.5" x2="20" y2="20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-          <input id="search-input" type="text" placeholder="search…" autocomplete="off" spellcheck="false" />
-          <button id="search-clear" title="Clear">&times;</button>
-        </div>
-
-        <!-- 1-line divider -->
-        <div class="scroll-divider"></div>
-
-        <!-- Tabs row -->
-        <div class="scroll-tabs">
-          <button class="scroll-tab active" data-tab="layers">Layers</button>
-          <button class="scroll-tab" data-tab="bosses">Bosses</button>
-          <button class="scroll-tab" data-tab="builds">Builds</button>
-        </div>
-
-        <!-- 1-line divider -->
-        <div class="scroll-divider"></div>
-
-        <!-- Tab content -->
-        <div id="tab-layers" class="scroll-tab-content">
-          <div id="layer-list"></div>
-        </div>
-        <div id="tab-bosses" class="scroll-tab-content hidden">
-          <div class="scroll-coming-soon">boss rotation — coming soon</div>
-        </div>
-        <div id="tab-builds" class="scroll-tab-content hidden">
-          <div id="builds-list"></div>
-        </div>
+      <!-- Search row (full width) -->
+      <div class="scroll-search">
+        <svg class="scroll-search-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="15.5" y1="15.5" x2="20" y2="20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <input id="search-input" type="text" placeholder="search…" autocomplete="off" spellcheck="false" />
+        <button id="search-clear" title="Clear">&times;</button>
       </div>
 
-      <!-- Right column: custom waypoints (phase 2 — placeholder for now) -->
-      <div id="scroll-menu-right">
-        <div class="scroll-section-title">
-          My Waypoints
-          <button id="add-waypoint-btn" title="Add waypoint" aria-label="Add waypoint">+</button>
+      <div class="scroll-divider"></div>
+
+      <!-- 2-column body: left = tabs + tab content, right = waypoints (independent of tabs) -->
+      <div class="scroll-body">
+        <!-- Left column -->
+        <div id="scroll-menu-left">
+          <div class="scroll-tabs">
+            <button class="scroll-tab active" data-tab="layers">Layers</button>
+            <button class="scroll-tab" data-tab="bosses">Bosses</button>
+            <button class="scroll-tab" data-tab="builds">Builds</button>
+          </div>
+          <div class="scroll-divider"></div>
+          <div id="tab-layers" class="scroll-tab-content">
+            <div id="layer-list"></div>
+          </div>
+          <div id="tab-bosses" class="scroll-tab-content hidden">
+            <div class="scroll-coming-soon">boss rotation — coming soon</div>
+          </div>
+          <div id="tab-builds" class="scroll-tab-content hidden">
+            <div id="builds-list"></div>
+          </div>
         </div>
-        <div class="scroll-divider"></div>
-        <div id="custom-waypoints-list">
-          <div class="scroll-empty">right-click map<br/>to save a spot</div>
+
+        <!-- Right column: custom waypoints — same row level as tabs -->
+        <div id="scroll-menu-right">
+          <div class="scroll-section-title">
+            My Waypoints
+            <button id="add-waypoint-btn" title="Add waypoint" aria-label="Add waypoint">+</button>
+          </div>
+          <div class="scroll-divider"></div>
+          <div id="custom-waypoints-list">
+            <div class="scroll-empty">right-click map<br/>to save a spot</div>
+          </div>
         </div>
       </div>
 

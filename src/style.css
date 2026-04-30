@@ -103,21 +103,29 @@ html, body {
 #scroll-menu .scroll-layer-item,
 #scroll-menu .scroll-search-icon { pointer-events: auto; }
 
-/* Inner wrapper provides 2-col layout inside the scroll's drawable area. */
+/* Inner wrapper: search row on top (full width), then 2-col body below. */
 #scroll-menu-inner {
   position: relative;
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: row;
-  gap: 6%;
+  flex-direction: column;
+  gap: 0.2em;
   padding: 5% 4% 5% 4%;
   font-size: 1em; /* JS sets em on #scroll-menu so children scale with map zoom */
   line-height: 1.15;
   overflow: hidden;
 }
 
-#scroll-menu-left { flex: 1 1 60%; min-width: 0; display: flex; flex-direction: column; gap: 0.4em; overflow: hidden; }
+.scroll-body {
+  display: flex;
+  flex-direction: row;
+  gap: 6%;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+#scroll-menu-left { flex: 1 1 60%; min-width: 0; display: flex; flex-direction: column; gap: 0.3em; overflow: hidden; }
 #scroll-menu-right { flex: 1 1 40%; min-width: 0; display: flex; flex-direction: column; gap: 0.3em; overflow: hidden; }
 
 /* Search row — no border, no background, just icon + input. */
