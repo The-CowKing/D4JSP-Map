@@ -14,6 +14,11 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
+  <!-- Y.34m: preload the brand frame WebP so the fetch starts in parallel
+       with the main JS bundle (was loading slow because it kicked off
+       only after main.js parsed and called L.imageOverlay). -->
+  <link rel="preload" as="image" href="./branding-frame.webp" fetchpriority="high" />
+
   <link rel="stylesheet" href="./src/style.css" />
 </head>
 <body>

@@ -134,7 +134,11 @@ const FRAME_SE = map.unproject(
   TILE_MAX_NATIVE_ZOOM,
 )
 const FRAME_BOUNDS = L.latLngBounds(FRAME_NW, FRAME_SE)
-const brandFrameOverlay = L.imageOverlay('./branding-frame.png', FRAME_BOUNDS, {
+// Y.34m (Adam: "the border image loads slow as fuck fix it"): switched
+// from PNG (909KB) to WebP q=85 (200KB, ~4.5x smaller). All target
+// browsers (Chrome/Safari/Firefox/Edge) support WebP. Preload link
+// in index.html starts the fetch in parallel with the JS bundle.
+const brandFrameOverlay = L.imageOverlay('./branding-frame.webp', FRAME_BOUNDS, {
   opacity: 1,
   interactive: false,
   className: 'd4jsp-brand-frame',
@@ -213,13 +217,12 @@ function blockBrowserPinchZoom() {
 // latLng, then on every map zoom/move recompute container points and
 // position the #scroll-menu div there. Font-size scales with the map
 // zoom so text stays proportional to the scroll texture.
-// Y.34b: nudged right+down so the menu sits past the scroll's top roller
-// and left handle. Y.34e bumped y1 to 0.43 — too much, items spilled past
-// the bottom roller onto the empty parchment-tan area below the scroll.
-// Y.34h (Adam: "the bottom text is a off parchment a bit"): pull y1 in
-// to 0.31 so the menu stays within the writable parchment area; layer
-// list scrolls internally if the item count exceeds visible space.
-const SCROLL_FRAC = { x0: 0.09, y0: 0.12, x1: 0.50, y1: 0.31 }
+// Y.34b nudged right+down. Y.34e overshot at 0.43 (past bottom roller).
+// Y.34h pulled to 0.31. Y.34l (Adam: "the length of the thing is too
+// short.. look at where living steel is cutoff the container needs to
+// go lower"): bump y1 0.31 -> 0.38 to use the empty parchment area
+// below the layer list, while staying inside the bottom roller.
+const SCROLL_FRAC = { x0: 0.09, y0: 0.12, x1: 0.50, y1: 0.38 }
 const FRAME_W_PX = NATIVE_WIDTH * (1 + 2 * FRAME_OUTSET_X)
 const FRAME_H_PX = NATIVE_WIDTH * (1 + 2 * FRAME_OUTSET_Y)
 const SCROLL_NW_PX = [
