@@ -312,15 +312,19 @@ async function boot() {
   //   Ked Bardu  ( -886, -989) -> pyramid (5000, 2700)  // N central Dry Steppes
   // Affine: px = a*wx + b*wy + c, py = d*wx + e*wy + f
   // Solved by least-squares on those 3 points.
-  // Y.34ab — recomputed the affine from scratch; previous coefficients
-  // had an arithmetic error that produced a near-degenerate matrix
-  // (cluster collapsed to a diagonal line). New values verified by
-  // back-substituting all three landmarks.
-  // px = -0.988*wx + 0.082*wy + 2398   (X-flipped from Y.34z)
-  // py =  0.412*wx - 0.253*wy + 2815
+  // Y.34ac — Y.34ab's matrix was ill-conditioned because Kyo/Gea/Ked
+  // landmarks happened to lie nearly along one diagonal in pyramid
+  // space, collapsing the linear system. Replaced Ked Bardu with
+  // Zarbinzet (Hawezar, far south) so the three landmarks span 2D.
+  // Solved + back-substituted; X mirrored around pyramid center.
+  //   Kyovashad  (-1398,  154) -> pyramid (4400, 2200)  // NW Fractured Peaks
+  //   Gea Kul    (  680, -418) -> pyramid (6500, 3200)  // E Kehjistan coast
+  //   Zarbinzet  ( -235,  386) -> pyramid (5500, 5000)  // S Hawezar
+  // px = -0.973*wx + 0.136*wy + 2411  (X-flipped)
+  // py =  1.598*wx + 4.058*wy + 3809
   const POI_AFFINE = {
-    a: -0.988,  b:  0.082,  c: 2398,
-    d:  0.412,  e: -0.253,  f: 2815,
+    a: -0.973,  b: 0.136,  c: 2411,
+    d:  1.598,  e: 4.058,  f: 3809,
   }
   // No-op kept for compatibility with loadAndRenderPOIs.
   function buildPoiTransform(/* markers */) { /* affine constants are static */ }
