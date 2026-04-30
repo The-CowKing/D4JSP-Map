@@ -16,7 +16,7 @@
 // Coord system uses Leaflet's project/unproject at maxNativeZoom so the
 // world bounds line up with the actual 8192×8192 pixel pyramid.
 
-import { initLayers, dungeonsData, refreshBuildRotationLayers, setParentBuilds } from './layers.js'
+import { initLayers, dungeonsData, refreshBuildRotationLayers, setParentBuilds, LAYER_CONFIGS } from './layers.js'
 import { initSearch } from './search.js'
 import { initPlanner } from './planner.js'
 
@@ -206,15 +206,56 @@ function blockBrowserPinchZoom() {
   }, { passive: false })
 }
 
+// ── Y.34: in-scroll menu — anchored to the parchment scroll graphic ──
+// The scroll graphic occupies the upper-left ~3-50% × 5-30% of the brand
+// frame PNG. Convert that fractional region into pyramid pixel coords →
+// latLng, then on every map zoom/move recompute container points and
+// position the #scroll-menu div there. Font-size scales with the map
+// zoom so text stays proportional to the scroll texture.
+const SCROLL_FRAC = { x0: 0.04, y0: 0.07, x1: 0.50, y1: 0.31 }
+const FRAME_W_PX = NATIVE_WIDTH * (1 + 2 * FRAME_OUTSET_X)
+const FRAME_H_PX = NATIVE_WIDTH * (1 + 2 * FRAME_OUTSET_Y)
+const SCROLL_NW_PX = [
+  -NATIVE_WIDTH * FRAME_OUTSET_X + SCROLL_FRAC.x0 * FRAME_W_PX,
+  -NATIVE_WIDTH * FRAME_OUTSET_Y + SCROLL_FRAC.y0 * FRAME_H_PX,
+]
+const SCROLL_SE_PX = [
+  -NATIVE_WIDTH * FRAME_OUTSET_X + SCROLL_FRAC.x1 * FRAME_W_PX,
+  -NATIVE_WIDTH * FRAME_OUTSET_Y + SCROLL_FRAC.y1 * FRAME_H_PX,
+]
+const SCROLL_NW_LL = map.unproject(SCROLL_NW_PX, TILE_MAX_NATIVE_ZOOM)
+const SCROLL_SE_LL = map.unproject(SCROLL_SE_PX, TILE_MAX_NATIVE_ZOOM)
+
+function repositionScrollMenu() {
+  const el = document.getElementById('scroll-menu')
+  if (!el) return
+  const nw = map.latLngToContainerPoint(SCROLL_NW_LL)
+  const se = map.latLngToContainerPoint(SCROLL_SE_LL)
+  const w = se.x - nw.x
+  const h = se.y - nw.y
+  if (w < 30 || h < 20) {
+    // scroll has zoomed out of usefulness — hide
+    el.style.display = 'none'
+    return
+  }
+  el.style.display = 'block'
+  el.style.left = nw.x + 'px'
+  el.style.top = nw.y + 'px'
+  el.style.width = w + 'px'
+  el.style.height = h + 'px'
+  // Base font-size scales with the scroll's rendered width. At ~340px wide
+  // we want ~13px text; smaller scrolls shrink text proportionally with a
+  // floor so it stays readable.
+  const base = Math.max(8, Math.min(22, w / 26))
+  el.style.fontSize = base + 'px'
+}
+
 async function boot() {
   blockBrowserPinchZoom()
   hideLegacyRegionToggle()
 
   // Phase Y: POI layers FULLY disabled — old data uses coordinates tied to
-  // the old painted tiles, so loading them onto the new unified pyramid
-  // dumps every dungeon/altar/waypoint icon into the wrong spot (Adam saw
-  // a cluster of icons stacked on Skovos on 2026-04-29). Re-enable once
-  // we've ported maxroll's map.min.json POI data with proper coords.
+  // the old painted tiles. Re-enable once we've ported maxroll's POI data.
   initSearch(map)
 
   document.addEventListener('builds-changed', () => {
@@ -228,30 +269,64 @@ async function boot() {
   })
   window.parent.postMessage({ type: 'd4jsp:map-ready' }, '*')
 
-  const layerPanel    = document.getElementById('layer-panel')
-  const closePanelBtn = document.getElementById('panel-close-btn')
-  const toggleBtn     = document.getElementById('panel-toggle-btn')
+  // ── In-scroll menu wiring ──
+  repositionScrollMenu()
+  map.on('zoom move resize zoomend moveend', repositionScrollMenu)
+  // Reposition once tiles+layout settle (frame ImageOverlay sizing can
+  // shift on first paint); use multiple frames + a setTimeout fallback.
+  requestAnimationFrame(() => requestAnimationFrame(repositionScrollMenu))
+  setTimeout(repositionScrollMenu, 200)
 
-  function closePanel() {
-    if (layerPanel) layerPanel.classList.add('panel-hidden')
-    if (toggleBtn) toggleBtn.style.display = 'flex'
-  }
-  function openPanel() {
-    if (layerPanel) layerPanel.classList.remove('panel-hidden')
-    if (toggleBtn) toggleBtn.style.display = 'none'
-  }
-  if (closePanelBtn) closePanelBtn.addEventListener('click', e => { e.stopPropagation(); closePanel() })
-  if (toggleBtn) toggleBtn.addEventListener('click', openPanel)
-  map.on('click', closePanel)
+  // Tab switching
+  const tabButtons = document.querySelectorAll('.scroll-tab')
+  const tabContents = document.querySelectorAll('.scroll-tab-content')
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.tab
+      tabButtons.forEach(b => b.classList.toggle('active', b === btn))
+      tabContents.forEach(c => c.classList.toggle('hidden', c.id !== `tab-${id}`))
+    })
+  })
 
-  function openPlanner() {
-    const m = document.getElementById('planner-modal')
-    if (m) m.classList.add('open')
+  // Render layer toggles list (phase 1 — visual-only; layers re-enable
+  // when POI data is re-anchored to the new tile pyramid).
+  const layerList = document.getElementById('layer-list')
+  if (layerList) {
+    const groupOrder = ['Sanctuary', 'Nahantu']
+    const grouped = {}
+    for (const cfg of LAYER_CONFIGS) {
+      ;(grouped[cfg.region] = grouped[cfg.region] || []).push(cfg)
+    }
+    const html = []
+    for (const region of groupOrder) {
+      const items = grouped[region] || []
+      if (items.length === 0) continue
+      if (region !== 'Sanctuary') {
+        html.push(`<div class="scroll-region-label">${region}</div>`)
+      }
+      for (const cfg of items) {
+        html.push(
+          `<div class="scroll-layer-item" data-layer-id="${cfg.id}">` +
+          `<span class="check"></span>${cfg.label}</div>`,
+        )
+      }
+    }
+    layerList.innerHTML = html.join('')
+    layerList.addEventListener('click', e => {
+      const item = e.target.closest('.scroll-layer-item')
+      if (!item) return
+      item.classList.toggle('on')
+      // Phase 2: actually toggle the layer group on/off when POIs are wired.
+    })
   }
-  const pb = document.getElementById('btn-plan-builds')
-  const nb = document.getElementById('btn-new-build')
-  if (pb) pb.addEventListener('click', openPlanner)
-  if (nb) nb.addEventListener('click', openPlanner)
+
+  // Add waypoint button — phase 1 stub (phase 3 wires the actual save flow)
+  const addWpBtn = document.getElementById('add-waypoint-btn')
+  if (addWpBtn) {
+    addWpBtn.addEventListener('click', () => {
+      console.log('[D4JSP Map] add waypoint — phase 3 will wire this')
+    })
+  }
 
   console.log('[D4JSP Map] Ready — unified Blizzard tile pyramid (via maxroll CDN).')
 }

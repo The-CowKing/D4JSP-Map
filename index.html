@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>D4JSP — Sanctuary Map</title>
 
-  <!-- Google Fonts: Cinzel + Barlow Condensed -->
+  <!-- Google Fonts: Cinzel + Barlow Condensed + IM Fell (ink-on-paper script for in-scroll menu) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Barlow+Condensed:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Barlow+Condensed:wght@300;400;500;600&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Italianno&display=swap" rel="stylesheet" />
 
   <!-- Leaflet CSS from CDN -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -29,45 +29,78 @@
          Y.14 CSS gold border that worked. Layer panel hides on zoom-in. -->
     <div id="brand-frame"></div>
 
-  <!-- Panel reopen button (visible when panel is closed) — Y.10 hidden via CSS -->
+  <!-- Panel reopen button (legacy, hidden via CSS) -->
   <button id="panel-toggle-btn" title="Show layer controls">&#9776;</button>
 
-  <!-- Left sidebar: layer controls — sits over the parchment scroll in the brand frame -->
-  <div id="layer-panel">
-    <div class="panel-header">
-      <div class="panel-header-top">
-        <div>
-          <span class="panel-title">SANCTUARY</span>
-          <span class="panel-subtitle">Layer Controls</span>
+  <!-- Y.34 (Adam): in-scroll menu. Anchored via JS to the parchment scroll
+       graphic in the brand frame so it pans/zooms WITH the map. Mostly
+       transparent — just text on the parchment, ink color, script font.
+       Two columns inside the scroll: left = search + tabs + tab content,
+       right = custom waypoints (phase 2). -->
+  <div id="scroll-menu">
+    <div id="scroll-menu-inner">
+
+      <!-- Left column -->
+      <div id="scroll-menu-left">
+        <!-- Search row -->
+        <div class="scroll-search">
+          <svg class="scroll-search-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="15.5" y1="15.5" x2="20" y2="20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <input id="search-input" type="text" placeholder="search…" autocomplete="off" spellcheck="false" />
+          <button id="search-clear" title="Clear">&times;</button>
         </div>
-        <button id="panel-close-btn" class="panel-close-btn" title="Close">&#10005;</button>
-      </div>
-      <!-- Tab buttons -->
-      <div class="panel-tabs">
-        <button class="panel-tab active" data-tab="layers">LAYERS</button>
-        <button class="panel-tab" data-tab="builds">BUILDS</button>
-      </div>
-    </div>
 
-    <!-- LAYERS tab -->
-    <div id="tab-layers" class="tab-content">
-      <div id="layer-list"></div>
-      <div class="panel-plan-row">
-        <button id="btn-plan-builds" class="panel-btn">&#9876; Plan Builds</button>
-      </div>
-      <div class="panel-footer">
-        <button id="btn-all-on" class="panel-btn">All On</button>
-        <button id="btn-all-off" class="panel-btn">All Off</button>
-      </div>
-    </div>
+        <!-- 1-line divider -->
+        <div class="scroll-divider"></div>
 
-    <!-- BUILDS tab -->
-    <div id="tab-builds" class="tab-content hidden">
-      <div id="builds-list"></div>
-      <div class="panel-footer">
-        <button id="btn-new-build" class="panel-btn" style="width:100%">&#65291; New Build</button>
+        <!-- Tabs row -->
+        <div class="scroll-tabs">
+          <button class="scroll-tab active" data-tab="layers">Layers</button>
+          <button class="scroll-tab" data-tab="bosses">Bosses</button>
+          <button class="scroll-tab" data-tab="builds">Builds</button>
+        </div>
+
+        <!-- 1-line divider -->
+        <div class="scroll-divider"></div>
+
+        <!-- Tab content -->
+        <div id="tab-layers" class="scroll-tab-content">
+          <div id="layer-list"></div>
+        </div>
+        <div id="tab-bosses" class="scroll-tab-content hidden">
+          <div class="scroll-coming-soon">boss rotation — coming soon</div>
+        </div>
+        <div id="tab-builds" class="scroll-tab-content hidden">
+          <div id="builds-list"></div>
+        </div>
       </div>
+
+      <!-- Right column: custom waypoints (phase 2 — placeholder for now) -->
+      <div id="scroll-menu-right">
+        <div class="scroll-section-title">
+          My Waypoints
+          <button id="add-waypoint-btn" title="Add waypoint" aria-label="Add waypoint">+</button>
+        </div>
+        <div class="scroll-divider"></div>
+        <div id="custom-waypoints-list">
+          <div class="scroll-empty">right-click map<br/>to save a spot</div>
+        </div>
+      </div>
+
+      <!-- Search results dropdown (overlays inside the scroll) -->
+      <div id="search-results"></div>
     </div>
+  </div>
+
+  <!-- Legacy elements kept for back-compat with main.js / search.js / planner.js -->
+  <div id="layer-panel" style="display:none">
+    <button id="panel-close-btn" style="display:none"></button>
+    <button id="btn-plan-builds" style="display:none"></button>
+    <button id="btn-all-on" style="display:none"></button>
+    <button id="btn-all-off" style="display:none"></button>
+    <button id="btn-new-build" style="display:none"></button>
   </div>
 
   <!-- Build Planner Modal -->
@@ -109,20 +142,8 @@
     </div>
   </div>
 
-  <!-- Search panel: top right -->
-  <div id="search-panel">
-    <div id="search-container">
-      <span class="search-icon">&#9906;</span>
-      <input id="search-input" type="text" placeholder="Search locations... [/]" autocomplete="off" spellcheck="false" />
-      <button id="search-clear" title="Clear">&#10005;</button>
-    </div>
-    <div id="search-results"></div>
-  </div>
-
-  <!-- Coordinate display: bottom left -->
-  <div id="coords-display">
-    <span id="coords-text">Hover map for coordinates</span>
-  </div>
+  <!-- Y.34: search/coords moved into in-scroll menu — old top-right panel removed. -->
+  <div id="coords-display" style="display:none"><span id="coords-text"></span></div>
 
   </div><!-- /#map-shell -->
 
