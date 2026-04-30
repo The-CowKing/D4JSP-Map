@@ -155,6 +155,24 @@
   <!-- Y.34: search/coords moved into in-scroll menu — old top-right panel removed. -->
   <div id="coords-display" style="display:none"><span id="coords-text"></span></div>
 
+  <!-- Y.34k: context menu for right-click / long-press on map. -->
+  <div id="map-context-menu">
+    <button class="ctx-item" data-action="save-waypoint">Save waypoint</button>
+  </div>
+
+  <!-- Y.34k: waypoint save dialog — input for note/description. -->
+  <div id="waypoint-dialog">
+    <div class="wp-dialog-inner">
+      <div class="wp-dialog-title">New waypoint</div>
+      <input id="wp-name-input" type="text" placeholder="Name" />
+      <textarea id="wp-desc-input" placeholder="Description (optional)"></textarea>
+      <div class="wp-dialog-actions">
+        <button id="wp-cancel-btn">Cancel</button>
+        <button id="wp-save-btn">Save</button>
+      </div>
+    </div>
+  </div>
+
   </div><!-- /#map-shell -->
 
   <!-- Leaflet JS from CDN -->

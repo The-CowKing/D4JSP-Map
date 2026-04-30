@@ -326,13 +326,196 @@ async function boot() {
     .filter(c => c.region === 'Nahantu')
     .map(c => ({ id: c.id, label: c.label })))
 
-  // Add waypoint button — phase 1 stub (phase 3 wires the actual save flow)
-  const addWpBtn = document.getElementById('add-waypoint-btn')
-  if (addWpBtn) {
-    addWpBtn.addEventListener('click', () => {
-      console.log('[D4JSP Map] add waypoint — phase 3 will wire this')
+  // ── Y.34k: Custom waypoints ────────────────────────────────────
+  // Long-press / right-click map → context menu → "Save waypoint" →
+  // modal with name + description → persists to localStorage and
+  // renders as marker + list item.
+  const STORAGE_KEY = 'd4jsp.map.waypoints.v1'
+  const waypointLayer = L.layerGroup().addTo(map)
+  let waypoints = []
+  let pendingWp = null
+
+  function loadWaypoints() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY)
+      waypoints = raw ? JSON.parse(raw) : []
+    } catch { waypoints = [] }
+  }
+  function saveWaypoints() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(waypoints)) } catch {}
+  }
+  function renderWaypoints() {
+    waypointLayer.clearLayers()
+    for (const wp of waypoints) {
+      const m = L.marker([wp.lat, wp.lng], {
+        icon: L.divIcon({
+          className: 'd4jsp-user-waypoint',
+          html: '<div class="d4jsp-wp-pin">&#9733;</div>',
+          iconSize: [20, 20],
+          iconAnchor: [10, 10],
+        }),
+      })
+      m.bindPopup(
+        `<div class="d4jsp-wp-popup"><strong>${escapeHtml(wp.name)}</strong>` +
+        (wp.desc ? `<div class="d4jsp-wp-popup-desc">${escapeHtml(wp.desc)}</div>` : '') +
+        `<button class="d4jsp-wp-delete" data-wp-id="${wp.id}">remove</button></div>`,
+        { autoClose: true, closeOnClick: true },
+      )
+      m.addTo(waypointLayer)
+    }
+    const list = document.getElementById('custom-waypoints-list')
+    if (!list) return
+    if (waypoints.length === 0) {
+      list.innerHTML = '<div class="scroll-empty">right-click map<br/>to save a spot</div>'
+      return
+    }
+    list.innerHTML = waypoints.map(wp =>
+      `<div class="scroll-waypoint-item" data-wp-id="${wp.id}" title="${escapeHtml(wp.desc || '')}">` +
+      `<span class="dot"></span>${escapeHtml(wp.name)}</div>`
+    ).join('')
+  }
+  function escapeHtml(str) {
+    return String(str || '').replace(/[&<>"']/g, c =>
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]))
+  }
+
+  // Tapping a list item flies the map to that waypoint and opens its popup.
+  const wpList = document.getElementById('custom-waypoints-list')
+  if (wpList) {
+    wpList.addEventListener('click', e => {
+      const item = e.target.closest('.scroll-waypoint-item')
+      if (!item) return
+      const id = item.dataset.wpId
+      const wp = waypoints.find(w => w.id === id)
+      if (!wp) return
+      map.flyTo([wp.lat, wp.lng], Math.max(map.getZoom(), 3), { duration: 0.5 })
+      // Open popup of the matching marker after the flyTo settles.
+      setTimeout(() => {
+        waypointLayer.eachLayer(m => {
+          const ll = m.getLatLng()
+          if (Math.abs(ll.lat - wp.lat) < 1e-6 && Math.abs(ll.lng - wp.lng) < 1e-6) m.openPopup()
+        })
+      }, 600)
     })
   }
+  // Marker popup remove button
+  map.on('popupopen', (e) => {
+    const root = e.popup.getElement()
+    if (!root) return
+    root.querySelectorAll('.d4jsp-wp-delete').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.wpId
+        waypoints = waypoints.filter(w => w.id !== id)
+        saveWaypoints()
+        renderWaypoints()
+        map.closePopup()
+      })
+    })
+  })
+
+  // Context menu (right-click / long-press)
+  const ctxMenu = document.getElementById('map-context-menu')
+  function showCtxMenu(latlng, containerPoint) {
+    pendingWp = latlng
+    ctxMenu.style.left = containerPoint.x + 'px'
+    ctxMenu.style.top  = containerPoint.y + 'px'
+    ctxMenu.classList.add('open')
+  }
+  function hideCtxMenu() {
+    pendingWp = null
+    ctxMenu.classList.remove('open')
+  }
+  // Right-click on the map (desktop)
+  map.on('contextmenu', (e) => {
+    if (e.originalEvent) e.originalEvent.preventDefault()
+    showCtxMenu(e.latlng, e.containerPoint)
+  })
+  // Long-press on touch (mobile) — Leaflet doesn't fire contextmenu on
+  // touch reliably, so detect a touchstart that holds for 600ms without
+  // moving more than a few pixels.
+  let lpTimer = null
+  let lpStart = null
+  const mapEl = map.getContainer()
+  mapEl.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) { clearTimeout(lpTimer); return }
+    const t = e.touches[0]
+    lpStart = { x: t.clientX, y: t.clientY }
+    clearTimeout(lpTimer)
+    lpTimer = setTimeout(() => {
+      const rect = mapEl.getBoundingClientRect()
+      const cp = L.point(t.clientX - rect.left, t.clientY - rect.top)
+      const ll = map.containerPointToLatLng(cp)
+      showCtxMenu(ll, cp)
+    }, 600)
+  }, { passive: true })
+  mapEl.addEventListener('touchmove', (e) => {
+    if (!lpStart) return
+    const t = e.touches[0]
+    if (Math.abs(t.clientX - lpStart.x) > 8 || Math.abs(t.clientY - lpStart.y) > 8) {
+      clearTimeout(lpTimer)
+      lpStart = null
+    }
+  }, { passive: true })
+  mapEl.addEventListener('touchend', () => { clearTimeout(lpTimer); lpStart = null }, { passive: true })
+
+  // Hide ctx menu on map click or escape
+  map.on('click movestart zoomstart', hideCtxMenu)
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideCtxMenu() })
+
+  // Context menu action — open the waypoint dialog
+  ctxMenu.addEventListener('click', (e) => {
+    const btn = e.target.closest('.ctx-item')
+    if (!btn) return
+    if (btn.dataset.action === 'save-waypoint' && pendingWp) {
+      openWaypointDialog(pendingWp)
+    }
+    hideCtxMenu()
+  })
+
+  // Waypoint dialog
+  const wpDialog   = document.getElementById('waypoint-dialog')
+  const wpName     = document.getElementById('wp-name-input')
+  const wpDesc     = document.getElementById('wp-desc-input')
+  const wpCancel   = document.getElementById('wp-cancel-btn')
+  const wpSave     = document.getElementById('wp-save-btn')
+  let dialogLatLng = null
+  function openWaypointDialog(latlng) {
+    dialogLatLng = latlng
+    wpName.value = ''
+    wpDesc.value = ''
+    wpDialog.classList.add('open')
+    setTimeout(() => wpName.focus(), 50)
+  }
+  function closeWaypointDialog() {
+    wpDialog.classList.remove('open')
+    dialogLatLng = null
+  }
+  wpCancel.addEventListener('click', closeWaypointDialog)
+  wpDialog.addEventListener('click', (e) => { if (e.target === wpDialog) closeWaypointDialog() })
+  wpSave.addEventListener('click', () => {
+    const name = wpName.value.trim() || 'Untitled'
+    const desc = wpDesc.value.trim()
+    if (!dialogLatLng) return
+    waypoints.push({
+      id: 'wp_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+      lat: dialogLatLng.lat,
+      lng: dialogLatLng.lng,
+      name,
+      desc,
+      created: new Date().toISOString(),
+    })
+    saveWaypoints()
+    renderWaypoints()
+    closeWaypointDialog()
+  })
+
+  // + button in the My Waypoints title — drops a pin at current map center
+  const addWpBtn = document.getElementById('add-waypoint-btn')
+  if (addWpBtn) addWpBtn.addEventListener('click', () => openWaypointDialog(map.getCenter()))
+
+  // Boot the persisted list
+  loadWaypoints()
+  renderWaypoints()
 
   // Y.34d (Adam: "when you click the invisible card it should take you
   // centered zoomed in on the menu"). Map-level click handler — when the
