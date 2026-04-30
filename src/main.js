@@ -67,9 +67,12 @@ const WORLD_BOUNDS = L.latLngBounds(NW, SE)
 // Phase Y.8: tighten the bounds so users can't pan past the map content
 // (Adam: there should never be black outside the map). Padding negative so
 // the user gets a small "snap-back" feel when they hit the edge.
+// Y.23 (Adam: start position is too zoomed in, should be to end of fog of
+// war): pad the fitBounds so the entire fog-of-war edge is visible inside
+// the frame on load, with breathing room. 8% inset on each side.
 map.setMaxBounds(WORLD_BOUNDS)
 map.options.maxBoundsViscosity = 1.0
-map.fitBounds(WORLD_BOUNDS, { animate: false, padding: [0, 0] })
+map.fitBounds(WORLD_BOUNDS, { animate: false, padding: [40, 40] })
 
 // --- Unified tile layer (maxroll CDN, x_y_z.webp ordering) --------------
 // L.TileLayer.extend so we can override getTileUrl and map Leaflet's
