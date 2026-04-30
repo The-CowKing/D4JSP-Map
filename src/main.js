@@ -34,7 +34,7 @@ const map = new L.Map('map', {
   minZoom: 1,
   maxZoom: TILE_MAX_ZOOM,
   crs: L.CRS.Simple,
-  attributionControl: true,
+  attributionControl: false,    // Adam: kill the Leaflet/maxroll attribution bar
   zoomControl: false,
   preferCanvas: false,
   zoomSnap: 0.5,
@@ -71,9 +71,7 @@ const worldLayer = new MaxrollTileLayer('', {
   noWrap: true,
   tms: false,
   bounds: WORLD_BOUNDS,
-  attribution:
-    'Map: <a href="https://us.shop.battle.net/family/diablo-iv" target="_blank">Diablo IV</a> &copy; Blizzard | ' +
-    '<a href="https://d4jsp.org" target="_blank">D4JSP</a>',
+  attribution: '',
   errorTileUrl:
     'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
 }).addTo(map)
