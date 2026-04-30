@@ -103,16 +103,11 @@ function hideLegacyRegionToggle() {
 async function boot() {
   hideLegacyRegionToggle()
 
-  // Phase Y: POI layers temporarily disabled — old data uses coordinates
-  // tied to the old painted tiles, won't align on the unified pyramid.
-  // Re-enabling once we've ported maxroll's map.min.json POI data.
-  try {
-    await initLayers(map)
-    refreshBuildRotationLayers(map)
-    initPlanner(dungeonsData)
-  } catch (e) {
-    console.warn('[MAP] POI layers skipped (pending coord re-alignment):', e)
-  }
+  // Phase Y: POI layers FULLY disabled — old data uses coordinates tied to
+  // the old painted tiles, so loading them onto the new unified pyramid
+  // dumps every dungeon/altar/waypoint icon into the wrong spot (Adam saw
+  // a cluster of icons stacked on Skovos on 2026-04-29). Re-enable once
+  // we've ported maxroll's map.min.json POI data with proper coords.
   initSearch(map)
 
   document.addEventListener('builds-changed', () => {
