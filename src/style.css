@@ -179,24 +179,32 @@ html, body {
   flex-shrink: 0;
 }
 
-/* Tabs: text only, simple underline for active. */
+/* Tabs: text only, simple underline for active. 5 tabs need to fit a
+   narrow column — scroll horizontally if they exceed the available
+   width (touch can swipe through them). */
 .scroll-tabs {
   display: flex;
   flex-direction: row;
-  gap: 0.8em;
+  gap: 0.5em;
   flex-shrink: 0;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  white-space: nowrap;
 }
+.scroll-tabs::-webkit-scrollbar { display: none; }
 .scroll-tab {
   background: transparent;
   border: 0;
   padding: 0;
   color: #2a160a;
   font-family: inherit;
-  font-size: 1em;
+  font-size: 0.85em;
   font-style: italic;
   cursor: pointer;
   opacity: 0.55;
   transition: opacity 0.15s;
+  flex-shrink: 0;
 }
 .scroll-tab:hover { opacity: 0.85; }
 .scroll-tab.active {

@@ -295,37 +295,36 @@ async function boot() {
     })
   })
 
-  // Render layer toggles list (phase 1 — visual-only; layers re-enable
-  // when POI data is re-anchored to the new tile pyramid).
-  const layerList = document.getElementById('layer-list')
-  if (layerList) {
-    const groupOrder = ['Sanctuary', 'Nahantu']
-    const grouped = {}
-    for (const cfg of LAYER_CONFIGS) {
-      ;(grouped[cfg.region] = grouped[cfg.region] || []).push(cfg)
-    }
-    const html = []
-    for (const region of groupOrder) {
-      const items = grouped[region] || []
-      if (items.length === 0) continue
-      if (region !== 'Sanctuary') {
-        html.push(`<div class="scroll-region-label">${region}</div>`)
-      }
-      for (const cfg of items) {
-        html.push(
-          `<div class="scroll-layer-item" data-layer-id="${cfg.id}">` +
-          `<span class="check"></span>${cfg.label}</div>`,
-        )
-      }
-    }
-    layerList.innerHTML = html.join('')
-    layerList.addEventListener('click', e => {
+  // Y.34j (Adam: "vs their tabs only control their pois etc"): each
+  // region tab toggles ONLY that region's POIs. Layer ids include the
+  // region prefix (e.g. nahantu_waypoints) so each tab's clicks target
+  // its own L.layerGroup, independent of the other tabs.
+  function renderLayerList(rootId, items) {
+    const root = document.getElementById(rootId)
+    if (!root) return
+    const html = items.map(cfg =>
+      `<div class="scroll-layer-item" data-layer-id="${cfg.id}">` +
+      `<span class="check"></span>${cfg.label}</div>`
+    ).join('')
+    root.innerHTML = html
+    root.addEventListener('click', e => {
       const item = e.target.closest('.scroll-layer-item')
       if (!item) return
       item.classList.toggle('on')
-      // Phase 2: actually toggle the layer group on/off when POIs are wired.
+      const on = item.classList.contains('on')
+      const id = item.dataset.layerId
+      // Phase 2 (POI wiring): toggle the layerGroups[id] on/off.
+      console.log(`[D4JSP Map] toggle ${id}: ${on ? 'on' : 'off'} (POI wiring pending)`)
     })
   }
+  // Sanctuary tab — Sanctuary POIs only.
+  renderLayerList('layer-list-sanctuary', LAYER_CONFIGS
+    .filter(c => c.region === 'Sanctuary')
+    .map(c => ({ id: c.id, label: c.label })))
+  // Nahantu tab — Nahantu POIs only.
+  renderLayerList('layer-list-nahantu', LAYER_CONFIGS
+    .filter(c => c.region === 'Nahantu')
+    .map(c => ({ id: c.id, label: c.label })))
 
   // Add waypoint button — phase 1 stub (phase 3 wires the actual save flow)
   const addWpBtn = document.getElementById('add-waypoint-btn')
