@@ -122,7 +122,29 @@ function hideLegacyRegionToggle() {
   })
 }
 
+// Y.15 (Adam: zoom is pinch — pinch makes it move): block browser-native
+// pinch-zoom at the document level. user-scalable=no in viewport meta is
+// not enough — Chrome and Safari often ignore it in iframes/PWAs. Capturing
+// gesturestart/gesturechange/gestureend (Safari) + touchmove with 2+
+// fingers (Chrome) prevents the page from scaling while still letting
+// Leaflet's touchZoom handler receive the pinch and zoom the map content.
+function blockBrowserPinchZoom() {
+  const stop = (e) => {
+    if (e.touches && e.touches.length >= 2) e.preventDefault()
+  }
+  document.addEventListener('touchstart', stop, { passive: false })
+  document.addEventListener('touchmove', stop, { passive: false })
+  document.addEventListener('gesturestart', (e) => e.preventDefault(), { passive: false })
+  document.addEventListener('gesturechange', (e) => e.preventDefault(), { passive: false })
+  document.addEventListener('gestureend', (e) => e.preventDefault(), { passive: false })
+  // Block Ctrl+wheel page zoom on desktop too
+  document.addEventListener('wheel', (e) => {
+    if (e.ctrlKey) e.preventDefault()
+  }, { passive: false })
+}
+
 async function boot() {
+  blockBrowserPinchZoom()
   hideLegacyRegionToggle()
 
   // Phase Y: POI layers FULLY disabled — old data uses coordinates tied to
