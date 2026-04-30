@@ -304,19 +304,22 @@ async function boot() {
   // marker type, and stash L.layerGroups in poiGroups. Layer toggles in
   // the menu add/remove the groups from the map.
   //
-  // Coord transform — calibrated empirically by mapping marker bounding
-  // box into ~75% of the 8192 pyramid (with offset for the empty-tan
-  // padding around Sanctuary's continents). This is approximate; we'll
-  // tune when Adam reports markers landing wrong.
-  const WORLD_X_MIN = -2500, WORLD_X_MAX = 3500
+  // Coord transform — Y.34r (Adam: "they r super far off if I had to
+  // guess I'd say inverted would allign"). Maxroll's world Y is
+  // positive-up (game convention), but Leaflet's pyramid Y is positive-
+  // down (screen pixels). Negate Y. Sanctuary sits in the upper-right
+  // half of the maxroll pyramid, so x=0 (Sanctuary roughly-center) needs
+  // to land near pyramid x≈4800 — adjusted X bounds so that mapping holds.
+  const WORLD_X_MIN = -3000, WORLD_X_MAX = 3500
   const WORLD_Y_MIN = -2000, WORLD_Y_MAX = 1500
-  const POI_PX_OFFSET_X = 500
+  const POI_PX_OFFSET_X = 600
   const POI_PX_OFFSET_Y = 800
   const POI_PX_W = NATIVE_WIDTH - 2 * POI_PX_OFFSET_X
   const POI_PX_H = NATIVE_WIDTH - 2 * POI_PX_OFFSET_Y
   function worldToLatLng(wx, wy) {
     const px = POI_PX_OFFSET_X + (wx - WORLD_X_MIN) / (WORLD_X_MAX - WORLD_X_MIN) * POI_PX_W
-    const py = POI_PX_OFFSET_Y + (wy - WORLD_Y_MIN) / (WORLD_Y_MAX - WORLD_Y_MIN) * POI_PX_H
+    // Y inverted: game-north (positive Y) -> pyramid-top (small py)
+    const py = POI_PX_OFFSET_Y + (WORLD_Y_MAX - wy) / (WORLD_Y_MAX - WORLD_Y_MIN) * POI_PX_H
     return map.unproject([px, py], TILE_MAX_NATIVE_ZOOM)
   }
   // Color + label per maxroll marker type.
