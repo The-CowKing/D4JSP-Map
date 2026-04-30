@@ -3,9 +3,11 @@
 //
 // 2026-04-29 Phase Y: switched to maxroll's unified tile pyramid via direct
 // CDN hot-link. Single world map (Sanctuary + VoH/Nahantu + LoH/Skovos +
-// Hell + Kehj zones) at z=0..5. Maxroll's URL format is {x}_{y}_{z}.webp
-// (x and y first, then z) — we use Leaflet's getTileUrl override to map
-// the standard {z}/{x}/{y} request into their format.
+// Hell + Kehj zones) at z=0..5. Maxroll's URL format is {z}_{x}_{y}.webp
+// (zoom first — verified by inspecting their captures: z=0 has only
+// `0_0_0.webp`, z=1 has `1_0_0`/`1_1_0`/`1_0_1`/`1_1_1` — so the leading
+// number is z, not x). Phase Y.4 fixed this — earlier passes had {x}_{y}_{z}
+// which produced the "completely cut in half + Skovos upside down" view.
 //
 // Custom branding overlay is added via CSS in index.html so we own the
 // frame around the map even though the bytes are hot-linked.
@@ -57,10 +59,9 @@ map.fitBounds(WORLD_BOUNDS, { animate: false })
 // {z, x, y} into maxroll's {x}_{y}_{z}.webp filename.
 const MaxrollTileLayer = L.TileLayer.extend({
   getTileUrl(coords) {
-    const x = coords.x
-    const y = coords.y
-    const z = coords.z
-    return `${TILE_BASE}/${x}_${y}_${z}.webp`
+    // Maxroll's filename order is {z}_{x}_{y}.webp — verified from their
+    // own captures (z=0 has only "0_0_0", z=1 has "1_0_0"/"1_1_0" etc.)
+    return `${TILE_BASE}/${coords.z}_${coords.x}_${coords.y}.webp`
   },
 })
 
