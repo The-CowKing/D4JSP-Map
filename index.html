@@ -17,18 +17,18 @@
   <link rel="stylesheet" href="./src/style.css" />
 </head>
 <body>
-  <!-- Phase Y.8: square shell pinned to top of viewport. The brand frame is
-       positioned absolutely within the shell so it does NOT pan with the map.
-       Map fills the shell. Outside the shell: regular page background. -->
+  <!-- Phase Y.8/Y.10: square shell pinned to top of viewport. The brand
+       frame is positioned absolutely within the shell so it does NOT pan
+       with the map. Layer panel is also inside the shell now, baked into
+       the parchment scroll in the top-left of the frame. -->
   <div id="map-shell">
     <div id="map"></div>
     <div id="brand-frame"></div>
-  </div>
 
-  <!-- Panel reopen button (visible when panel is closed) -->
+  <!-- Panel reopen button (visible when panel is closed) — Y.10 hidden via CSS -->
   <button id="panel-toggle-btn" title="Show layer controls">&#9776;</button>
 
-  <!-- Left sidebar: layer controls -->
+  <!-- Left sidebar: layer controls — sits over the parchment scroll in the brand frame -->
   <div id="layer-panel">
     <div class="panel-header">
       <div class="panel-header-top">
@@ -120,10 +120,7 @@
     <span id="coords-text">Hover map for coordinates</span>
   </div>
 
-  <!-- Phase Y.7: brand frame moved into Leaflet as an ImageOverlay (see src/main.js)
-       so it pans/zooms with the map and sits at the edge of the world bounds, not the
-       viewport. No more blue outside the frame; pure black behind the world. -->
-
+  </div><!-- /#map-shell -->
 
   <!-- Leaflet JS from CDN -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"

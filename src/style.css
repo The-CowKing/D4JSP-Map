@@ -76,6 +76,85 @@ html, body {
   mix-blend-mode: multiply;
 }
 
+/* Phase Y.10 (Adam): bake menu items into the parchment scroll in the
+   top-left of the brand frame. Hide the search bar and hamburger; the
+   #layer-panel is repositioned to overlay the parchment area. */
+#search-panel { display: none !important; }
+#panel-toggle-btn { display: none !important; }
+
+#layer-panel {
+  position: absolute !important;
+  top: 4% !important;
+  left: 5% !important;
+  width: 30% !important;
+  max-width: 30% !important;
+  height: 26% !important;
+  max-height: 26% !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  z-index: 1100 !important;        /* above the brand frame so it stays visible */
+  overflow: hidden !important;
+  padding: 0.6vw 0.8vw !important;
+  /* Dark text on parchment background — flip from the dark-panel default */
+  color: #2a1f0c !important;
+}
+#layer-panel .panel-header {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 0 0.4vw 0 !important;
+}
+#layer-panel .panel-title {
+  font-size: clamp(10px, 1.2vw, 14px) !important;
+  letter-spacing: 0.1em !important;
+  color: #4a2f0c !important;
+}
+#layer-panel .panel-subtitle { display: none !important; }
+#layer-panel .panel-close-btn { display: none !important; }
+#layer-panel .panel-tabs {
+  margin-bottom: 0.4vw !important;
+  gap: 0.3vw !important;
+}
+#layer-panel .panel-tab {
+  font-size: clamp(8px, 0.9vw, 11px) !important;
+  padding: 2px 5px !important;
+  background: transparent !important;
+  color: #6a4a1c !important;
+  border-bottom-color: transparent !important;
+}
+#layer-panel .panel-tab.active {
+  color: #2a1a04 !important;
+  border-bottom-color: #8a6e18 !important;
+  background: transparent !important;
+}
+#layer-panel .tab-content {
+  padding: 0 !important;
+  height: calc(100% - 28px) !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+}
+#layer-panel .panel-btn {
+  font-size: clamp(8px, 0.85vw, 10px) !important;
+  padding: 2px 6px !important;
+  background: transparent !important;
+  color: #4a2f0c !important;
+  border: 1px solid rgba(74, 47, 12, 0.3) !important;
+}
+#layer-panel #layer-list {
+  font-size: clamp(8px, 0.85vw, 11px) !important;
+}
+#layer-panel #layer-list label {
+  color: #2a1a04 !important;
+  font-size: clamp(8px, 0.85vw, 11px) !important;
+}
+#layer-panel .panel-plan-row,
+#layer-panel .panel-footer {
+  padding: 2px 0 !important;
+  background: transparent !important;
+  border-top: 1px solid rgba(74, 47, 12, 0.2) !important;
+  margin-top: 4px !important;
+}
+
 /* ── Scrollbars ────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg-deep); }
