@@ -317,12 +317,19 @@ async function boot() {
   const POI_PX_W = NATIVE_WIDTH - 2 * POI_PX_OFFSET_X
   const POI_PX_H = NATIVE_WIDTH - 2 * POI_PX_OFFSET_Y
   function worldToLatLng(wx, wy) {
-    // Y.34u (Adam: "looks like top bottom need to invert now"). Now
-    // both X and Y are inverted (i.e. the original transform with
-    // both axes flipped — same as a 180° rotation of the source coords
-    // around the pyramid center).
-    const px = POI_PX_OFFSET_X + (WORLD_X_MAX - wx) / (WORLD_X_MAX - WORLD_X_MIN) * POI_PX_W
-    const py = POI_PX_OFFSET_Y + (WORLD_Y_MAX - wy) / (WORLD_Y_MAX - WORLD_Y_MIN) * POI_PX_H
+    // Y.34x (Adam: "look at bottom tit of the pois it would align with
+    // the coast at the top"). The 90° CCW rotation (Y.34v) had the
+    // shape correct but Y-flipped — flipping Y on top of the rotation
+    // brings the cluster's bottom protrusion up to align with the
+    // northern coast.
+    // Steps:
+    //   1) Y.34u-style flip on both source axes -> oldPx, oldPy
+    //   2) 90° CCW rotation around pyramid center -> (NATIVE - oldPy, oldPx)
+    //   3) Y-flip the result -> (NATIVE - oldPy, NATIVE - oldPx)
+    const oldPx = POI_PX_OFFSET_X + (WORLD_X_MAX - wx) / (WORLD_X_MAX - WORLD_X_MIN) * POI_PX_W
+    const oldPy = POI_PX_OFFSET_Y + (WORLD_Y_MAX - wy) / (WORLD_Y_MAX - WORLD_Y_MIN) * POI_PX_H
+    const px = NATIVE_WIDTH - oldPy
+    const py = NATIVE_WIDTH - oldPx
     return map.unproject([px, py], TILE_MAX_NATIVE_ZOOM)
   }
   // Color + label per maxroll marker type.
