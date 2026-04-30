@@ -312,9 +312,12 @@ async function boot() {
   //   Ked Bardu  ( -886, -989) -> pyramid (5000, 2700)  // N central Dry Steppes
   // Affine: px = a*wx + b*wy + c, py = d*wx + e*wy + f
   // Solved by least-squares on those 3 points.
+  // Y.34aa (Adam: "needs to invert em all left to right again I think").
+  // X-flip the affine: a, b, c negated/adjusted so px is mirrored
+  // around pyramid center (4096).
   const POI_AFFINE = {
-    a: 1.028,  b:  0.064,  c: 5828,
-    d: 0.412,  e: -0.253,  f: 2814,
+    a: -1.028,  b: -0.064,  c: 2364,
+    d:  0.412,  e: -0.253,  f: 2814,
   }
   // No-op kept for compatibility with loadAndRenderPOIs.
   function buildPoiTransform(/* markers */) { /* affine constants are static */ }
