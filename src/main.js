@@ -325,11 +325,12 @@ async function boot() {
   // applied around pyramid center: (px, py) -> (NATIVE - py, px).
   function buildPoiTransform(/* markers */) { /* derived from data */ }
   function worldToLatLng(wx, wy) {
-    // Y.34aq (Adam: "all need to shift with one at top matching"):
-    // applied a uniform dLat shift south so the northernmost marker
-    // lands on the coast instead of floating above it. Tunable from
-    // console: window.setPoiOffset({dLat: -20})
-    const dLat = (window.__poiOffset && window.__poiOffset.dLat != null) ? window.__poiOffset.dLat : -15
+    // Y.34as — back to the clean Y.34ap calibration. The Y.34aq dLat=-15
+    // shift was too aggressive and pushed Gea Kul south of where Adam
+    // pinned it (-145.82, 127.76). Use the two-point calibration as-is.
+    // Tunable from console if Adam wants to override later:
+    //   setPoiOffset({dLat: -8, dLng: 0})
+    const dLat = (window.__poiOffset && window.__poiOffset.dLat != null) ? window.__poiOffset.dLat : 0
     const dLng = (window.__poiOffset && window.__poiOffset.dLng != null) ? window.__poiOffset.dLng : 0
     const lat = -0.02942 * (wx + wy) - 138.12 + dLat
     const lng =  0.02942 * (wy - wx) + 160.08 + dLng
