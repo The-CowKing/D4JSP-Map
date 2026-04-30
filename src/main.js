@@ -214,10 +214,12 @@ function blockBrowserPinchZoom() {
 // position the #scroll-menu div there. Font-size scales with the map
 // zoom so text stays proportional to the scroll texture.
 // Y.34b: nudged right+down so the menu sits past the scroll's top roller
-// and left handle. Y.34e (Adam: "it's got lots of space to be longer on
-// the scroll"): bumped y1 0.31->0.43 so the menu uses more of the
-// parchment's vertical real estate.
-const SCROLL_FRAC = { x0: 0.09, y0: 0.12, x1: 0.50, y1: 0.43 }
+// and left handle. Y.34e bumped y1 to 0.43 — too much, items spilled past
+// the bottom roller onto the empty parchment-tan area below the scroll.
+// Y.34h (Adam: "the bottom text is a off parchment a bit"): pull y1 in
+// to 0.31 so the menu stays within the writable parchment area; layer
+// list scrolls internally if the item count exceeds visible space.
+const SCROLL_FRAC = { x0: 0.09, y0: 0.12, x1: 0.50, y1: 0.31 }
 const FRAME_W_PX = NATIVE_WIDTH * (1 + 2 * FRAME_OUTSET_X)
 const FRAME_H_PX = NATIVE_WIDTH * (1 + 2 * FRAME_OUTSET_Y)
 const SCROLL_NW_PX = [

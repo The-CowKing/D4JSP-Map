@@ -94,6 +94,10 @@ html, body {
   font-family: 'IM Fell English', 'Cormorant Garamond', serif;
   color: #2a160a; /* dark sepia ink */
   text-shadow: 0 0 1px rgba(58,32,12,0.4);
+  /* Y.34h: clip anything that exceeds the menu's allocated parchment area
+     (e.g. a long layer list); .scroll-tab-content's overflow-y:auto then
+     handles in-content scrolling. */
+  overflow: hidden;
 }
 /* Re-enable pointer events ONLY on interactive children (input/buttons/items) so
    panning/zooming still works on empty scroll padding. */
