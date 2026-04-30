@@ -304,47 +304,24 @@ async function boot() {
   // marker type, and stash L.layerGroups in poiGroups. Layer toggles in
   // the menu add/remove the groups from the map.
   //
-  // Y.34y — root cause analysis: maxroll's tile pyramid is rendered with
-  // a 45°-rotated coord system relative to the marker world coords (D4
-  // uses an iso-style projection internally; the rendered top-down map
-  // tiles bake in this rotation). Naive XY mappings will always look
-  // rotated/sheared. Apply 45° rotation in the world->tile transform.
-  //
-  // After 45° CW rotation: tx = (wx - wy)/√2, ty = (wx + wy)/√2
-  // (This rotates the source coord plane 45° CW so game-east maps to
-  // tile-NE, which matches how Sanctuary appears on maxroll's tiles.)
-  //
-  // Bounds (tx, ty) computed at boot from the actual markers so the
-  // cluster fits the pyramid centered with breathing room.
-  const POI_FILL = 0.78  // markers occupy ~78% of pyramid (rest is empty parchment around Sanctuary)
-  let POI_TRANSFORM = null
-  function buildPoiTransform(markers) {
-    let txMin = Infinity, txMax = -Infinity, tyMin = Infinity, tyMax = -Infinity
-    for (const m of markers) {
-      const tx = (m.x - m.y) / Math.SQRT2
-      const ty = (m.x + m.y) / Math.SQRT2
-      if (tx < txMin) txMin = tx
-      if (tx > txMax) txMax = tx
-      if (ty < tyMin) tyMin = ty
-      if (ty > tyMax) tyMax = ty
-    }
-    const txSpan = txMax - txMin
-    const tySpan = tyMax - tyMin
-    const span = Math.max(txSpan, tySpan)  // uniform scale across both axes
-    const targetSpan = NATIVE_WIDTH * POI_FILL
-    const scale = targetSpan / span
-    // Centered offset so cluster sits in middle of pyramid
-    const offsetX = (NATIVE_WIDTH - txSpan * scale) / 2 - txMin * scale
-    const offsetY = (NATIVE_WIDTH - tySpan * scale) / 2 - tyMin * scale
-    POI_TRANSFORM = { scale, offsetX, offsetY }
+  // Y.34z — landmark-calibrated affine transform. Solved from 3 known
+  // waypoints whose world coords are in the data and whose pyramid
+  // pixel positions I estimated visually from the maxroll tile:
+  //   Kyovashad  (-1398,  154) -> pyramid (4400, 2200)  // NW Fractured Peaks
+  //   Gea Kul    (  680, -418) -> pyramid (6500, 3200)  // E Kehjistan coast
+  //   Ked Bardu  ( -886, -989) -> pyramid (5000, 2700)  // N central Dry Steppes
+  // Affine: px = a*wx + b*wy + c, py = d*wx + e*wy + f
+  // Solved by least-squares on those 3 points.
+  const POI_AFFINE = {
+    a: 1.028,  b:  0.064,  c: 5828,
+    d: 0.412,  e: -0.253,  f: 2814,
   }
+  // No-op kept for compatibility with loadAndRenderPOIs.
+  function buildPoiTransform(/* markers */) { /* affine constants are static */ }
   function worldToLatLng(wx, wy) {
-    // 45° CW rotation, then scale + offset onto pyramid.
-    const tx = (wx - wy) / Math.SQRT2
-    const ty = (wx + wy) / Math.SQRT2
-    const t = POI_TRANSFORM
-    const px = tx * t.scale + t.offsetX
-    const py = ty * t.scale + t.offsetY
+    const t = POI_AFFINE
+    const px = t.a * wx + t.b * wy + t.c
+    const py = t.d * wx + t.e * wy + t.f
     return map.unproject([px, py], TILE_MAX_NATIVE_ZOOM)
   }
   // Color + label per maxroll marker type.
