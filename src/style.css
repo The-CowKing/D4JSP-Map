@@ -82,11 +82,12 @@ html, body {
 #layer-panel { display: none !important; }
 #planner-modal { display: none !important; }
 
-/* Y.34am: coords readout strip at bottom of the map shell. */
+/* Y.34am: coords readout strip — fixed to viewport bottom-left so it sits
+   inside the map shell regardless of where in the DOM it lives. */
 #coords-display {
-  position: absolute;
+  position: fixed;
   left: 8px;
-  bottom: 8px;
+  top: calc(min(100vw, 100vh) - 28px); /* sit at the bottom of the square shell */
   z-index: 700;
   font-family: 'Cinzel', serif;
   font-size: 11px;
@@ -98,6 +99,7 @@ html, body {
   letter-spacing: 0.04em;
   pointer-events: none;
   text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+  white-space: nowrap;
 }
 
 /* ── In-scroll menu (Y.34) ─────────────────────────────────────
