@@ -171,6 +171,10 @@ const containerSize = map.getSize()
 const viewportW = containerSize.x || 360 // fallback if container not laid out yet
 const frameNativeW = NATIVE_WIDTH * (1 + 2 * FRAME_OUTSET_X)
 const zoomToFitWidth = TILE_MAX_NATIVE_ZOOM - Math.log2(frameNativeW / viewportW)
+// Y.34ax (Adam: "shouldnt let it zoom out past frame touching screen
+// edge on mobile either"): pin minZoom to the frame-fit zoom so users
+// can't pinch out past the brand frame and see the dark page behind.
+map.options.minZoom = zoomToFitWidth
 map.setView(center, zoomToFitWidth, { animate: false })
 
 L.control.zoom({ position: 'bottomright' }).addTo(map)

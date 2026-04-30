@@ -808,12 +808,19 @@ html, body {
   width: 100%;
   height: 100%;
   z-index: 1;
-  /* Y.34at: parchment-tan background to match maxroll's empty-tile color
-     so loading tiles fade into the surrounding world instead of flashing
-     a black void. Same color as the empty pyramid padding around the
-     continents so it reads as "still loading" not "broken". */
-  background-color: #c5b78f;
+  /* Phase Y.8: map fills its #map-shell parent (square at top). Background
+     is the dark page color so anything outside the brand frame stays
+     black (Adam: 'instead of black all around border'). Tile loading
+     flashes are smoothed via .leaflet-tile bg below — only the actual
+     tile cells get the parchment-tan, not the whole map element. */
+  background-color: #080608;
   background-image: none;
+}
+/* Y.34ax: parchment-tan only on tile cells while loading, not on the whole
+   #map element. Means dark stays around the frame edge (Adam: black border)
+   but individual tile flashes blend with maxroll's empty-tile color. */
+.leaflet-tile-pane .leaflet-tile {
+  background: #c5b78f;
   /* Y.9 (Adam): kill any browser-side touch gestures so the map always
      captures fingers — no page-scroll leakage even when fully zoomed out. */
   touch-action: none;
