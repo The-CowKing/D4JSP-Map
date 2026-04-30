@@ -364,13 +364,13 @@ async function boot() {
     'skovos_strongholds':  { region: 'Skovos',   type: 'stronghold' },
     'skovos_cellars':      { region: 'Skovos',   type: 'cellar'     },
   }
-  // Region classification — Y.34ai. Cross-referenced old
-  // nahantu_waypoints.json with the new maxroll data and verified that
-  // BOTH regions use the same (x+y) -> lat formula, but Nahantu sits
-  // at much higher (x+y) values. Threshold (x+y) > 350 cleanly
-  // separates Nahantu (Kurast Bazaar 1190, Kichuk 489, Athulua 2173)
-  // from Sanctuary (Gea Kul 262, Imperial Library -414, Kyo -1244).
+  // Region classification — Y.34ak. 3-way split based on world coords:
+  //   Skovos    : y > 800  (Backwater 1286, Tidal Burrow 1359, etc. —
+  //               far south of the unified map)
+  //   Nahantu   : x+y > 350 (Kurast Bazaar 1190, Kichuk 489, Athulua 2173)
+  //   Sanctuary : everything else (Kyo -1244, Gea Kul 262, Imperial Library -414)
   function regionForMarker(m) {
+    if (m.y > 800) return 'Skovos'
     if (m.x + m.y > 350) return 'Nahantu'
     return 'Sanctuary'
   }
