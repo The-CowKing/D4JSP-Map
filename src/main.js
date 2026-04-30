@@ -366,26 +366,18 @@ async function boot() {
   // their expansion tab and the rest to sanctuary tab"). Each layer id
   // maps to a (region, type) pair. Each (region, type) gets its own
   // L.layerGroup so toggles on different tabs don't share state.
+  // Y.34aw: single Layers tab — these IDs map to a TYPE only; the
+  // click handler activates that type across every region.
   const LAYER_ID_TO_REGION_TYPE = {
-    // Sanctuary tab — main game POIs
-    'waypoints':           { region: 'Sanctuary', type: 'waypoint'  },
-    'dungeons':            { region: 'Sanctuary', type: 'dungeon'   },
-    'altars':              { region: 'Sanctuary', type: 'altar'     },
-    'sidequests':          { region: 'Sanctuary', type: 'quest'     },
-    'cellars':             { region: 'Sanctuary', type: 'cellar'    }, // no data yet
-    'chests':              { region: 'Sanctuary', type: 'chest'     }, // no data yet
-    'livingsteel':         { region: 'Sanctuary', type: 'livingsteel' }, // no data yet
-    'events':              { region: 'Sanctuary', type: 'event'     }, // no data yet
-    // Nahantu (Vessel of Hatred) tab
-    'nahantu_waypoints':   { region: 'Nahantu',  type: 'waypoint'   },
-    'nahantu_dungeons':    { region: 'Nahantu',  type: 'dungeon'    },
-    'nahantu_strongholds': { region: 'Nahantu',  type: 'stronghold' },
-    'nahantu_cellars':     { region: 'Nahantu',  type: 'cellar'     }, // no data yet
-    // Skovos (Lord of Hatred) tab — slot for when data lands
-    'skovos_waypoints':    { region: 'Skovos',   type: 'waypoint'   },
-    'skovos_dungeons':     { region: 'Skovos',   type: 'dungeon'    },
-    'skovos_strongholds':  { region: 'Skovos',   type: 'stronghold' },
-    'skovos_cellars':      { region: 'Skovos',   type: 'cellar'     },
+    'waypoints':   { type: 'waypoint'   },
+    'dungeons':    { type: 'dungeon'    },
+    'altars':      { type: 'altar'      },
+    'strongholds': { type: 'stronghold' },
+    'sidequests':  { type: 'quest'      },
+    'cellars':     { type: 'cellar'     }, // no data yet
+    'chests':      { type: 'chest'      }, // no data yet
+    'livingsteel': { type: 'livingsteel' }, // no data yet
+    'events':      { type: 'event'      }, // no data yet
   }
   // Region classification — Y.34ak. 3-way split based on world coords:
   //   Skovos    : y > 800  (Backwater 1286, Tidal Burrow 1359, etc. —
@@ -497,26 +489,27 @@ async function boot() {
       const on = item.classList.contains('on')
       const id = item.dataset.layerId
       const rt = LAYER_ID_TO_REGION_TYPE[id]
-      if (rt) {
-        setRegionTypeVisible(rt.region, rt.type, on)
-      } else {
-        console.log(`[D4JSP Map] no region/type mapping for ${id}`)
-      }
+      if (!rt) { console.log(`[D4JSP Map] no region/type mapping for ${id}`); return }
+      // Y.34aw (Adam: "sanctuary tab should engage all pois all expansions"):
+      // single Layers tab now controls every region's group of that type.
+      ;['Sanctuary', 'Nahantu', 'Skovos'].forEach(region =>
+        setRegionTypeVisible(region, rt.type, on)
+      )
     })
   }
-  renderLayerList('layer-list-sanctuary', LAYER_CONFIGS
-    .filter(c => c.region === 'Sanctuary')
-    .map(c => ({ id: c.id, label: c.label })))
-  renderLayerList('layer-list-nahantu', LAYER_CONFIGS
-    .filter(c => c.region === 'Nahantu')
-    .map(c => ({ id: c.id, label: c.label })))
-  // Y.34aj: Skovos tab — same standard items as Nahantu (no data yet,
-  // but the toggles are wired so they'll work once Skovos POIs land).
-  renderLayerList('layer-list-skovos', [
-    { id: 'skovos_waypoints',   label: 'Waypoints'   },
-    { id: 'skovos_dungeons',    label: 'Dungeons'    },
-    { id: 'skovos_strongholds', label: 'Strongholds' },
-    { id: 'skovos_cellars',     label: 'Cellars'     },
+  // Y.34aw — single Layers tab covering every region. Items are the
+  // common type set; toggles activate that type across all regions
+  // (Sanctuary + Nahantu + Skovos via the renderLayerList click handler).
+  renderLayerList('layer-list-sanctuary', [
+    { id: 'waypoints',     label: 'Waypoints'        },
+    { id: 'dungeons',      label: 'Dungeons'         },
+    { id: 'altars',        label: 'Altars of Lilith' },
+    { id: 'strongholds',   label: 'Strongholds'      },
+    { id: 'sidequests',    label: 'Side Quests'      },
+    { id: 'cellars',       label: 'Cellars'          },
+    { id: 'chests',        label: 'Helltide Chests'  },
+    { id: 'livingsteel',   label: 'Living Steel'     },
+    { id: 'events',        label: 'Events'           },
   ])
 
   // Kick off POI load (non-blocking).
