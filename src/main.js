@@ -339,17 +339,22 @@ async function boot() {
   // fitBounds the scroll's latLng bounds so the menu fills the viewport.
   // Skip if already zoomed in past the threshold (don't trap zooms).
   const SCROLL_BOUNDS_LL = L.latLngBounds(SCROLL_NW_LL, SCROLL_SE_LL)
+  function jumpToMenu() {
+    const targetZoom = map.getBoundsZoom(SCROLL_BOUNDS_LL, false)
+    if (Math.abs(map.getZoom() - targetZoom) < 0.1) return
+    map.fitBounds(SCROLL_BOUNDS_LL, { padding: [8, 8], maxZoom: 5, animate: true })
+  }
   map.on('click', (e) => {
     const cp = e.containerPoint
     const nw = map.latLngToContainerPoint(SCROLL_NW_LL)
     const se = map.latLngToContainerPoint(SCROLL_SE_LL)
     const inScroll = cp.x >= nw.x && cp.x <= se.x && cp.y >= nw.y && cp.y <= se.y
-    if (!inScroll) return
-    // Already centered + zoomed on menu? Skip.
-    const targetZoom = map.getBoundsZoom(SCROLL_BOUNDS_LL, false)
-    if (Math.abs(map.getZoom() - targetZoom) < 0.1) return
-    map.fitBounds(SCROLL_BOUNDS_LL, { padding: [8, 8], maxZoom: 5, animate: true })
+    if (inScroll) jumpToMenu()
   })
+  // Y.34f: hamburger to the left of the zoom buttons jumps to the menu,
+  // so the user can return from a zoomed-in view of the map quickly.
+  const menuJumpBtn = document.getElementById('menu-jump-btn')
+  if (menuJumpBtn) menuJumpBtn.addEventListener('click', jumpToMenu)
 
   console.log('[D4JSP Map] Ready — unified Blizzard tile pyramid (via maxroll CDN).')
 }

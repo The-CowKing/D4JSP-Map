@@ -32,6 +32,11 @@
   <!-- Panel reopen button (legacy, hidden via CSS) -->
   <button id="panel-toggle-btn" title="Show layer controls">&#9776;</button>
 
+  <!-- Y.34f: hamburger anchored to the left of the zoom buttons. Tapping
+       fitBounds the scroll/menu so the user can jump back from a zoomed
+       map view. Positioned in #map-shell so it sits inside the frame. -->
+  <button id="menu-jump-btn" title="Jump to menu" aria-label="Jump to menu">&#9776;</button>
+
   <!-- Y.34 (Adam): in-scroll menu. Anchored via JS to the parchment scroll
        graphic in the brand frame so it pans/zooms WITH the map. Y.34c
        layout: search bar full-width at top, then below it a 2-column
