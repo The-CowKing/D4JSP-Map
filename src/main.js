@@ -312,20 +312,25 @@ async function boot() {
   //   Ked Bardu  ( -886, -989) -> pyramid (5000, 2700)  // N central Dry Steppes
   // Affine: px = a*wx + b*wy + c, py = d*wx + e*wy + f
   // Solved by least-squares on those 3 points.
-  // Y.34ad — calibration baseline. Iterative guesses kept producing wrong
-  // mappings because I never had a verified pyramid-pixel position for
-  // any landmark. Switch to a simple, transparent transform: world (0,0)
-  // at pyramid center (4096, 4096), uniform scale 1.0. Kyovashad will
-  // log to console at boot — Adam can visually compare where Kyovashad
-  // lands vs where it should be, and we calibrate from there.
-  const POI_TRANSFORM_SCALE = 1.0
-  const POI_TRANSFORM_OFFX  = 4096
-  const POI_TRANSFORM_OFFY  = 4096
-  function buildPoiTransform(/* markers */) { /* static constants */ }
+  // Y.34af — extracted the EXACT world(x,y) -> lat/lng transform from
+  // src/data/waypoints.json (the old map's hand-calibrated POIs that
+  // Adam said "were lined up"). Linear regression on all 35 samples
+  // gives ZERO residual:
+  //   lat = -0.035724 * (wx + wy) - 137.7816
+  //   lng =  0.035724 * (wy - wx) +  68.6388
+  // At zoom 5 (CRS.Simple), pyramid pixel = (lng * 32, -lat * 32).
+  // Then Adam's instruction: "rotate it over 90 degrees clock wise"
+  // applied around pyramid center: (px, py) -> (NATIVE - py, px).
+  function buildPoiTransform(/* markers */) { /* derived from data */ }
   function worldToLatLng(wx, wy) {
-    const px = wx * POI_TRANSFORM_SCALE + POI_TRANSFORM_OFFX
-    const py = wy * POI_TRANSFORM_SCALE + POI_TRANSFORM_OFFY
-    return map.unproject([px, py], TILE_MAX_NATIVE_ZOOM)
+    const lat = -0.035724 * (wx + wy) - 137.7816
+    const lng =  0.035724 * (wy - wx) +  68.6388
+    const px = lng * 32
+    const py = -lat * 32
+    // 90° CW around pyramid center
+    const rpx = NATIVE_WIDTH - py
+    const rpy = px
+    return map.unproject([rpx, rpy], TILE_MAX_NATIVE_ZOOM)
   }
   // Color + label per maxroll marker type.
   const POI_TYPES = {
