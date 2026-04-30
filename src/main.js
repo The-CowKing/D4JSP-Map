@@ -325,18 +325,18 @@ async function boot() {
   // applied around pyramid center: (px, py) -> (NATIVE - py, px).
   function buildPoiTransform(/* markers */) { /* derived from data */ }
   function worldToLatLng(wx, wy) {
-    // Y.34al (Adam: "get the waypoints lined up proper do what u gotta
-    // do"). The OLD formula was calibrated to the OLD tile pyramid.
-    // Maxroll's tile pyramid renders Sanctuary further to the right
-    // and slightly lower. Shift via lng/lat offsets — tunable from the
-    // browser console: window.setLatLngOffset({dLng: 70, dLat: -10})
-    const dLng = (window.__poiOffset && window.__poiOffset.dLng) || 70
-    const dLat = (window.__poiOffset && window.__poiOffset.dLat) || -10
+    // Y.34ao — calibrated against Adam's hand-placed Kyovashad waypoint:
+    //   Adam pin     : lat -101.55, lng 205.77
+    //   Old formula  : lat  -93.34, lng 124.10
+    //   Diff         : dLat -8.21,  dLng +81.67
+    // Defaults below applied; tunable from console:
+    //   setPoiOffset({dLng: 82, dLat: -8})
+    const dLng = (window.__poiOffset && window.__poiOffset.dLng != null) ? window.__poiOffset.dLng : 82
+    const dLat = (window.__poiOffset && window.__poiOffset.dLat != null) ? window.__poiOffset.dLat : -8
     const lat = -0.035724 * (wx + wy) - 137.7816 + dLat
     const lng =  0.035724 * (wy - wx) +  68.6388 + dLng
     return L.latLng(lat, lng)
   }
-  // Console helper: window.setPoiOffset({dLng: 80, dLat: -20}); location.reload()
   window.setPoiOffset = (off) => {
     window.__poiOffset = { ...(window.__poiOffset || {}), ...off }
     try { localStorage.setItem('poi_offset', JSON.stringify(window.__poiOffset)) } catch {}
