@@ -450,6 +450,10 @@ html, body {
 .leaflet-popup .d4jsp-wp-delete:hover { background: rgba(212,175,55,0.12); }
 
 /* Saved waypoint markers + list items in My Waypoints */
+.scroll-waypoint-row {
+  display: flex;
+  flex-direction: column;
+}
 .scroll-waypoint-item {
   display: flex;
   align-items: center;
@@ -469,6 +473,41 @@ html, body {
   background: #2a160a;
   flex-shrink: 0;
 }
+.scroll-waypoint-row.open .scroll-waypoint-item { font-style: italic; }
+.scroll-waypoint-drawer {
+  display: none;
+  padding: 0.2em 0 0.4em 0.85em;
+  font-size: 0.85em;
+  border-left: 1px solid rgba(42,22,10,0.3);
+  margin-left: 0.2em;
+}
+.scroll-waypoint-row.open .scroll-waypoint-drawer { display: block; }
+.scroll-waypoint-drawer .wp-note {
+  white-space: normal;
+  line-height: 1.25;
+  margin-bottom: 0.3em;
+}
+.scroll-waypoint-drawer .wp-note.empty {
+  font-style: italic;
+  opacity: 0.55;
+}
+.scroll-waypoint-drawer .wp-drawer-actions {
+  display: flex;
+  gap: 0.5em;
+}
+.scroll-waypoint-drawer button {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(42,22,10,0.5);
+  color: #2a160a;
+  font-family: inherit;
+  font-style: italic;
+  font-size: 0.9em;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.8;
+}
+.scroll-waypoint-drawer button:hover { opacity: 1; }
 
 /* Y.34f — Hamburger jump-to-menu button, sits to the left of Leaflet's
    bottom-right zoom controls. Same dark gold framing as zoom buttons so

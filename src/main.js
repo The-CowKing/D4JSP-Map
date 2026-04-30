@@ -373,8 +373,20 @@ async function boot() {
       return
     }
     list.innerHTML = waypoints.map(wp =>
-      `<div class="scroll-waypoint-item" data-wp-id="${wp.id}" title="${escapeHtml(wp.desc || '')}">` +
-      `<span class="dot"></span>${escapeHtml(wp.name)}</div>`
+      `<div class="scroll-waypoint-row" data-wp-id="${wp.id}">` +
+        `<div class="scroll-waypoint-item">` +
+          `<span class="dot"></span>${escapeHtml(wp.name)}` +
+        `</div>` +
+        `<div class="scroll-waypoint-drawer">` +
+          (wp.desc
+            ? `<div class="wp-note">${escapeHtml(wp.desc)}</div>`
+            : `<div class="wp-note empty">— no note —</div>`) +
+          `<div class="wp-drawer-actions">` +
+            `<button class="wp-goto" data-wp-id="${wp.id}">Go to</button>` +
+            `<button class="wp-remove" data-wp-id="${wp.id}">Remove</button>` +
+          `</div>` +
+        `</div>` +
+      `</div>`
     ).join('')
   }
   function escapeHtml(str) {
@@ -382,23 +394,37 @@ async function boot() {
       ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]))
   }
 
-  // Tapping a list item flies the map to that waypoint and opens its popup.
+  // Y.34n (Adam: "clicking waypoint should expand drawer to see notes"):
+  // tapping a waypoint name toggles an inline drawer showing the note +
+  // Go-to / Remove buttons. Only one drawer open at a time.
   const wpList = document.getElementById('custom-waypoints-list')
+  function flyToWaypoint(id) {
+    const wp = waypoints.find(w => w.id === id)
+    if (!wp) return
+    map.flyTo([wp.lat, wp.lng], Math.max(map.getZoom(), 3), { duration: 0.5 })
+  }
   if (wpList) {
     wpList.addEventListener('click', e => {
+      // Goto button inside the drawer
+      const goto = e.target.closest('.wp-goto')
+      if (goto) { flyToWaypoint(goto.dataset.wpId); return }
+      // Remove button inside the drawer
+      const rm = e.target.closest('.wp-remove')
+      if (rm) {
+        waypoints = waypoints.filter(w => w.id !== rm.dataset.wpId)
+        saveWaypoints()
+        renderWaypoints()
+        return
+      }
+      // Otherwise — toggle the drawer for the clicked waypoint name row.
       const item = e.target.closest('.scroll-waypoint-item')
       if (!item) return
-      const id = item.dataset.wpId
-      const wp = waypoints.find(w => w.id === id)
-      if (!wp) return
-      map.flyTo([wp.lat, wp.lng], Math.max(map.getZoom(), 3), { duration: 0.5 })
-      // Open popup of the matching marker after the flyTo settles.
-      setTimeout(() => {
-        waypointLayer.eachLayer(m => {
-          const ll = m.getLatLng()
-          if (Math.abs(ll.lat - wp.lat) < 1e-6 && Math.abs(ll.lng - wp.lng) < 1e-6) m.openPopup()
-        })
-      }, 600)
+      const row = item.closest('.scroll-waypoint-row')
+      if (!row) return
+      const wasOpen = row.classList.contains('open')
+      // Close all other open drawers (one at a time).
+      wpList.querySelectorAll('.scroll-waypoint-row.open').forEach(r => r.classList.remove('open'))
+      if (!wasOpen) row.classList.add('open')
     })
   }
   // Marker popup remove button
