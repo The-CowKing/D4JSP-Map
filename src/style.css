@@ -57,6 +57,14 @@ html, body {
   z-index: 1;
   background: var(--bg-deep);
   overflow: hidden;
+  /* Phase Y.9 (Adam): when zoomed out fully, finger drags were leaking
+     into page scroll instead of staying captured by the map. touch-action:
+     none disables browser default touch gestures (scroll, pinch-zoom on
+     the page) so all touches go to the Leaflet handlers. overscroll-behavior:
+     contain stops scroll chaining if the iframe parent ever has scrollable
+     content. */
+  touch-action: none;
+  overscroll-behavior: contain;
 }
 
 #brand-frame {
@@ -94,6 +102,9 @@ html, body {
      is the same dark deep gothic as the page so any gap blends in. */
   background-color: var(--bg-deep);
   background-image: none;
+  /* Y.9 (Adam): kill any browser-side touch gestures so the map always
+     captures fingers — no page-scroll leakage even when fully zoomed out. */
+  touch-action: none;
 }
 
 /* ── Left Layer Panel ──────────────────────────────────────── */
