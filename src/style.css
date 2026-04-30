@@ -435,70 +435,52 @@ html, body {
 #waypoint-dialog button:hover { border-color: var(--gold); background: rgba(20,15,5,0.9); }
 #wp-save-btn { background: rgba(212,175,55,0.18); }
 
-/* Y.34ar — POI markers from maxroll data: glyph chip + name label.
-   Each marker is a divIcon with two spans: the colored glyph circle on
-   top, the name text below in a dark legible chip. NPCs get glyph only
-   (1227 of them — too noisy with names). */
+/* Y.34au — POI markers using the existing D4 icon WebPs in /public/icons/.
+   No box, no label by default. Click shows name as gold Cinzel text
+   (no border, no background) — see .d4-poi-name-tip below. */
 .d4-poi {
   background: transparent !important;
   border: 0 !important;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1px;
   pointer-events: auto;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.85));
 }
-.d4-poi .d4-poi-glyph {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 1px solid rgba(0,0,0,0.65);
-  color: #fff;
-  font-family: 'Cinzel', serif;
-  font-size: 11px;
-  line-height: 1;
-  font-weight: 700;
-  text-shadow: 0 1px 1px rgba(0,0,0,0.85);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+.d4-poi img {
+  display: block;
+  pointer-events: auto;
   cursor: pointer;
 }
-.d4-poi .d4-poi-name {
-  background: rgba(8,6,12,0.78);
-  border: 1px solid rgba(212,175,55,0.4);
-  color: #f0e6cc;
+.d4-poi .d4-poi-dot {
+  display: block;
+  width: 6px;
+  height: 6px;
+  margin: 2px;
+  border-radius: 50%;
+  background: #9aa3af;
+  opacity: 0.55;
+  border: 1px solid rgba(0,0,0,0.45);
+}
+
+/* Y.34at — Click-only POI name tooltip. Bare gold text in Cinzel, no
+   background, no border — same look as the character page username. */
+.leaflet-tooltip.d4-poi-name-tip {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
   font-family: 'Cinzel', serif;
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  padding: 1px 4px;
-  border-radius: 2px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #D4AF37;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-shadow:
+    0 1px 0 #000,
+    0 0 4px rgba(0,0,0,0.95),
+    0 0 8px rgba(0,0,0,0.7);
   white-space: nowrap;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.9);
   pointer-events: none;
-  margin-top: 1px;
-  max-width: 110px;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
-/* Hide name labels at low zoom (cluttered) — only show waypoints + strongholds. */
-body[data-zoom="0"] .d4-poi-dungeon .d4-poi-name,
-body[data-zoom="0"] .d4-poi-altar .d4-poi-name,
-body[data-zoom="0"] .d4-poi-quest .d4-poi-name,
-body[data-zoom="1"] .d4-poi-dungeon .d4-poi-name,
-body[data-zoom="1"] .d4-poi-altar .d4-poi-name,
-body[data-zoom="1"] .d4-poi-quest .d4-poi-name {
-  display: none;
-}
-/* Smaller glyph for NPCs since there's no label */
-.d4-poi-npc .d4-poi-glyph {
-  width: 10px;
-  height: 10px;
-  font-size: 7px;
-  opacity: 0.6;
-}
+.leaflet-tooltip.d4-poi-name-tip::before { display: none !important; }
 
 /* User-saved waypoint markers on the map */
 .d4jsp-user-waypoint {

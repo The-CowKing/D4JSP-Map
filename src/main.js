@@ -344,16 +344,15 @@ async function boot() {
     const stored = localStorage.getItem('poi_offset')
     if (stored) window.__poiOffset = JSON.parse(stored)
   } catch {}
-  // Color + label + glyph per maxroll marker type. Glyph is a unicode
-  // symbol used in the marker icon so each POI type is visually
-  // distinct without needing image assets.
+  // Y.34au — Adam's pre-existing D4 icon WebPs in /public/icons/.
   const POI_TYPES = {
-    waypoint:   { color: '#D4AF37', label: 'Waypoint',        glyph: '◎' }, // ◎
-    dungeon:    { color: '#8b5cf6', label: 'Dungeon',         glyph: '☠' }, // ☠
-    altar:      { color: '#dc2626', label: 'Altar of Lilith', glyph: '✝' }, // ✝
-    stronghold: { color: '#f43f5e', label: 'Stronghold',      glyph: '⌂' }, // ⌂
-    quest:      { color: '#3b82f6', label: 'Side Quest',      glyph: '!'      },
-    npc:        { color: '#9aa3af', label: 'NPC',             glyph: '·' }, // ·
+    waypoint:   { label: 'Waypoint',        size: 22, icon: 'waypoint.webp' },
+    dungeon:    { label: 'Dungeon',         size: 20, icon: 'dungeon.webp' },
+    altar:      { label: 'Altar of Lilith', size: 18, icon: 'altar_of_lilith.webp' },
+    stronghold: { label: 'Stronghold',      size: 22, icon: 'stronghold.webp' },
+    quest:      { label: 'Side Quest',      size: 18, icon: 'quest.webp' },
+    // NPCs don't have a dedicated icon — render as a small dim dot below.
+    npc:        { label: 'NPC',             size: 10, icon: null },
   }
   // Y.34ah (Adam: "hook up the pois to their switches... expansions to
   // their expansion tab and the rest to sanctuary tab"). Each layer id
@@ -414,25 +413,32 @@ async function boot() {
         const ll = worldToLatLng(m.x, m.y)
         const cfg = POI_TYPES[t]
         const safeName = escapeHtml(m.name || cfg.label)
-        // Y.34ar: divIcon with type glyph + name label, color-coded by type
+        // Y.34au — D4 icon WebPs from /public/icons/. NPC keeps a tiny dot.
+        const iconHtml = cfg.icon
+          ? `<img src="./icons/${cfg.icon}" alt="" width="${cfg.size}" height="${cfg.size}" />`
+          : `<span class="d4-poi-dot"></span>`
         const marker = L.marker(ll, {
           icon: L.divIcon({
             className: `d4-poi d4-poi-${t}`,
-            html:
-              `<span class="d4-poi-glyph" style="background:${cfg.color}">${cfg.glyph}</span>` +
-              (t === 'npc' ? '' : `<span class="d4-poi-name">${safeName}</span>`),
-            iconSize: null,
-            iconAnchor: [10, 10],
+            html: iconHtml,
+            iconSize: [cfg.size, cfg.size],
+            iconAnchor: [cfg.size / 2, cfg.size / 2],
           }),
           riseOnHover: true,
         })
-        const popup =
-          `<div class="d4-poi-popup">` +
-          `<div class="d4-poi-popup-type" style="color:${cfg.color}">${cfg.label}</div>` +
-          (m.name ? `<div class="d4-poi-popup-name">${safeName}</div>` : '') +
-          (m.desc ? `<div class="d4-poi-popup-desc">${escapeHtml(m.desc)}</div>` : '') +
-          `</div>`
-        marker.bindPopup(popup)
+        // Y.34at (Adam): "click them I just want text of its name to
+        // appear above. no border no box just text. same color and
+        // style as character page user name." Bind a Leaflet tooltip
+        // (which we style via CSS to remove the box).
+        marker.bindTooltip(safeName, {
+          direction: 'top',
+          offset: [0, -cfg.size / 2],
+          opacity: 1,
+          className: 'd4-poi-name-tip',
+          permanent: false,
+          sticky: false,
+        })
+        marker.on('click', function() { this.openTooltip() })
         poiGroups[key].addLayer(marker)
       }
       poisLoaded = true
