@@ -67,26 +67,12 @@ html, body {
   overscroll-behavior: contain;
 }
 
-/* Y.24 (Adam: maybe use css but display my border with it?): use the
-   PNG via CSS `border-image` property. The PNG is sliced into 9 regions
-   (4 corners + 4 edges + middle) and rendered AS a CSS border — same
-   GPU/vector pipeline as the Y.21 gold double border that locked
-   correctly. Raster bg-image was the problem; border-image isn't.
-   Slice value 100 = use 100px from each edge of the source PNG for the
-   corners/edges. `fill` keeps the middle slice rendered (transparent
-   parchment center). `stretch` stretches edge slices to fill. */
-#brand-frame {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1000;
-  border-style: solid;
-  border-width: 12% 12% 12% 12%;        /* matches the visible art margin in the PNG */
-  border-color: transparent;
-  border-image: url('/branding-frame.png') 100 fill / 12% / 0 stretch;
-  background: transparent;
-  touch-action: none;
-}
+/* Y.27 (Adam: embed the fucking thing into the map at the edge of fog of
+   war): brand frame is now a Leaflet ImageOverlay attached to WORLD_BOUNDS
+   (see src/main.js). It IS part of the map — zooms/pans with the tiles.
+   This empty CSS rule keeps any leftover #brand-frame div in the DOM
+   invisible so we don't double-render. */
+#brand-frame { display: none !important; }
 
 /* Y.19 (Adam: remove the bullshit u tried to embed in the scroll I bet
    that's conflicting): killed the parchment-scroll embed. Layer panel,

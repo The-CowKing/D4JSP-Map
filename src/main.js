@@ -100,9 +100,29 @@ const worldLayer = new MaxrollTileLayer('', {
     'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
 }).addTo(map)
 
-// Phase Y.8 (Adam): brand frame is back to a CSS-positioned div inside the
-// #map-shell square wrapper — it's fixed inside the shell so it does NOT
-// pan with the map. See index.html (#brand-frame div) and style.css.
+// Phase Y.27 (Adam: "embed the fucking thing into the map at the edge of
+// fog of war ... litterly part of the fuckin map. that way when I zoom in
+// on middle of map it's not even there"). Brand frame is now a Leaflet
+// ImageOverlay attached to WORLD_BOUNDS — it IS part of the map. At zoom
+// 1 (initial view) the user sees the entire 8192×8192 world plus the
+// parchment+quill frame around the fog-of-war edge. When the user zooms
+// in on the middle of the map, the frame zooms WITH the map content and
+// extends well past the viewport edges — exactly like the gold border
+// behavior they liked, but with our PNG branding instead of a CSS border.
+// CSS in style.css keeps any leftover #brand-frame div hidden so we don't
+// double-render anything.
+const brandFrameOverlay = L.imageOverlay('./branding-frame.png', WORLD_BOUNDS, {
+  opacity: 1,
+  interactive: false,
+  className: 'd4jsp-brand-frame',
+}).addTo(map)
+// Belt-and-suspenders: keep the overlay above tiles even if Leaflet's pane
+// stacking changes. overlayPane sits above tilePane by default but a high
+// z-index inside it puts the frame above any future POI markers too.
+if (brandFrameOverlay._image) {
+  brandFrameOverlay._image.style.pointerEvents = 'none'
+  brandFrameOverlay._image.style.zIndex = '500'
+}
 
 L.control.zoom({ position: 'bottomright' }).addTo(map)
 
