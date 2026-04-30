@@ -339,40 +339,55 @@ async function boot() {
     quest:      { color: '#3b82f6', label: 'Side Quest' },
     npc:        { color: '#9aa3af', label: 'NPC' },
   }
-  // Mapping from menu layer id -> marker type(s). Sanctuary + Nahantu
-  // tabs share the same maxroll types — we toggle the global group on
-  // each tab for now (phase 2: split per-region by coord region check).
-  const LAYER_ID_TO_TYPES = {
-    'waypoints':           ['waypoint'],
-    'dungeons':            ['dungeon'],
-    'altars':              ['altar'],
-    'sidequests':          ['quest'],
-    'cellars':             [],
-    'chests':              [],
-    'livingsteel':         [],
-    'events':              [],
-    'nahantu_waypoints':   ['waypoint'],
-    'nahantu_dungeons':    ['dungeon'],
-    'nahantu_strongholds': ['stronghold'],
-    'nahantu_cellars':     [],
+  // Y.34ah (Adam: "hook up the pois to their switches... expansions to
+  // their expansion tab and the rest to sanctuary tab"). Each layer id
+  // maps to a (region, type) pair. Each (region, type) gets its own
+  // L.layerGroup so toggles on different tabs don't share state.
+  const LAYER_ID_TO_REGION_TYPE = {
+    // Sanctuary tab — main game POIs
+    'waypoints':           { region: 'Sanctuary', type: 'waypoint'  },
+    'dungeons':            { region: 'Sanctuary', type: 'dungeon'   },
+    'altars':              { region: 'Sanctuary', type: 'altar'     },
+    'sidequests':          { region: 'Sanctuary', type: 'quest'     },
+    'cellars':             { region: 'Sanctuary', type: 'cellar'    }, // no data yet
+    'chests':              { region: 'Sanctuary', type: 'chest'     }, // no data yet
+    'livingsteel':         { region: 'Sanctuary', type: 'livingsteel' }, // no data yet
+    'events':              { region: 'Sanctuary', type: 'event'     }, // no data yet
+    // Nahantu (Vessel of Hatred) tab
+    'nahantu_waypoints':   { region: 'Nahantu',  type: 'waypoint'   },
+    'nahantu_dungeons':    { region: 'Nahantu',  type: 'dungeon'    },
+    'nahantu_strongholds': { region: 'Nahantu',  type: 'stronghold' },
+    'nahantu_cellars':     { region: 'Nahantu',  type: 'cellar'     }, // no data yet
   }
+  // Region classification heuristic: Nahantu (Vessel of Hatred) sits east
+  // of Sanctuary in the unified maxroll world coords; markers with x>1500
+  // are Nahantu (323 of 2384 in current data — see derive_poi_transform.py).
+  // Skovos markers aren't in this dataset yet.
+  function regionForMarker(m) {
+    if (m.x > 1500) return 'Nahantu'
+    return 'Sanctuary'
+  }
+  // Y.34ah: poiGroups indexed by "region_type" so each tab can toggle
+  // its region's groups independently. Key format: "Sanctuary_waypoint",
+  // "Nahantu_dungeon", etc.
   const poiGroups = {}
   let poisLoaded = false
+  function poiKey(region, type) { return region + '_' + type }
   async function loadAndRenderPOIs() {
     try {
       const res = await fetch('./maxroll-map.json')
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       const markers = Array.isArray(data.markers) ? data.markers : []
-      // Y.34y: compute the 45°-rotated bounds across all markers and stash
-      // the scale/offset so worldToLatLng can use them.
       buildPoiTransform(markers)
       const seen = new Set()
       for (const m of markers) {
         const t = m.type
         if (!POI_TYPES[t]) continue
-        if (!poiGroups[t]) poiGroups[t] = L.layerGroup()
-        seen.add(t)
+        const region = regionForMarker(m)
+        const key = poiKey(region, t)
+        if (!poiGroups[key]) poiGroups[key] = L.layerGroup()
+        seen.add(key)
         const ll = worldToLatLng(m.x, m.y)
         const cfg = POI_TYPES[t]
         const marker = L.circleMarker(ll, {
@@ -390,31 +405,24 @@ async function boot() {
           (m.desc ? `<div class="d4-poi-popup-desc">${escapeHtml(m.desc)}</div>` : '') +
           `</div>`
         marker.bindPopup(popup)
-        poiGroups[t].addLayer(marker)
+        poiGroups[key].addLayer(marker)
       }
       poisLoaded = true
-      console.log(`[D4JSP Map] loaded ${markers.length} POIs across ${seen.size} types`)
-      // Y.34ad: log key landmarks so Adam can compare actual vs expected.
-      const KNOWN = ['Kyovashad', 'Gea Kul', 'Zarbinzet', 'Ked Bardu']
-      for (const m of markers) {
-        if (!KNOWN.includes(m.name)) continue
-        const ll = worldToLatLng(m.x, m.y)
-        console.log(`[D4JSP Map] ${m.name}: world(${m.x.toFixed(0)}, ${m.y.toFixed(0)}) -> pyramid(${(m.x * POI_TRANSFORM_SCALE + POI_TRANSFORM_OFFX).toFixed(0)}, ${(m.y * POI_TRANSFORM_SCALE + POI_TRANSFORM_OFFY).toFixed(0)})`)
-      }
-      // Y.34q (Adam: "don't see any pois just the waypoint I saved"):
-      // re-apply any toggles that were clicked before the fetch landed.
+      console.log(`[D4JSP Map] loaded ${markers.length} POIs across ${seen.size} region+type groups`)
+      // Y.34q: re-apply any toggles that were clicked before the fetch landed.
       document.querySelectorAll('.scroll-layer-item.on').forEach(item => {
         const id = item.dataset.layerId
-        ;(LAYER_ID_TO_TYPES[id] || []).forEach(t => setTypeVisible(t, true))
+        const rt = LAYER_ID_TO_REGION_TYPE[id]
+        if (rt) setRegionTypeVisible(rt.region, rt.type, true)
       })
     } catch (e) {
       console.error('[D4JSP Map] POI load failed:', e)
     }
   }
-  // Toggle a marker type on/off — adds/removes the L.layerGroup from
-  // the map. Idempotent.
-  function setTypeVisible(type, on) {
-    const g = poiGroups[type]
+  // Toggle a (region, type) group on/off. Each tab now controls only
+  // its own region's POIs.
+  function setRegionTypeVisible(region, type, on) {
+    const g = poiGroups[poiKey(region, type)]
     if (!g) return
     if (on) g.addTo(map)
     else map.removeLayer(g)
@@ -436,10 +444,11 @@ async function boot() {
       item.classList.toggle('on')
       const on = item.classList.contains('on')
       const id = item.dataset.layerId
-      const types = LAYER_ID_TO_TYPES[id] || []
-      types.forEach(t => setTypeVisible(t, on))
-      if (types.length === 0) {
-        console.log(`[D4JSP Map] no POI data for ${id} yet`)
+      const rt = LAYER_ID_TO_REGION_TYPE[id]
+      if (rt) {
+        setRegionTypeVisible(rt.region, rt.type, on)
+      } else {
+        console.log(`[D4JSP Map] no region/type mapping for ${id}`)
       }
     })
   }
