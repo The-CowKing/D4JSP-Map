@@ -67,20 +67,14 @@ html, body {
   overscroll-behavior: contain;
 }
 
-/* Y.18 (Adam: it was working properly with the gold border): back inside
-   map-shell, position:absolute inset:0 — same anchoring as the Y.14 CSS
-   border. The PNG is a normal background-image, alpha-channeled, no
-   blend mode. Map zooms inside, frame stays put. */
-#brand-frame {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1000;
-  background: url('/branding-frame.png') center/100% 100% no-repeat;
-  touch-action: none;
-  user-select: none;
-  -webkit-user-select: none;
-}
+/* Y.20 (Adam: zero fucking change... try a different approach): the brand
+   frame moved out of the iframe entirely. It now lives on the PARENT page
+   (trade core ProfileView.js) as an absolute overlay around the iframe.
+   That guarantees the frame is in a different document from the map and
+   nothing inside the iframe (Leaflet zoom, browser pinch) can affect it.
+   This empty rule is left so #brand-frame inside the iframe (if anything
+   still rendered it during transition) is invisible. */
+#brand-frame { display: none !important; }
 
 /* Y.19 (Adam: remove the bullshit u tried to embed in the scroll I bet
    that's conflicting): killed the parchment-scroll embed. Layer panel,
