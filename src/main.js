@@ -1,56 +1,47 @@
 // D4JSP Interactive Map — main entry point
 // Stack: Leaflet + Fuse.js + Vite (no frameworks)
 //
-// Unified world model: Sanctuary's tile pyramid is the base layer and its
-// lat/lng range IS the world coord system. Nahantu and Skovos are placed
-// as L.imageOverlay on top — Nahantu matched to the empty silhouette
-// already drawn on Sanctuary's south-west tiles, Skovos placed in the
-// bottom-left ocean. POIs from every region all live in this same coord
-// space and render side-by-side. No region toggle.
+// 2026-04-29: Region toggle (top-center) lets the user fly to a specific
+// region. Tile layers stay loaded so cross-region transitions are smooth.
+// Nahantu+Skovos converted from imageOverlay → tileLayer (correct
+// rendering primitive: lazy-load only visible tiles).
 
-const TILE_URL = './tiles/Sanctuary/{z}/{x}/{y}.webp'
+import { initLayers, dungeonsData, refreshBuildRotationLayers, setParentBuilds } from './layers.js'
+import { initSearch } from './search.js'
+import { initPlanner } from './planner.js'
+
 const TILE_MAX_NATIVE_ZOOM = 4
 const TILE_MAX_ZOOM = 6
 
-// Unified WORLD_BOUNDS — the framed rectangle that holds all three regions
-// plus surrounding ocean/fog. Aspect ~1.22:1 matches public/maps/ocean.png.
-// Sanctuary tile bounds: lat=[-185,-5], lng=[5,185]
-// Nahantu overlay:        lat=[-230,-136], lng=[-2,92]
-// Skovos overlay:         lat=[-330,-200], lng=[-210,-50]
-// Padding all around so regions don't kiss the frame edge.
 const WORLD_BOUNDS = L.latLngBounds(
   L.latLng(-360, -230),
   L.latLng(0, 210)
 )
-
-// Pan-bounds is the same — user can't pan past the framed world
 const MAP_BOUNDS = WORLD_BOUNDS
 
-// Sanctuary's painted-tile coverage — sits inside WORLD_BOUNDS
-const TILE_BOUNDS = L.latLngBounds(
-  L.latLng(-185, 5),
-  L.latLng(-5, 185)
-)
-
-// Painted-image overlays placed in the unified Sanctuary coord space.
-// Nahantu bbox derived from the 3-anchor affine (Kurast Docks / Kichuk /
-// Gates of Necropolis) — the painted silhouette aligns with the empty
-// Nahantu shape on Sanctuary's existing tiles.
-// Skovos bbox is a free-placement bottom-left island chain; tweak by eye.
-const REGION_OVERLAYS = [
-  {
-    name: 'Nahantu',
-    url: './maps/nahantu.webp',
+const REGIONS = {
+  Sanctuary: {
+    label: 'Sanctuary',
+    tileUrl: './tiles/Sanctuary/{z}/{x}/{y}.webp',
+    bounds: L.latLngBounds(L.latLng(-185, 5), L.latLng(-5, 185)),
+    flyView: { center: [-95, 95], zoom: 2 },
+  },
+  Nahantu: {
+    label: 'Nahantu',
+    tileUrl: './tiles/Nahantu/{z}/{x}/{y}.webp',
     bounds: L.latLngBounds(L.latLng(-230.13, -2.08), L.latLng(-135.66, 91.83)),
+    flyView: { center: [-183, 45], zoom: 3 },
   },
-  {
-    name: 'Skovos',
-    url: './maps/skovos.webp',
+  Skovos: {
+    label: 'Skovos',
+    tileUrl: './tiles/Skovos/{z}/{x}/{y}.webp',
     bounds: L.latLngBounds(L.latLng(-330, -210), L.latLng(-200, -50)),
+    flyView: { center: [-265, -130], zoom: 3 },
   },
-]
+}
 
-// ── Initialize Map ──────────────────────────────────────────
+const REGION_ORDER = ['Sanctuary', 'Nahantu', 'Skovos']
+
 const map = new L.Map('map', {
   minZoom: 1,
   maxZoom: TILE_MAX_ZOOM,
@@ -64,61 +55,75 @@ const map = new L.Map('map', {
   zoomDelta: 0.5,
 }).setView([-180, -10], 1)
 
-// fitBounds after the map element has actual dimensions — guards against
-// initial 0x0 layout (some embeds, preview tools) where fitBounds can't
-// compute a zoom and tiles never load.
 requestAnimationFrame(() => {
   if (map.getSize().x > 0) map.fitBounds(WORLD_BOUNDS, { animate: false })
 })
 
-// Ocean + fog atmosphere is supplied by a rich CSS gradient on #map
-// (see src/style.css). The previous attempt of using ocean.webp as an
-// L.imageOverlay rendered as a flat medium-blue rectangle at typical
-// zoom levels (the visible viewport showed only the bright CENTER of
-// the texture, not the vignette/grain at the edges).
-
-// ── Sanctuary base tile layer ───────────────────────────────
-L.tileLayer(TILE_URL, {
-  minZoom: 0,
-  maxZoom: TILE_MAX_ZOOM,
-  maxNativeZoom: TILE_MAX_NATIVE_ZOOM,
-  noWrap: true,
-  tms: false,
-  bounds: TILE_BOUNDS,
-  attribution: 'Map data: <a href="https://github.com/shalzuth/SanctuaryMaps" target="_blank">SanctuaryMaps</a> | Nahantu/Skovos: D4JSP | <a href="https://d4jsp.com" target="_blank">D4JSP</a>',
-  errorTileUrl: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
-}).addTo(map)
-
-// ── Region image overlays (Nahantu, Skovos) ─────────────────
-for (const r of REGION_OVERLAYS) {
-  L.imageOverlay(r.url, r.bounds, { opacity: 1, interactive: false }).addTo(map)
+const regionTileLayers = {}
+for (const name of REGION_ORDER) {
+  const cfg = REGIONS[name]
+  const isSanctuary = name === 'Sanctuary'
+  regionTileLayers[name] = L.tileLayer(cfg.tileUrl, {
+    minZoom: 0,
+    maxZoom: TILE_MAX_ZOOM,
+    maxNativeZoom: TILE_MAX_NATIVE_ZOOM,
+    noWrap: true,
+    tms: false,
+    bounds: cfg.bounds,
+    attribution: isSanctuary
+      ? 'Map data: <a href="https://github.com/shalzuth/SanctuaryMaps" target="_blank">SanctuaryMaps</a> | Nahantu/Skovos: D4JSP | <a href="https://d4jsp.com" target="_blank">D4JSP</a>'
+      : null,
+    errorTileUrl: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+  }).addTo(map)
 }
 
-// ── Zoom Control (bottom right, styled via CSS) ─────────────
 L.control.zoom({ position: 'bottomright' }).addTo(map)
 
-// ── Coordinate Display ──────────────────────────────────────
+function buildRegionToggle() {
+  const wrap = document.createElement('div')
+  wrap.id = 'region-toggle'
+  wrap.className = 'region-toggle'
+  for (const name of REGION_ORDER) {
+    const btn = document.createElement('button')
+    btn.className = 'region-btn' + (name === 'Sanctuary' ? ' active' : '')
+    btn.dataset.region = name
+    btn.textContent = REGIONS[name].label
+    btn.addEventListener('click', () => switchRegion(name))
+    wrap.appendChild(btn)
+  }
+  document.body.appendChild(wrap)
+}
+
+let activeRegion = 'Sanctuary'
+function switchRegion(name) {
+  if (!REGIONS[name]) return
+  activeRegion = name
+  document.querySelectorAll('.region-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.region === name)
+  })
+  const titleEl = document.querySelector('.panel-title')
+  if (titleEl) titleEl.textContent = REGIONS[name].label.toUpperCase()
+  const cfg = REGIONS[name]
+  map.flyToBounds(cfg.bounds, { padding: [40, 40], duration: 0.6 })
+  console.log('[MAP-REGION] switch -> ' + name)
+}
+
 const coordsText = document.getElementById('coords-text')
 map.on('mousemove', e => {
   if (coordsText) {
-    coordsText.textContent = `Map: ${e.latlng.lat.toFixed(2)}, ${e.latlng.lng.toFixed(2)}`
+    coordsText.textContent = 'Map: ' + e.latlng.lat.toFixed(2) + ', ' + e.latlng.lng.toFixed(2)
   }
 })
 map.on('mouseout', () => {
   if (coordsText) coordsText.textContent = 'Hover map for coordinates'
 })
 
-// Track current zoom on body so CSS can show/hide labels by zoom
 function updateZoomClass() { document.body.dataset.zoom = String(Math.floor(map.getZoom())) }
 map.on('zoomend', updateZoomClass)
 updateZoomClass()
 
-// ── Load Layers + Search + Build Planner ────────────────────
-import { initLayers, dungeonsData, refreshBuildRotationLayers, setParentBuilds } from './layers.js'
-import { initSearch } from './search.js'
-import { initPlanner } from './planner.js'
-
 async function boot() {
+  buildRegionToggle()
   await initLayers(map)
   initSearch(map)
   refreshBuildRotationLayers(map)
@@ -128,39 +133,41 @@ async function boot() {
     refreshBuildRotationLayers(map)
   })
 
-  // postMessage bridge: receive builds from parent app
   window.addEventListener('message', (e) => {
-    if (e.data?.type === 'd4jsp:builds') {
+    if (e.data && e.data.type === 'd4jsp:builds') {
       setParentBuilds(e.data.builds || [], map)
     }
   })
   window.parent.postMessage({ type: 'd4jsp:map-ready' }, '*')
 
-  // ── Layer panel show/hide ───────────────────────────────────
   const layerPanel    = document.getElementById('layer-panel')
   const closePanelBtn = document.getElementById('panel-close-btn')
   const toggleBtn     = document.getElementById('panel-toggle-btn')
 
   function closePanel() {
-    layerPanel?.classList.add('panel-hidden')
+    if (layerPanel) layerPanel.classList.add('panel-hidden')
     if (toggleBtn) toggleBtn.style.display = 'flex'
   }
   function openPanel() {
-    layerPanel?.classList.remove('panel-hidden')
+    if (layerPanel) layerPanel.classList.remove('panel-hidden')
     if (toggleBtn) toggleBtn.style.display = 'none'
   }
-  closePanelBtn?.addEventListener('click', e => { e.stopPropagation(); closePanel() })
-  toggleBtn?.addEventListener('click', openPanel)
+  if (closePanelBtn) closePanelBtn.addEventListener('click', e => { e.stopPropagation(); closePanel() })
+  if (toggleBtn) toggleBtn.addEventListener('click', openPanel)
   map.on('click', closePanel)
 
-  // ── Plan Builds / New Build → open planner modal ───────────
   function openPlanner() {
-    document.getElementById('planner-modal')?.classList.add('open')
+    const m = document.getElementById('planner-modal')
+    if (m) m.classList.add('open')
   }
-  document.getElementById('btn-plan-builds')?.addEventListener('click', openPlanner)
-  document.getElementById('btn-new-build')?.addEventListener('click', openPlanner)
+  const pb = document.getElementById('btn-plan-builds')
+  const nb = document.getElementById('btn-new-build')
+  if (pb) pb.addEventListener('click', openPlanner)
+  if (nb) nb.addEventListener('click', openPlanner)
 
-  console.log('[D4JSP Map] Ready — unified world (Sanctuary + Nahantu + Skovos overlays).')
+  console.log('[D4JSP Map] Ready — Sanctuary + Nahantu + Skovos as proper tile pyramids.')
 }
 
 boot().catch(console.error)
+
+export { REGIONS, REGION_ORDER, switchRegion }
