@@ -344,14 +344,16 @@ async function boot() {
     const stored = localStorage.getItem('poi_offset')
     if (stored) window.__poiOffset = JSON.parse(stored)
   } catch {}
-  // Color + label per maxroll marker type.
+  // Color + label + glyph per maxroll marker type. Glyph is a unicode
+  // symbol used in the marker icon so each POI type is visually
+  // distinct without needing image assets.
   const POI_TYPES = {
-    waypoint:   { color: '#D4AF37', label: 'Waypoint' },
-    dungeon:    { color: '#8b5cf6', label: 'Dungeon' },
-    altar:      { color: '#dc2626', label: 'Altar of Lilith' },
-    stronghold: { color: '#f43f5e', label: 'Stronghold' },
-    quest:      { color: '#3b82f6', label: 'Side Quest' },
-    npc:        { color: '#9aa3af', label: 'NPC' },
+    waypoint:   { color: '#D4AF37', label: 'Waypoint',        glyph: '◎' }, // ◎
+    dungeon:    { color: '#8b5cf6', label: 'Dungeon',         glyph: '☠' }, // ☠
+    altar:      { color: '#dc2626', label: 'Altar of Lilith', glyph: '✝' }, // ✝
+    stronghold: { color: '#f43f5e', label: 'Stronghold',      glyph: '⌂' }, // ⌂
+    quest:      { color: '#3b82f6', label: 'Side Quest',      glyph: '!'      },
+    npc:        { color: '#9aa3af', label: 'NPC',             glyph: '·' }, // ·
   }
   // Y.34ah (Adam: "hook up the pois to their switches... expansions to
   // their expansion tab and the rest to sanctuary tab"). Each layer id
@@ -411,18 +413,23 @@ async function boot() {
         seen.add(key)
         const ll = worldToLatLng(m.x, m.y)
         const cfg = POI_TYPES[t]
-        const marker = L.circleMarker(ll, {
-          radius: 4,
-          color: cfg.color,
-          weight: 1,
-          opacity: 0.9,
-          fillColor: cfg.color,
-          fillOpacity: 0.7,
+        const safeName = escapeHtml(m.name || cfg.label)
+        // Y.34ar: divIcon with type glyph + name label, color-coded by type
+        const marker = L.marker(ll, {
+          icon: L.divIcon({
+            className: `d4-poi d4-poi-${t}`,
+            html:
+              `<span class="d4-poi-glyph" style="background:${cfg.color}">${cfg.glyph}</span>` +
+              (t === 'npc' ? '' : `<span class="d4-poi-name">${safeName}</span>`),
+            iconSize: null,
+            iconAnchor: [10, 10],
+          }),
+          riseOnHover: true,
         })
         const popup =
           `<div class="d4-poi-popup">` +
           `<div class="d4-poi-popup-type" style="color:${cfg.color}">${cfg.label}</div>` +
-          (m.name ? `<div class="d4-poi-popup-name">${escapeHtml(m.name)}</div>` : '') +
+          (m.name ? `<div class="d4-poi-popup-name">${safeName}</div>` : '') +
           (m.desc ? `<div class="d4-poi-popup-desc">${escapeHtml(m.desc)}</div>` : '') +
           `</div>`
         marker.bindPopup(popup)

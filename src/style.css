@@ -435,6 +435,71 @@ html, body {
 #waypoint-dialog button:hover { border-color: var(--gold); background: rgba(20,15,5,0.9); }
 #wp-save-btn { background: rgba(212,175,55,0.18); }
 
+/* Y.34ar — POI markers from maxroll data: glyph chip + name label.
+   Each marker is a divIcon with two spans: the colored glyph circle on
+   top, the name text below in a dark legible chip. NPCs get glyph only
+   (1227 of them — too noisy with names). */
+.d4-poi {
+  background: transparent !important;
+  border: 0 !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  pointer-events: auto;
+}
+.d4-poi .d4-poi-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.65);
+  color: #fff;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 700;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.85);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  cursor: pointer;
+}
+.d4-poi .d4-poi-name {
+  background: rgba(8,6,12,0.78);
+  border: 1px solid rgba(212,175,55,0.4);
+  color: #f0e6cc;
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 1px 4px;
+  border-radius: 2px;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+  pointer-events: none;
+  margin-top: 1px;
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Hide name labels at low zoom (cluttered) — only show waypoints + strongholds. */
+body[data-zoom="0"] .d4-poi-dungeon .d4-poi-name,
+body[data-zoom="0"] .d4-poi-altar .d4-poi-name,
+body[data-zoom="0"] .d4-poi-quest .d4-poi-name,
+body[data-zoom="1"] .d4-poi-dungeon .d4-poi-name,
+body[data-zoom="1"] .d4-poi-altar .d4-poi-name,
+body[data-zoom="1"] .d4-poi-quest .d4-poi-name {
+  display: none;
+}
+/* Smaller glyph for NPCs since there's no label */
+.d4-poi-npc .d4-poi-glyph {
+  width: 10px;
+  height: 10px;
+  font-size: 7px;
+  opacity: 0.6;
+}
+
 /* User-saved waypoint markers on the map */
 .d4jsp-user-waypoint {
   pointer-events: auto;
