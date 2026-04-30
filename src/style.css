@@ -74,6 +74,14 @@ html, body {
   pointer-events: none;
   z-index: 1000;
   mix-blend-mode: multiply;
+  /* Y.11 (Adam: it moves around): force the frame onto its own GPU layer
+     so it doesn't repaint with the Leaflet map's transform animations. */
+  will-change: transform;
+  transform: translateZ(0);
+  /* Belt-and-braces: also lock pointer/touch events from leaking */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 /* Phase Y.10 (Adam): bake menu items into the parchment scroll in the

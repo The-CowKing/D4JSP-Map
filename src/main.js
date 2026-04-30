@@ -41,6 +41,11 @@ const map = new L.Map('map', {
   preferCanvas: false,
   zoomSnap: 0.5,
   zoomDelta: 0.5,
+  // Y.11 (Adam: it moves around): disable zoom animation so the brand frame
+  // can't appear to drift during the CSS transform between zoom levels.
+  zoomAnimation: false,
+  fadeAnimation: false,
+  markerZoomAnimation: false,
 })
 
 // World bounds: at max-native zoom (5), the pyramid is 8192×8192 pixels.
