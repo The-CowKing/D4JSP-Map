@@ -101,17 +101,13 @@ const worldLayer = new MaxrollTileLayer('', {
   tms: false,
   bounds: WORLD_BOUNDS,
   attribution: '',
-  // Y.34at — smoother tile loading like maxroll's:
-  //  * keepBuffer: 6 -> hold extra tile rows around viewport so panning
-  //    reuses already-loaded tiles instead of fetching new ones
-  //  * updateWhenIdle:false -> load eagerly while the user is panning
-  //  * updateWhenZooming:true -> keep loading mid-zoom so we don't black
-  //    out during a pinch
-  //  * crossOrigin -> let the browser cache + reuse identical tile bytes
+  // Y.34av — smoother tile loading like maxroll's. Y.34at added
+  // crossOrigin:'anonymous' which BROKE all tile loads because maxroll's
+  // CDN doesn't send the right CORS headers for that mode. Removed.
+  // Keep the buffer/eager-load tweaks since those don't need CORS.
   keepBuffer: 6,
   updateWhenIdle: false,
   updateWhenZooming: true,
-  crossOrigin: 'anonymous',
   errorTileUrl:
     'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
 }).addTo(map)
