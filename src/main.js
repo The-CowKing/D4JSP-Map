@@ -33,13 +33,17 @@ const NATIVE_WIDTH = TILE_PIXEL_SIZE * (1 << TILE_MAX_NATIVE_ZOOM)  // 8192
 // CRS.Simple: lng = +x_pixel, lat = -y_pixel (so the world ends up in
 // negative-lat space which is fine).
 const map = new L.Map('map', {
-  minZoom: 1,
+  // Y.32 (Adam: "we need to fix it so default viewport shows the entire
+  // border zoomed out"). Drop minZoom to 0 so the initial fitBounds can
+  // pick a fractional zoom below 1. Tighten zoomSnap to 0.25 so the snap
+  // can land closer to the ideal frame-fit zoom.
+  minZoom: 0,
   maxZoom: TILE_MAX_ZOOM,
   crs: L.CRS.Simple,
   attributionControl: false,    // Adam: kill the Leaflet/maxroll attribution bar
   zoomControl: false,
   preferCanvas: false,
-  zoomSnap: 0.5,
+  zoomSnap: 0.25,
   zoomDelta: 0.5,
   // Y.11/Y.13: zoom animations off so frame can't drift during transitions.
   zoomAnimation: false,
@@ -141,6 +145,12 @@ if (brandFrameOverlay._image) {
   brandFrameOverlay._image.style.pointerEvents = 'none'
   brandFrameOverlay._image.style.zIndex = '500'
 }
+
+// Y.32: default viewport shows the ENTIRE frame. Override the initial
+// setView (zoom 1) above with a fitBounds against FRAME_BOUNDS so the
+// outer frame edges land just inside the shell on first load. Padding 0
+// because we already factored the outset into FRAME_BOUNDS itself.
+map.fitBounds(FRAME_BOUNDS, { animate: false, padding: [0, 0] })
 
 L.control.zoom({ position: 'bottomright' }).addTo(map)
 
