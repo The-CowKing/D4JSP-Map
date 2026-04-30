@@ -73,10 +73,12 @@ html, body {
   background: url('/branding-frame.png') center/100% 100% no-repeat;
   pointer-events: none;
   z-index: 1000;
-  /* Y.12 (Adam: it moves around even after Y.11): switched to an alpha PNG
-     (white pixels → real transparency, baked in by PIL) so we no longer
-     need mix-blend-mode. Without blend mode the frame is a normal layer
-     that won't drift when Leaflet animates the tile pane underneath. */
+  /* Y.13 (Adam: opacity keeps increasing, still moves): reverted to
+     original PNG + mix-blend-mode multiply. The "opacity increasing" was
+     PIL-pass leaving semi-transparent edges that compounded as the
+     browser repainted the layer during pan. Original PNG is now used
+     untouched, multiply blend reads white as transparent. */
+  mix-blend-mode: multiply;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
