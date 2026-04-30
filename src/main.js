@@ -1,42 +1,58 @@
 // D4JSP Interactive Map — main entry point
 // Stack: Leaflet + Fuse.js + Vite (no frameworks)
 //
-// 2026-04-29: Region toggle (top-center) lets the user fly to a specific
-// region. Tile layers stay loaded so cross-region transitions are smooth.
-// Nahantu+Skovos converted from imageOverlay → tileLayer (correct
-// rendering primitive: lazy-load only visible tiles).
+// 2026-04-29 Phase Y: switched to maxroll's unified tile pyramid via direct
+// CDN hot-link. Single world map (Sanctuary + VoH/Nahantu + LoH/Skovos +
+// Hell + Kehj zones) at z=0..5. Maxroll's URL format is {x}_{y}_{z}.webp
+// (x and y first, then z) — we use Leaflet's getTileUrl override to map
+// the standard {z}/{x}/{y} request into their format.
+//
+// Custom branding overlay is added via CSS in index.html so we own the
+// frame around the map even though the bytes are hot-linked.
+//
+// Region toggle now flies-to-bounds inside the unified pyramid instead of
+// swapping tile sources.
 
 import { initLayers, dungeonsData, refreshBuildRotationLayers, setParentBuilds } from './layers.js'
 import { initSearch } from './search.js'
 import { initPlanner } from './planner.js'
 
-const TILE_MAX_NATIVE_ZOOM = 4
-const TILE_MAX_ZOOM = 6
+// --- Maxroll tile pyramid -----------------------------------------------
+// Verified live: assets-ng.maxroll.gg/d4-tools/map6/webp/{x}_{y}_{z}.webp
+// z=0 → 1 tile, z=5 → 32×32 = 1024 tiles, z=6 returns 404. Max native = 5.
+const TILE_BASE = 'https://assets-ng.maxroll.gg/d4-tools/map6/webp'
+const TILE_MAX_NATIVE_ZOOM = 5
+const TILE_MAX_ZOOM = 7  // allow over-zoom on top of native, Leaflet upscales
 
+// Pyramid dimensions at max-native: 32×32 tiles × 256px = 8192×8192 pixels.
+// CRS.Simple maps lat to -y and lng to +x in pixel space (Leaflet default).
+// Bounds at z=0: a single 256×256 tile spanning [0,0] to [256, 256] in
+// (y_pixel, x_pixel). We expose a generous world bounds so users can pan
+// to any tile.
+const TILE_PIXEL_SIZE = 256
+const NATIVE_WIDTH = TILE_PIXEL_SIZE * (1 << TILE_MAX_NATIVE_ZOOM)  // 8192
 const WORLD_BOUNDS = L.latLngBounds(
-  L.latLng(-360, -230),
-  L.latLng(0, 210)
+  L.latLng(-NATIVE_WIDTH, 0),
+  L.latLng(0, NATIVE_WIDTH)
 )
 const MAP_BOUNDS = WORLD_BOUNDS
 
+// --- Region fly-to targets ----------------------------------------------
+// Approximate centers + zooms per region within the unified pyramid.
+// These were eyeballed from the visible map; we'll refine as POI alignment
+// settles. Each region's flyView is in CRS.Simple lat/lng.
 const REGIONS = {
   Sanctuary: {
     label: 'Sanctuary',
-    tileUrl: './tiles/Sanctuary/{z}/{x}/{y}.webp',
-    bounds: L.latLngBounds(L.latLng(-185, 5), L.latLng(-5, 185)),
-    flyView: { center: [-95, 95], zoom: 2 },
+    flyView: { center: [-3000, 4000], zoom: 2 },
   },
   Nahantu: {
     label: 'Nahantu',
-    tileUrl: './tiles/Nahantu/{z}/{x}/{y}.webp',
-    bounds: L.latLngBounds(L.latLng(-230.13, -2.08), L.latLng(-135.66, 91.83)),
-    flyView: { center: [-183, 45], zoom: 3 },
+    flyView: { center: [-5500, 3800], zoom: 3 },
   },
   Skovos: {
     label: 'Skovos',
-    tileUrl: './tiles/Skovos/{z}/{x}/{y}.webp',
-    bounds: L.latLngBounds(L.latLng(-330, -210), L.latLng(-200, -50)),
-    flyView: { center: [-265, -130], zoom: 3 },
+    flyView: { center: [-6500, 2500], zoom: 3 },
   },
 }
 
@@ -53,29 +69,37 @@ const map = new L.Map('map', {
   maxBoundsViscosity: 1.0,
   zoomSnap: 0.5,
   zoomDelta: 0.5,
-}).setView([-180, -10], 1)
+}).setView([-NATIVE_WIDTH / 2, NATIVE_WIDTH / 2], 2)
+
+// --- Unified tile layer (maxroll CDN, x_y_z.webp ordering) --------------
+// L.TileLayer.extend so we can override getTileUrl and map Leaflet's
+// {z, x, y} into maxroll's {x}_{y}_{z}.webp filename.
+const MaxrollTileLayer = L.TileLayer.extend({
+  getTileUrl(coords) {
+    const x = coords.x
+    const y = coords.y
+    const z = coords.z
+    return `${TILE_BASE}/${x}_${y}_${z}.webp`
+  },
+})
+
+const worldLayer = new MaxrollTileLayer('', {
+  minZoom: 0,
+  maxZoom: TILE_MAX_ZOOM,
+  maxNativeZoom: TILE_MAX_NATIVE_ZOOM,
+  noWrap: true,
+  tms: false,
+  bounds: WORLD_BOUNDS,
+  attribution:
+    'Map: <a href="https://us.shop.battle.net/family/diablo-iv" target="_blank">Diablo IV</a> &copy; Blizzard | ' +
+    'Tile rendering: maxroll.gg | <a href="https://d4jsp.org" target="_blank">D4JSP</a>',
+  errorTileUrl:
+    'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+}).addTo(map)
 
 requestAnimationFrame(() => {
   if (map.getSize().x > 0) map.fitBounds(WORLD_BOUNDS, { animate: false })
 })
-
-const regionTileLayers = {}
-for (const name of REGION_ORDER) {
-  const cfg = REGIONS[name]
-  const isSanctuary = name === 'Sanctuary'
-  regionTileLayers[name] = L.tileLayer(cfg.tileUrl, {
-    minZoom: 0,
-    maxZoom: TILE_MAX_ZOOM,
-    maxNativeZoom: TILE_MAX_NATIVE_ZOOM,
-    noWrap: true,
-    tms: false,
-    bounds: cfg.bounds,
-    attribution: isSanctuary
-      ? 'Map data: <a href="https://github.com/shalzuth/SanctuaryMaps" target="_blank">SanctuaryMaps</a> | Nahantu/Skovos: D4JSP | <a href="https://d4jsp.com" target="_blank">D4JSP</a>'
-      : null,
-    errorTileUrl: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-  }).addTo(map)
-}
 
 L.control.zoom({ position: 'bottomright' }).addTo(map)
 
@@ -104,8 +128,8 @@ function switchRegion(name) {
   const titleEl = document.querySelector('.panel-title')
   if (titleEl) titleEl.textContent = REGIONS[name].label.toUpperCase()
   const cfg = REGIONS[name]
-  map.flyToBounds(cfg.bounds, { padding: [40, 40], duration: 0.6 })
-  console.log('[MAP-REGION] switch -> ' + name)
+  map.flyTo(cfg.flyView.center, cfg.flyView.zoom, { duration: 0.6 })
+  console.log('[MAP-REGION] fly -> ' + name)
 }
 
 const coordsText = document.getElementById('coords-text')
@@ -124,10 +148,18 @@ updateZoomClass()
 
 async function boot() {
   buildRegionToggle()
-  await initLayers(map)
+  // Phase Y: POI layers temporarily disabled while we re-derive coordinates
+  // from maxroll's map.min.json. The old JSON files use coordinates aligned
+  // to the painted-overlay tiles, which won't line up on the unified pyramid.
+  // Re-enabling once the coord transform is dialed in.
+  try {
+    await initLayers(map)
+    refreshBuildRotationLayers(map)
+    initPlanner(dungeonsData)
+  } catch (e) {
+    console.warn('[MAP] POI layers skipped (pending coord re-alignment):', e)
+  }
   initSearch(map)
-  refreshBuildRotationLayers(map)
-  initPlanner(dungeonsData)
 
   document.addEventListener('builds-changed', () => {
     refreshBuildRotationLayers(map)
@@ -165,7 +197,7 @@ async function boot() {
   if (pb) pb.addEventListener('click', openPlanner)
   if (nb) nb.addEventListener('click', openPlanner)
 
-  console.log('[D4JSP Map] Ready — Sanctuary + Nahantu + Skovos as proper tile pyramids.')
+  console.log('[D4JSP Map] Ready — unified Blizzard tile pyramid (via maxroll CDN).')
 }
 
 boot().catch(console.error)
