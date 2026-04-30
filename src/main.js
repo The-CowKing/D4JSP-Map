@@ -101,6 +101,17 @@ const worldLayer = new MaxrollTileLayer('', {
   tms: false,
   bounds: WORLD_BOUNDS,
   attribution: '',
+  // Y.34at — smoother tile loading like maxroll's:
+  //  * keepBuffer: 6 -> hold extra tile rows around viewport so panning
+  //    reuses already-loaded tiles instead of fetching new ones
+  //  * updateWhenIdle:false -> load eagerly while the user is panning
+  //  * updateWhenZooming:true -> keep loading mid-zoom so we don't black
+  //    out during a pinch
+  //  * crossOrigin -> let the browser cache + reuse identical tile bytes
+  keepBuffer: 6,
+  updateWhenIdle: false,
+  updateWhenZooming: true,
+  crossOrigin: 'anonymous',
   errorTileUrl:
     'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
 }).addTo(map)

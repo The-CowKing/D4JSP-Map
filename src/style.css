@@ -800,9 +800,11 @@ html, body {
   width: 100%;
   height: 100%;
   z-index: 1;
-  /* Phase Y.8: map fills its #map-shell parent (square at top). Background
-     is the same dark deep gothic as the page so any gap blends in. */
-  background-color: var(--bg-deep);
+  /* Y.34at: parchment-tan background to match maxroll's empty-tile color
+     so loading tiles fade into the surrounding world instead of flashing
+     a black void. Same color as the empty pyramid padding around the
+     continents so it reads as "still loading" not "broken". */
+  background-color: #c5b78f;
   background-image: none;
   /* Y.9 (Adam): kill any browser-side touch gestures so the map always
      captures fingers — no page-scroll leakage even when fully zoomed out. */
