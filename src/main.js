@@ -49,10 +49,11 @@ const map = new L.Map('map', {
   zoomAnimation: false,
   fadeAnimation: false,
   markerZoomAnimation: false,
-  // Y.13 (Adam: it moves around): disable dragging at all zoom levels.
-  // The map content + frame are locked in alignment now. Zoom is the only
-  // interaction. (We can re-enable panning later when zoomed in past min.)
-  dragging: false,
+  // Y.34g (Adam: "in the map 1 finger should let you move left right up
+  // down.. right now it doesn't"): re-enable dragging now that the frame
+  // is part of the map (zooms/pans WITH content) so panning no longer
+  // breaks frame alignment.
+  dragging: true,
   touchZoom: true,
   doubleClickZoom: true,
   scrollWheelZoom: true,
@@ -340,9 +341,20 @@ async function boot() {
   // Skip if already zoomed in past the threshold (don't trap zooms).
   const SCROLL_BOUNDS_LL = L.latLngBounds(SCROLL_NW_LL, SCROLL_SE_LL)
   function jumpToMenu() {
-    const targetZoom = map.getBoundsZoom(SCROLL_BOUNDS_LL, false)
-    if (Math.abs(map.getZoom() - targetZoom) < 0.1) return
-    map.fitBounds(SCROLL_BOUNDS_LL, { padding: [8, 8], maxZoom: 5, animate: true })
+    // Y.34g (Adam: "barely changes... should take you to a view like this"
+    // [target screenshot showed scroll filling viewport]): use inside:true
+    // so viewport fits INSIDE scroll bounds — zooms tighter than the default
+    // fitBounds which leaves padding around the bounds.
+    map.fitBounds(SCROLL_BOUNDS_LL, { padding: [4, 4], maxZoom: 5, animate: true })
+    // Force a closer zoom on top of fitBounds so the scroll fills the viewport.
+    setTimeout(() => {
+      const containerW = map.getSize().x || 360
+      const scrollNativeW = (SCROLL_FRAC.x1 - SCROLL_FRAC.x0) * FRAME_W_PX
+      const targetZoom = TILE_MAX_NATIVE_ZOOM - Math.log2(scrollNativeW / (containerW * 0.92))
+      if (targetZoom > map.getZoom()) {
+        map.setView(SCROLL_BOUNDS_LL.getCenter(), targetZoom, { animate: true })
+      }
+    }, 50)
   }
   map.on('click', (e) => {
     const cp = e.containerPoint
