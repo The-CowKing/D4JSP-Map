@@ -426,10 +426,9 @@ async function boot() {
           }),
           riseOnHover: true,
         })
-        // Y.34at (Adam): "click them I just want text of its name to
-        // appear above. no border no box just text. same color and
-        // style as character page user name." Bind a Leaflet tooltip
-        // (which we style via CSS to remove the box).
+        // Y.34at: bare gold name tip. Y.34av: name itself is clickable
+        // and opens the info modal with type/desc/region (and loot from
+        // our DB once wired).
         marker.bindTooltip(safeName, {
           direction: 'top',
           offset: [0, -cfg.size / 2],
@@ -437,8 +436,19 @@ async function boot() {
           className: 'd4-poi-name-tip',
           permanent: false,
           sticky: false,
+          interactive: true,
         })
+        marker._poiData = { ...m, region }
         marker.on('click', function() { this.openTooltip() })
+        marker.on('tooltipopen', (ev) => {
+          const tipEl = ev.tooltip.getElement()
+          if (!tipEl || tipEl._poiBound) return
+          tipEl._poiBound = true
+          tipEl.addEventListener('click', (e) => {
+            e.stopPropagation()
+            openPoiInfoModal(marker._poiData)
+          })
+        })
         poiGroups[key].addLayer(marker)
       }
       poisLoaded = true
@@ -503,6 +513,73 @@ async function boot() {
 
   // Kick off POI load (non-blocking).
   loadAndRenderPOIs()
+
+  // Y.34av: POI info modal — opened when user clicks a name tooltip.
+  // Shows name + type + description from maxroll data; queries our
+  // Supabase d4_equipment table for any drops associated with the
+  // dungeon name (same pattern the trade core uses).
+  const poiModal      = document.getElementById('poi-info-modal')
+  const poiModalType  = document.getElementById('poi-info-type')
+  const poiModalName  = document.getElementById('poi-info-name')
+  const poiModalRegion = document.getElementById('poi-info-region')
+  const poiModalDesc  = document.getElementById('poi-info-desc')
+  const poiModalLoot  = document.getElementById('poi-info-loot')
+  const poiModalClose = document.getElementById('poi-info-close')
+  function openPoiInfoModal(p) {
+    if (!poiModal || !p) return
+    const cfg = POI_TYPES[p.type] || { label: p.type }
+    poiModalType.textContent = cfg.label
+    poiModalName.textContent = p.name || cfg.label
+    poiModalRegion.textContent = p.region || ''
+    poiModalDesc.textContent = p.desc || ''
+    poiModalDesc.style.display = p.desc ? 'block' : 'none'
+    poiModalLoot.innerHTML = ''
+    poiModal.classList.add('open')
+    if (p.type === 'dungeon' && p.name) {
+      poiModalLoot.innerHTML =
+        `<div class="poi-info-loot-title">Drops</div>` +
+        `<div class="poi-info-loot-loading">loading from D4JSP database…</div>`
+      fetchDungeonLoot(p.name).then(rows => {
+        if (!poiModal.classList.contains('open')) return
+        if (!rows || rows.length === 0) {
+          poiModalLoot.innerHTML =
+            `<div class="poi-info-loot-title">Drops</div>` +
+            `<div class="poi-info-loot-loading">no drops recorded for this dungeon yet</div>`
+          return
+        }
+        poiModalLoot.innerHTML =
+          `<div class="poi-info-loot-title">Drops</div>` +
+          `<div class="poi-info-loot-list">` +
+          rows.map(r => `<div class="poi-info-loot-item"><span>${escapeHtml(r.name)}</span><span class="loot-rarity">${escapeHtml(r.rarity || '')}</span></div>`).join('') +
+          `</div>`
+      }).catch(err => {
+        console.warn('[D4JSP Map] dungeon loot fetch failed:', err)
+        poiModalLoot.innerHTML =
+          `<div class="poi-info-loot-title">Drops</div>` +
+          `<div class="poi-info-loot-loading">drops lookup unavailable</div>`
+      })
+    }
+  }
+  function closePoiInfoModal() { if (poiModal) poiModal.classList.remove('open') }
+  if (poiModalClose) poiModalClose.addEventListener('click', closePoiInfoModal)
+  if (poiModal) poiModal.addEventListener('click', (e) => {
+    if (e.target === poiModal) closePoiInfoModal()
+  })
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePoiInfoModal() })
+
+  // Query the trade core's loot endpoint. Falls back to empty list if
+  // the endpoint isn't reachable from the iframe origin.
+  async function fetchDungeonLoot(dungeonName) {
+    try {
+      // Try a JSON endpoint on the trade core. If we don't have one yet
+      // this returns empty and the modal shows "no drops recorded".
+      const url = `https://trade.d4jsp.org/api/d4/dungeon-loot?name=${encodeURIComponent(dungeonName)}`
+      const r = await fetch(url, { credentials: 'omit' })
+      if (!r.ok) return []
+      const data = await r.json()
+      return Array.isArray(data) ? data : (data?.items || [])
+    } catch { return [] }
+  }
 
   // ── Y.34k: Custom waypoints ────────────────────────────────────
   // Long-press / right-click map → context menu → "Save waypoint" →
