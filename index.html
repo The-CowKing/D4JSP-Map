@@ -17,7 +17,13 @@
   <link rel="stylesheet" href="./src/style.css" />
 </head>
 <body>
-  <div id="map"></div>
+  <!-- Phase Y.8: square shell pinned to top of viewport. The brand frame is
+       positioned absolutely within the shell so it does NOT pan with the map.
+       Map fills the shell. Outside the shell: regular page background. -->
+  <div id="map-shell">
+    <div id="map"></div>
+    <div id="brand-frame"></div>
+  </div>
 
   <!-- Panel reopen button (visible when panel is closed) -->
   <button id="panel-toggle-btn" title="Show layer controls">&#9776;</button>

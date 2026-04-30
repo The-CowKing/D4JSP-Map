@@ -50,9 +50,12 @@ const NW = map.unproject([0, 0], TILE_MAX_NATIVE_ZOOM)
 const SE = map.unproject([NATIVE_WIDTH, NATIVE_WIDTH], TILE_MAX_NATIVE_ZOOM)
 const WORLD_BOUNDS = L.latLngBounds(NW, SE)
 
-map.setMaxBounds(WORLD_BOUNDS.pad(0.1))
+// Phase Y.8: tighten the bounds so users can't pan past the map content
+// (Adam: there should never be black outside the map). Padding negative so
+// the user gets a small "snap-back" feel when they hit the edge.
+map.setMaxBounds(WORLD_BOUNDS)
 map.options.maxBoundsViscosity = 1.0
-map.fitBounds(WORLD_BOUNDS, { animate: false })
+map.fitBounds(WORLD_BOUNDS, { animate: false, padding: [0, 0] })
 
 // --- Unified tile layer (maxroll CDN, x_y_z.webp ordering) --------------
 // L.TileLayer.extend so we can override getTileUrl and map Leaflet's
@@ -77,18 +80,9 @@ const worldLayer = new MaxrollTileLayer('', {
     'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
 }).addTo(map)
 
-// Phase Y.7 (Adam): brand frame embedded in the map at world bounds so it
-// pans/zooms WITH the world (not pinned to viewport). Sits above the tile
-// layer but below markers — z-index 400 keeps it under map controls/markers.
-// mix-blend-mode keeps the PNG's white middle transparent against the tiles.
-const brandFrameOverlay = L.imageOverlay('./branding-frame.png', WORLD_BOUNDS, {
-  opacity: 1,
-  interactive: false,
-  className: 'd4jsp-brand-frame',
-}).addTo(map)
-brandFrameOverlay.getElement().style.mixBlendMode = 'multiply'
-brandFrameOverlay.getElement().style.zIndex = '400'
-brandFrameOverlay.getElement().style.pointerEvents = 'none'
+// Phase Y.8 (Adam): brand frame is back to a CSS-positioned div inside the
+// #map-shell square wrapper — it's fixed inside the shell so it does NOT
+// pan with the map. See index.html (#brand-frame div) and style.css.
 
 L.control.zoom({ position: 'bottomright' }).addTo(map)
 

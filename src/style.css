@@ -38,6 +38,36 @@ html, body {
   font-family: var(--font-body);
 }
 
+/* Phase Y.8 (Adam): map + frame live in a square shell at the top of the
+   viewport. Width = full viewport width, height = same (aspect-ratio:1).
+   Frame is fixed within this shell so it does not pan with the map. */
+#map-shell {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  /* Square: height = width via aspect-ratio. On desktop where the viewport
+     is wider than tall, cap the shell at 100vh so it doesn't overflow off
+     the bottom of the screen. */
+  aspect-ratio: 1 / 1;
+  max-height: 100vh;
+  /* If aspect-ratio caps at max-height, width follows so we stay square. */
+  max-width: 100vh;
+  margin: 0 auto;
+  z-index: 1;
+  background: var(--bg-deep);
+  overflow: hidden;
+}
+
+#brand-frame {
+  position: absolute;
+  inset: 0;
+  background: url('/branding-frame.png') center/100% 100% no-repeat;
+  pointer-events: none;
+  z-index: 1000;
+  mix-blend-mode: multiply;
+}
+
 /* ── Scrollbars ────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg-deep); }
@@ -55,15 +85,14 @@ html, body {
      5. counter-diagonal grain striations -45° (cross-weave)
      6. base ocean gradient top-to-bottom */
 #map {
-  position: fixed;
-  top: 0; left: 0;
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   z-index: 1;
-  /* Phase Y.7 (Adam): no blue outside the boundary of the box. The brand
-     frame is now an ImageOverlay attached to the map bounds, so the area
-     OUTSIDE the world tile pyramid should be flat black, not blue. */
-  background-color: #000;
+  /* Phase Y.8: map fills its #map-shell parent (square at top). Background
+     is the same dark deep gothic as the page so any gap blends in. */
+  background-color: var(--bg-deep);
   background-image: none;
 }
 
