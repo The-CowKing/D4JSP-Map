@@ -115,13 +115,18 @@ const worldLayer = new MaxrollTileLayer('', {
 // matting extends past the viewport at zoom 1 and gets clipped —
 // invisible. Frame appears LARGER (visible art at shell edge) not
 // smaller. Tunable.
-const FRAME_OUTSET = 0.07
+// Y.30 (Adam: "top and bottom perfect.. sides are a little too much"):
+// split the outset into X and Y. Y stays at 7% (top/bottom landed). X
+// drops to ~4% so the side scrollwork/ornaments don't push past the
+// shell edge.
+const FRAME_OUTSET_X = 0.04
+const FRAME_OUTSET_Y = 0.07
 const FRAME_NW = map.unproject(
-  [-NATIVE_WIDTH * FRAME_OUTSET, -NATIVE_WIDTH * FRAME_OUTSET],
+  [-NATIVE_WIDTH * FRAME_OUTSET_X, -NATIVE_WIDTH * FRAME_OUTSET_Y],
   TILE_MAX_NATIVE_ZOOM,
 )
 const FRAME_SE = map.unproject(
-  [NATIVE_WIDTH * (1 + FRAME_OUTSET), NATIVE_WIDTH * (1 + FRAME_OUTSET)],
+  [NATIVE_WIDTH * (1 + FRAME_OUTSET_X), NATIVE_WIDTH * (1 + FRAME_OUTSET_Y)],
   TILE_MAX_NATIVE_ZOOM,
 )
 const FRAME_BOUNDS = L.latLngBounds(FRAME_NW, FRAME_SE)
