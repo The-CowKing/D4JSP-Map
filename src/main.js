@@ -168,16 +168,18 @@ map.setView(center, zoomToFitWidth, { animate: false })
 
 L.control.zoom({ position: 'bottomright' }).addTo(map)
 
-// --- Coordinate display -------------------------------------------------
+// --- Coordinate display ---------------------------------------------------
+// Y.34am: shows latLng under the cursor (desktop) or last tap (mobile).
 const coordsText = document.getElementById('coords-text')
-map.on('mousemove', e => {
-  if (coordsText) {
-    coordsText.textContent = 'Map: ' + e.latlng.lat.toFixed(2) + ', ' + e.latlng.lng.toFixed(2)
-  }
-})
-map.on('mouseout', () => {
-  if (coordsText) coordsText.textContent = 'Hover map for coordinates'
-})
+function setCoordText(latlng) {
+  if (!coordsText) return
+  if (!latlng) { coordsText.textContent = 'tap map for coordinates'; return }
+  coordsText.textContent = `lat ${latlng.lat.toFixed(2)}  lng ${latlng.lng.toFixed(2)}`
+}
+map.on('mousemove', e => setCoordText(e.latlng))
+map.on('click', e => setCoordText(e.latlng))
+map.on('mouseout', () => setCoordText(null))
+setCoordText(null)
 
 function updateZoomClass() { document.body.dataset.zoom = String(Math.floor(map.getZoom())) }
 map.on('zoomend', updateZoomClass)
@@ -323,13 +325,27 @@ async function boot() {
   // applied around pyramid center: (px, py) -> (NATIVE - py, px).
   function buildPoiTransform(/* markers */) { /* derived from data */ }
   function worldToLatLng(wx, wy) {
-    // Y.34ag (Adam: "u got them on the old pyramid.. surely u can get
-    // them on this one"): drop the rotation, use the OLD formula
-    // exactly as-is. CRS.Simple's L.latLng(lat, lng) takes (lat, lng).
-    const lat = -0.035724 * (wx + wy) - 137.7816
-    const lng =  0.035724 * (wy - wx) +  68.6388
+    // Y.34al (Adam: "get the waypoints lined up proper do what u gotta
+    // do"). The OLD formula was calibrated to the OLD tile pyramid.
+    // Maxroll's tile pyramid renders Sanctuary further to the right
+    // and slightly lower. Shift via lng/lat offsets — tunable from the
+    // browser console: window.setLatLngOffset({dLng: 70, dLat: -10})
+    const dLng = (window.__poiOffset && window.__poiOffset.dLng) || 70
+    const dLat = (window.__poiOffset && window.__poiOffset.dLat) || -10
+    const lat = -0.035724 * (wx + wy) - 137.7816 + dLat
+    const lng =  0.035724 * (wy - wx) +  68.6388 + dLng
     return L.latLng(lat, lng)
   }
+  // Console helper: window.setPoiOffset({dLng: 80, dLat: -20}); location.reload()
+  window.setPoiOffset = (off) => {
+    window.__poiOffset = { ...(window.__poiOffset || {}), ...off }
+    try { localStorage.setItem('poi_offset', JSON.stringify(window.__poiOffset)) } catch {}
+    location.reload()
+  }
+  try {
+    const stored = localStorage.getItem('poi_offset')
+    if (stored) window.__poiOffset = JSON.parse(stored)
+  } catch {}
   // Color + label per maxroll marker type.
   const POI_TYPES = {
     waypoint:   { color: '#D4AF37', label: 'Waypoint' },
@@ -529,6 +545,7 @@ async function boot() {
           (wp.desc
             ? `<div class="wp-note">${escapeHtml(wp.desc)}</div>`
             : `<div class="wp-note empty">— no note —</div>`) +
+          `<div class="wp-drawer-coords">lat ${wp.lat.toFixed(2)}, lng ${wp.lng.toFixed(2)}</div>` +
           `<div class="wp-drawer-actions">` +
             `<button class="wp-goto" data-wp-id="${wp.id}">Go to</button>` +
             `<button class="wp-remove" data-wp-id="${wp.id}">Remove</button>` +
@@ -655,11 +672,15 @@ async function boot() {
   const wpDesc     = document.getElementById('wp-desc-input')
   const wpCancel   = document.getElementById('wp-cancel-btn')
   const wpSave     = document.getElementById('wp-save-btn')
+  const wpCoords   = document.getElementById('wp-coords-display')
   let dialogLatLng = null
   function openWaypointDialog(latlng) {
     dialogLatLng = latlng
     wpName.value = ''
     wpDesc.value = ''
+    if (wpCoords && latlng) {
+      wpCoords.textContent = `lat ${latlng.lat.toFixed(2)}  lng ${latlng.lng.toFixed(2)}`
+    }
     wpDialog.classList.add('open')
     setTimeout(() => wpName.focus(), 50)
   }

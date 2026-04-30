@@ -157,8 +157,9 @@
     </div>
   </div>
 
-  <!-- Y.34: search/coords moved into in-scroll menu — old top-right panel removed. -->
-  <div id="coords-display" style="display:none"><span id="coords-text"></span></div>
+  <!-- Y.34am: coords readout — restored at bottom so Adam can call out
+       waypoint positions for calibration. -->
+  <div id="coords-display"><span id="coords-text">Hover map for coordinates</span></div>
 
   <!-- Y.34k: context menu for right-click / long-press on map. -->
   <div id="map-context-menu">
@@ -170,6 +171,7 @@
   <div id="waypoint-dialog">
     <div class="wp-dialog-inner">
       <div class="wp-dialog-title">New waypoint</div>
+      <div id="wp-coords-display" class="wp-coords"></div>
       <input id="wp-name-input" type="text" placeholder="Name" />
       <textarea id="wp-desc-input" placeholder="Description (optional)"></textarea>
       <div class="wp-dialog-actions">
