@@ -363,6 +363,10 @@ async function boot() {
     altar:      { label: 'Altar of Lilith', size: 18, icon: 'altar_of_lilith.webp' },
     stronghold: { label: 'Stronghold',      size: 22, icon: 'stronghold.webp' },
     quest:      { label: 'Side Quest',      size: 18, icon: 'quest.webp' },
+    // Y.34bf — boss-key farm sources. Falls back to dungeon.webp until we
+    // have a dedicated key glyph; size matches stronghold so it stands out
+    // among regular dungeons. Color tint is applied via CSS class override.
+    boss_key:   { label: 'Boss Key Source', size: 22, icon: 'dungeon.webp' },
     // NPCs don't have a dedicated icon — render as a small dim dot below.
     npc:        { label: 'NPC',             size: 10, icon: null },
   }
@@ -382,6 +386,7 @@ async function boot() {
     'chests':      { type: 'chest'      }, // no data yet
     'livingsteel': { type: 'livingsteel' }, // no data yet
     'events':      { type: 'event'      }, // no data yet
+    'boss_keys':   { type: 'boss_key'   }, // Y.34bf — boss-key farm sources
   }
   // Region classification — Y.34ak. 3-way split based on world coords:
   //   Skovos    : y > 800  (Backwater 1286, Tidal Burrow 1359, etc. —
@@ -445,10 +450,25 @@ async function boot() {
 
   async function loadAndRenderPOIs() {
     try {
-      const res = await fetch('./maxroll-map.json')
+      // Y.34bf — boss-keys.json is a small companion file with hand-curated
+      // boss summoning material sources. Loaded in parallel and merged into
+      // the same marker pipeline so the Sanctuary "Boss Keys" toggle just
+      // flips a layerGroup like everything else.
+      const [res, bkRes] = await Promise.all([
+        fetch('./maxroll-map.json'),
+        fetch('./boss-keys.json').catch(() => null),
+      ])
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
-      const markers = Array.isArray(data.markers) ? data.markers : []
+      const baseMarkers = Array.isArray(data.markers) ? data.markers : []
+      let bossKeyMarkers = []
+      if (bkRes && bkRes.ok) {
+        try {
+          const bk = await bkRes.json()
+          if (Array.isArray(bk?.markers)) bossKeyMarkers = bk.markers
+        } catch (_) { /* boss-keys is optional */ }
+      }
+      const markers = baseMarkers.concat(bossKeyMarkers)
       buildPoiTransform(markers)
       const seen = new Set()
       for (const m of markers) {
@@ -574,6 +594,7 @@ async function boot() {
     { id: 'altars',        label: 'Altars of Lilith' },
     { id: 'strongholds',   label: 'Strongholds'      },
     { id: 'sidequests',    label: 'Side Quests'      },
+    { id: 'boss_keys',     label: 'Boss Keys'        },
     { id: 'cellars',       label: 'Cellars'          },
     { id: 'chests',        label: 'Helltide Chests'  },
     { id: 'livingsteel',   label: 'Living Steel'     },

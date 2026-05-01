@@ -1,0 +1,75 @@
+{
+  "_doc": "Boss-key farm/redeem locations. Coords are in the same world-coord system as maxroll-map.json (x,y), passed through worldToLatLng() in main.js. Each entry is a fixed in-world location where players go to obtain or use a boss summoning material. Dynamic sources (Helltide chests for Living Steel, NMD chests for Distilled Fear) belong to their own layers (chests / livingsteel) — those rotate so they can't be a single static marker.",
+  "_curation_notes": [
+    "Tree of Whispers: Hawezar — turn in Grim Favors for Whisper Caches, Varshan body parts (Malignant Heart / Trembling Hand / Blackened Femur / Gurgling Head)",
+    "Pit Entrance: Cerrigar, Scosglen — use Stygian Stones to enter The Pit",
+    "World Boss arenas (Hanged Man's Hall, Hall of the Penitent, Gaping Crevasse, Tree of Whispers, Glacial Fissure, Darkened Way): consume their respective summoning materials to summon the boss",
+    "Iron Wolves Camp: Kehjistan — Iron Wolves vendor sells Stygian Stones for Iron Wolves Honor"
+  ],
+  "markers": [
+    {
+      "name": "Tree of Whispers",
+      "type": "boss_key",
+      "desc": "Whisper Caches reward Malignant Heart, Trembling Hand, Blackened Femur, Gurgling Head — Echo of Varshan summoning materials.",
+      "x": -153,
+      "y": 165,
+      "keys": ["Malignant Heart", "Trembling Hand", "Blackened Femur", "Gurgling Head"]
+    },
+    {
+      "name": "Pit Entrance — Cerrigar",
+      "type": "boss_key",
+      "desc": "Use Stygian Stones to enter The Pit. The Pit drops Distilled Fear and other endgame materials.",
+      "x": -540,
+      "y": -25,
+      "keys": ["Stygian Stone"]
+    },
+    {
+      "name": "Iron Wolves Camp",
+      "type": "boss_key",
+      "desc": "Iron Wolves vendor sells Stygian Stones for Honor. Helltide objectives + bounty boards earn Honor here.",
+      "x": -148,
+      "y": 110,
+      "keys": ["Stygian Stone"]
+    },
+    {
+      "name": "Hanged Man's Hall",
+      "type": "boss_key",
+      "desc": "Andariel arena. Use 2× Sandscorched Shackles + 2× Pincushioned Doll to summon her here.",
+      "x": -148,
+      "y": 110,
+      "keys": ["Sandscorched Shackles", "Pincushioned Doll"]
+    },
+    {
+      "name": "Gaping Crevasse",
+      "type": "boss_key",
+      "desc": "Duriel arena. Use 2× Mucus-Slick Egg + 2× Shard of Agony to summon him here.",
+      "x": -160,
+      "y": 130,
+      "keys": ["Mucus-Slick Egg", "Shard of Agony"]
+    },
+    {
+      "name": "Hall of the Penitent",
+      "type": "boss_key",
+      "desc": "Grigoire arena. Living Steel charges the altar here.",
+      "x": -100,
+      "y": 70,
+      "keys": ["Living Steel"]
+    },
+    {
+      "name": "Darkened Way",
+      "type": "boss_key",
+      "desc": "Lord Zir arena. Exquisite Blood charges the altar here.",
+      "x": -45,
+      "y": 95,
+      "keys": ["Exquisite Blood"]
+    },
+    {
+      "name": "Glacial Fissure",
+      "type": "boss_key",
+      "desc": "Beast in Ice arena. Distilled Fear + Sigil charges the altar here.",
+      "x": -95,
+      "y": 47,
+      "keys": ["Distilled Fear", "Sigil of the Beast"]
+    }
+  ]
+}
