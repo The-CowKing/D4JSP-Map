@@ -166,12 +166,52 @@ export function initSearch(mapInstance) {
     if (idx < 0 || idx >= currentResults.length) return
     const poi = currentResults[idx].item
 
-    // Fly to location
-    map.flyTo([poi.lat, poi.lng], 5, { duration: 1.2 })
+    // Fly to + zoom in. Y.34bd (Adam): "selecting dungeon from search and
+    // clicking it should activate its marker / and take you centered to it
+    // zoomed in". Bumped from zoom 5 to a closer 4 (max native is 5; deeper
+    // zoom is implemented via image-overlay scaling so we have headroom)
+    // and shortened duration so the marker activation doesn't lag.
+    const TARGET_ZOOM = Math.min(5, (map.getMaxZoom?.() ?? 5))
+    map.flyTo([poi.lat, poi.lng], TARGET_ZOOM, { duration: 0.8 })
 
-    // Open popup — need a short delay for fly animation
+    // After the camera lands, activate the marker.
     setTimeout(() => {
-      poi.marker.openPopup()
+      // Maxroll POIs (dungeons / altars / waypoints / etc.) bound via
+      // main.js loadAndRenderPOIs() expose `_poiData` and a tooltip-name
+      // → postMessage open flow. For those, dispatch the event main.js
+      // listens for (window message) so the trade-core modal opens
+      // immediately — no second tap needed. For everything else (the
+      // static-data layers from layers.js with `bindPopup`), fall back
+      // to the original popup open.
+      const poiData = poi.marker?._poiData
+      if (poiData && poiData.type === 'dungeon') {
+        // Direct: postMessage to parent so the trade-core DungeonInfoModal
+        // opens. Same payload main.js builds from openPoiInfoModal.
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({
+              type: 'd4jsp:open-poi-info',
+              poi: {
+                name: poiData.name || poi.name,
+                type: poiData.type,
+                typeLabel: poi.config?.label || 'Dungeon',
+                region: poiData.region || '',
+                desc: poiData.desc || '',
+                x: poiData.x, y: poiData.y,
+              },
+            }, '*')
+          } else {
+            // Standalone /map/ visit — open the in-iframe legacy modal.
+            poi.marker.openTooltip?.()
+          }
+        } catch (_) { poi.marker.openTooltip?.() }
+      } else if (poiData) {
+        // Non-dungeon POI from maxroll set — show the gold name tip.
+        poi.marker.openTooltip?.()
+      } else if (typeof poi.marker?.openPopup === 'function') {
+        // Static-layer markers (Nahantu side data, etc.) — original popup path.
+        poi.marker.openPopup()
+      }
     }, 400)
 
     // Update input
