@@ -363,10 +363,13 @@ async function boot() {
     altar:      { label: 'Altar of Lilith', size: 18, icon: 'altar_of_lilith.webp' },
     stronghold: { label: 'Stronghold',      size: 22, icon: 'stronghold.webp' },
     quest:      { label: 'Side Quest',      size: 18, icon: 'quest.webp' },
-    // Y.34bf — boss-key farm sources. Falls back to dungeon.webp until we
-    // have a dedicated key glyph; size matches stronghold so it stands out
-    // among regular dungeons. Color tint is applied via CSS class override.
-    boss_key:   { label: 'Boss Key Source', size: 22, icon: 'dungeon.webp' },
+    // Y.34bg (renamed from boss_key per Adam: "should be under ubers").
+    // Covers BOTH the Uber boss arenas (Hanged Man's Hall, Darkened Way,
+    // etc.) AND the Uber-key farm sources (Tree of Whispers, Pit Entrance,
+    // Iron Wolves Camp). Each marker can override its display label via a
+    // `typeLabel` field on the marker JSON ("Boss" vs "Uber Farm"). Falls
+    // back to dungeon.webp icon at size 22 until we cut a dedicated glyph.
+    uber:       { label: 'Uber',            size: 22, icon: 'dungeon.webp' },
     // NPCs don't have a dedicated icon — render as a small dim dot below.
     npc:        { label: 'NPC',             size: 10, icon: null },
   }
@@ -386,7 +389,7 @@ async function boot() {
     'chests':      { type: 'chest'      }, // no data yet
     'livingsteel': { type: 'livingsteel' }, // no data yet
     'events':      { type: 'event'      }, // no data yet
-    'boss_keys':   { type: 'boss_key'   }, // Y.34bf — boss-key farm sources
+    'ubers':       { type: 'uber'       }, // Y.34bg — Uber boss arenas + key farm sources
   }
   // Region classification — Y.34ak. 3-way split based on world coords:
   //   Skovos    : y > 800  (Backwater 1286, Tidal Burrow 1359, etc. —
@@ -594,7 +597,7 @@ async function boot() {
     { id: 'altars',        label: 'Altars of Lilith' },
     { id: 'strongholds',   label: 'Strongholds'      },
     { id: 'sidequests',    label: 'Side Quests'      },
-    { id: 'boss_keys',     label: 'Boss Keys'        },
+    { id: 'ubers',         label: 'Ubers'            },
     { id: 'cellars',       label: 'Cellars'          },
     { id: 'chests',        label: 'Helltide Chests'  },
     { id: 'livingsteel',   label: 'Living Steel'     },
@@ -618,14 +621,15 @@ async function boot() {
   function openPoiInfoModal(p) {
     if (!p) return
     const cfg = POI_TYPES[p.type] || { label: p.type }
+    // Y.34bg — markers can override the displayed type label per row
+    // (e.g. an Uber-tagged marker sets typeLabel: "Boss" so the modal
+    // header reads "BOSS · SANCTUARY" instead of "UBER · SANCTUARY").
+    const displayLabel = p.typeLabel || cfg.label
 
     // Y.34bb (2026-05-01): when running inside an iframe, post the dungeon
     // info to the parent so it can open a FULL-SCREEN modal in the trade
     // core's chrome (matching the rest of the site). Drops are fetched
-    // there. Adam: "modal could take over entire screen instead of being
-    // inside the map ... only thing is there is multiple drops per dungeon
-    // so it would take alotnof tooltips do on the map part it should just
-    // be the dungeon items names not full tooltips until they are clicked".
+    // there.
     try {
       if (typeof window !== 'undefined' && window.parent && window.parent !== window) {
         window.parent.postMessage({
@@ -633,7 +637,7 @@ async function boot() {
           poi: {
             name: p.name || cfg.label,
             type: p.type,
-            typeLabel: cfg.label,
+            typeLabel: displayLabel,
             region: p.region || '',
             desc: p.desc || '',
             x: p.x, y: p.y,
