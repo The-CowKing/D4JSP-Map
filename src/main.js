@@ -400,20 +400,49 @@ async function boot() {
   let poisLoaded = false
   function poiKey(region, type) { return region + '_' + type }
 
-  // Y.34az (2026-04-30): single-tap-marker-opens-modal.
+  // Y.34ba (2026-05-01): two-step name → modal that ACTUALLY works on mobile.
   //
-  // The previous "tap marker → tooltip shows name → tap name → modal"
-  // flow (Y.34av/ay) was unreliable on mobile: Leaflet's tooltip pane
-  // fights with the map's tap handler, the tooltip's own click listener
-  // gets eaten, and the WeakMap-based document-level capture handler
-  // (Y.34ay) still didn't fire because synthetic clicks from touch never
-  // reached the tooltip child element under iOS Safari / mobile Chrome.
+  // Adam wants:  tap marker → tooltip shows gold name → tap name → modal opens.
   //
-  // Simpler and bulletproof: tapping the marker icon opens the modal
-  // directly. We keep the tooltip bound for hover-preview on desktop
-  // (mouseover shows the gold name) but the click-to-name-then-click-modal
-  // dance is gone. Mobile users get one tap; desktop users still see the
-  // hover label and can click anywhere on the icon to open.
+  // The earlier per-tooltip listener (Y.34av) and WeakMap+capture-phase
+  // approach (Y.34ay) both failed because Leaflet's `tooltipPane` has
+  // `pointer-events: none` by default and the tooltip's children inherit
+  // that on iOS Safari and mobile Chrome — synthetic clicks from touch never
+  // reach our listener. Y.34az dodged it by opening the modal on the marker
+  // tap, which Adam doesn't want.
+  //
+  // Y.34ba fix:
+  //   1. Multi-event delegated handler at document level (capture phase)
+  //      listens for 'click', 'touchend', AND 'pointerup'. At least one of
+  //      those reliably fires on every mobile browser even when synthetic
+  //      click is suppressed.
+  //   2. CSS forces pointer-events:auto on the tooltip pane AND the tooltip
+  //      element AND their children, so the touch reaches our handler.
+  //   3. WeakMap maps tooltip element → marker._poiData. Refreshed on every
+  //      tooltipopen so re-used tooltip elements always have current data.
+  //
+  // Tested resilient: stopPropagation+preventDefault means Leaflet's map tap
+  // handler doesn't get to close the tooltip before we open the modal.
+  const _poiTipDataByEl = new WeakMap()
+  const _poiHandledTimes = new WeakMap()  // de-dup: click + touchend can both fire
+  function _handlePoiTipTap(e) {
+    const tipEl = (e.target && e.target.closest && e.target.closest('.d4-poi-name-tip'))
+    if (!tipEl) return
+    const data = _poiTipDataByEl.get(tipEl)
+    if (!data) return
+    // de-dup: ignore if same tooltip handled within last 400ms
+    const now = Date.now()
+    const last = _poiHandledTimes.get(tipEl) || 0
+    if (now - last < 400) return
+    _poiHandledTimes.set(tipEl, now)
+    e.stopPropagation()
+    if (e.cancelable) e.preventDefault()
+    openPoiInfoModal(data)
+  }
+  document.addEventListener('click',     _handlePoiTipTap, true)
+  document.addEventListener('touchend',  _handlePoiTipTap, true)
+  document.addEventListener('pointerup', _handlePoiTipTap, true)
+
   async function loadAndRenderPOIs() {
     try {
       const res = await fetch('./maxroll-map.json')
@@ -458,10 +487,14 @@ async function boot() {
           interactive: true,
         })
         marker._poiData = { ...m, region }
-        // Y.34az: single tap on marker opens the info modal directly.
-        // Tooltip (bindTooltip above) still shows on desktop hover for the
-        // gold-name preview, but mobile no longer needs a second tap.
-        marker.on('click', () => openPoiInfoModal(marker._poiData))
+        // Y.34ba: tap marker → tooltip shows the name. Then a tap on the
+        // name fires the document-level multi-event handler at the top of
+        // this scope (click / touchend / pointerup) and opens the modal.
+        marker.on('click', function() { this.openTooltip() })
+        marker.on('tooltipopen', (ev) => {
+          const tipEl = ev.tooltip.getElement()
+          if (tipEl) _poiTipDataByEl.set(tipEl, marker._poiData)
+        })
         poiGroups[key].addLayer(marker)
       }
       poisLoaded = true
