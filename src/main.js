@@ -182,11 +182,16 @@ if (brandFrameOverlay._image) {
 // later with a width clamp.
 function fitFrameToViewport(animate = false) {
   const sz = map.getSize()
-  const viewportW = sz.x || 360
-  const frameNativeWPx = NATIVE_WIDTH * (1 + 2 * FRAME_OUTSET_X)
-  const z = TILE_MAX_NATIVE_ZOOM - Math.log2(frameNativeWPx / viewportW)
-  // Y.34ax: pin minZoom to the frame-fit zoom so users can't pinch out
-  // past the brand frame and see the dark page behind.
+  // 2026-05-01 (Adam: "fog of war hits all 4 edges like before"): fit
+  // WORLD width to viewport (not the slightly-bigger frame). The brand-
+  // frame.webp ImageOverlay extends past world bounds via FRAME_OUTSET,
+  // so the gold scrollwork still surrounds the world but the world tiles
+  // themselves fill the viewport edge-to-edge with fog-of-war touching
+  // all four sides. Use the smaller of width/height so the world is
+  // never narrower than the viewport on any aspect.
+  const viewportEdge = Math.max(sz.x, sz.y) || 360
+  const z = TILE_MAX_NATIVE_ZOOM - Math.log2(NATIVE_WIDTH / viewportEdge)
+  // Y.34ax: pin minZoom so users can't pinch out past the world.
   map.options.minZoom = z
   map.setView(center, z, { animate })
 }

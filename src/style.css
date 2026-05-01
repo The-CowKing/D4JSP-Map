@@ -38,22 +38,20 @@ html, body {
   font-family: var(--font-body);
 }
 
-/* Phase Y.8 (Adam): map + frame live in a square shell at the top of the
-   viewport. Width = full viewport width, height = same (aspect-ratio:1).
-   Frame is fixed within this shell so it does not pan with the map. */
+/* 2026-05-01 (Adam: "fix the fuckin map allready"): the prior version
+   capped #map-shell at min(100vw, 100vh) and made it a square — that
+   shrunk the leaflet container to the smaller viewport dimension and
+   left empty bands inside the iframe. The trade core now controls the
+   iframe aspect (square via maxHeight:100vw on the iframe element), so
+   #map-shell can simply fill 100% of the iframe — world tiles then fill
+   the iframe edge-to-edge with fog-of-war hitting all four edges. */
 #map-shell {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
-  /* Square: height = width via aspect-ratio. On desktop where the viewport
-     is wider than tall, cap the shell at 100vh so it doesn't overflow off
-     the bottom of the screen. */
-  aspect-ratio: 1 / 1;
-  max-height: 100vh;
-  /* If aspect-ratio caps at max-height, width follows so we stay square. */
-  max-width: 100vh;
-  margin: 0 auto;
+  height: 100vh;
+  margin: 0;
   z-index: 1;
   background: var(--bg-deep);
   overflow: hidden;
