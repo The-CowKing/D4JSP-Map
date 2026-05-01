@@ -30,15 +30,17 @@ import _livingsteelData from './data/livingsteel.json'
 import _cellarsData     from './data/cellars.json'
 import _eventsData      from './data/events.json'
 
-// --- World tile pyramid (self-hosted) -----------------------------------
-// Phase Y.34bk (2026-05-01): pulled all 1365 tiles down from the upstream
-// CDN and self-host them under public/tiles/Sanctuary/{z}/{x}/{y}.webp so
-// the live site has zero outbound calls to third-party domains during load.
-// Adam: "I saw something below map on loading just wanna make sure it
-// doesn't say maxroll" — this kills the URL leak in the browser status bar.
+// --- World tile pyramid (maxroll CDN — pre-self-host) -------------------
+// 2026-05-01 (Adam: "it's not even the right fuckin map" / "doesn't have
+// nahantu or skovos"): Y.34bk's self-host downloaded the Sanctuary
+// pyramid only, but the POI data spans Sanctuary + Nahantu + Skovos via
+// a unified pyramid that lived at maxroll. Reverting TILE_BASE to the
+// maxroll CDN so the full multi-region map loads correctly. Self-host
+// the unified pyramid properly post-launch.
 //
 // z=0 → 1 tile, z=5 → 32×32 = 1024 tiles, z=6 returns 404. Max native = 5.
-const TILE_BASE = './tiles/Sanctuary'
+const TILE_BASE = 'https://assets-ng.maxroll.gg/d4-tools/map6/webp'
+const TILE_FILENAME_FORMAT = 'maxroll' // 'maxroll' = {z}_{x}_{y}.webp
 const TILE_MAX_NATIVE_ZOOM = 5
 const TILE_MAX_ZOOM = 7  // allow over-zoom on top of native, Leaflet upscales
 const TILE_PIXEL_SIZE = 256
@@ -102,7 +104,8 @@ map.setView(center, 1, { animate: false })
 // Leaflet z/x/y directory pyramid we serve from /map/tiles/Sanctuary/.
 const WorldTileLayer = L.TileLayer.extend({
   getTileUrl(coords) {
-    return `${TILE_BASE}/${coords.z}/${coords.x}/${coords.y}.webp`
+    // Maxroll CDN uses {z}_{x}_{y}.webp filename format, NOT directory tree.
+    return `${TILE_BASE}/${coords.z}_${coords.x}_${coords.y}.webp`
   },
 })
 
