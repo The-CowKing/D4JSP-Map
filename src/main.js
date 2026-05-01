@@ -30,10 +30,15 @@ import _livingsteelData from './data/livingsteel.json'
 import _cellarsData     from './data/cellars.json'
 import _eventsData      from './data/events.json'
 
-// --- Maxroll tile pyramid -----------------------------------------------
-// Verified live: assets-ng.maxroll.gg/d4-tools/map6/webp/{x}_{y}_{z}.webp
+// --- World tile pyramid (self-hosted) -----------------------------------
+// Phase Y.34bk (2026-05-01): pulled all 1365 tiles down from the upstream
+// CDN and self-host them under public/tiles/Sanctuary/{z}/{x}/{y}.webp so
+// the live site has zero outbound calls to third-party domains during load.
+// Adam: "I saw something below map on loading just wanna make sure it
+// doesn't say maxroll" — this kills the URL leak in the browser status bar.
+//
 // z=0 → 1 tile, z=5 → 32×32 = 1024 tiles, z=6 returns 404. Max native = 5.
-const TILE_BASE = 'https://assets-ng.maxroll.gg/d4-tools/map6/webp'
+const TILE_BASE = './tiles/Sanctuary'
 const TILE_MAX_NATIVE_ZOOM = 5
 const TILE_MAX_ZOOM = 7  // allow over-zoom on top of native, Leaflet upscales
 const TILE_PIXEL_SIZE = 256
@@ -92,18 +97,16 @@ map.options.maxBoundsViscosity = 1.0
 const center = map.unproject([NATIVE_WIDTH / 2, NATIVE_WIDTH / 2], TILE_MAX_NATIVE_ZOOM)
 map.setView(center, 1, { animate: false })
 
-// --- Unified tile layer (maxroll CDN, x_y_z.webp ordering) --------------
-// L.TileLayer.extend so we can override getTileUrl and map Leaflet's
-// {z, x, y} into maxroll's {x}_{y}_{z}.webp filename.
-const MaxrollTileLayer = L.TileLayer.extend({
+// --- Unified tile layer (self-hosted, /{z}/{x}/{y}.webp pyramid) --------
+// L.TileLayer.extend so we can override getTileUrl with the standard
+// Leaflet z/x/y directory pyramid we serve from /map/tiles/Sanctuary/.
+const WorldTileLayer = L.TileLayer.extend({
   getTileUrl(coords) {
-    // Maxroll's filename order is {z}_{x}_{y}.webp — verified from their
-    // own captures (z=0 has only "0_0_0", z=1 has "1_0_0"/"1_1_0" etc.)
-    return `${TILE_BASE}/${coords.z}_${coords.x}_${coords.y}.webp`
+    return `${TILE_BASE}/${coords.z}/${coords.x}/${coords.y}.webp`
   },
 })
 
-const worldLayer = new MaxrollTileLayer('', {
+const worldLayer = new WorldTileLayer('', {
   minZoom: 0,
   maxZoom: TILE_MAX_ZOOM,
   maxNativeZoom: TILE_MAX_NATIVE_ZOOM,
@@ -111,10 +114,10 @@ const worldLayer = new MaxrollTileLayer('', {
   tms: false,
   bounds: WORLD_BOUNDS,
   attribution: '',
-  // Y.34av — smoother tile loading like maxroll's. Y.34at added
-  // crossOrigin:'anonymous' which BROKE all tile loads because maxroll's
-  // CDN doesn't send the right CORS headers for that mode. Removed.
-  // Keep the buffer/eager-load tweaks since those don't need CORS.
+  // Y.34av — smoother tile loading. Y.34at added crossOrigin:'anonymous'
+  // which BROKE all tile loads because the upstream CDN didn't send the
+  // right CORS headers for that mode. Removed (now self-hosted, but keep
+  // it removed for compatibility). Keep the buffer/eager-load tweaks.
   keepBuffer: 6,
   updateWhenIdle: false,
   updateWhenZooming: true,
@@ -475,7 +478,7 @@ async function boot() {
       // the same marker pipeline so the Sanctuary "Boss Keys" toggle just
       // flips a layerGroup like everything else.
       const [res, bkRes] = await Promise.all([
-        fetch('./maxroll-map.json'),
+        fetch('./world-pois.json'),
         fetch('./boss-keys.json').catch(() => null),
       ])
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
