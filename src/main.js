@@ -681,16 +681,29 @@ async function boot() {
       if (item && !item.classList.contains('on')) item.click()
     }
 
-    // 3. Find matching markers in allPOIs by case-insensitive name contains.
+    // 3. Find matching markers in allPOIs.
+    //    Strategy: try drop sources first; fall back to item name tokens.
+    //    Many uniques are named after the boss they drop from (e.g.
+    //    Rakanoth's Wake → boss Rakanoth, Andariel's Visage → Andariel).
+    //    If the API returns generic layer labels like "Tormented Bosses",
+    //    we tokenise the ITEM name and try to match POIs by those tokens.
     const target = sources.map(s => s.toLowerCase())
+    // Item-name tokens: split on apostrophes/spaces, drop short stop words.
+    const STOP = new Set(['the','of','a','an','and','wake','visage','will','crest','might','grandfather','talisman','ring','skies','starless'])
+    const itemTokens = String(itemName)
+      .toLowerCase()
+      .split(/[\s'']+/)
+      .map(t => t.replace(/[^a-z]/g, ''))
+      .filter(t => t.length > 3 && !STOP.has(t))
+    const allTargets = [...target, ...itemTokens]
     const matches = []
     for (const p of allPOIs) {
       const pname = String(p.name || '').toLowerCase()
-      if (target.some(t => pname.includes(t) || t.includes(pname))) {
+      if (allTargets.some(t => t && (pname.includes(t) || t.includes(pname)))) {
         matches.push(p)
       }
     }
-    console.log(`[D4JSP Map] matched ${matches.length} POIs of ${sources.length} drop sources`)
+    console.log(`[D4JSP Map] matched ${matches.length} POIs (sources=${sources.length} tokens=${itemTokens.length}: ${itemTokens.join(',')})`)
     if (matches.length === 0) return
 
     // 4. fitBounds on the matched markers, then open name tooltips for the
