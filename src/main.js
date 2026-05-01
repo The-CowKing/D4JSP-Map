@@ -158,19 +158,23 @@ const FRAME_BOUNDS = L.latLngBounds(FRAME_NW, FRAME_SE)
 // from PNG (909KB) to WebP q=85 (200KB, ~4.5x smaller). All target
 // browsers (Chrome/Safari/Firefox/Edge) support WebP. Preload link
 // in index.html starts the fetch in parallel with the JS bundle.
-// 2026-05-01 (Adam: "the white shit showed up with the star, delete it"):
-// brand-frame.webp had parchment-tan matting baked in around the gold
-// scrollwork. The matting was opaque and covered ~30% of the viewport,
-// regardless of FRAME_OUTSET settings. Removing the overlay entirely so
-// world tiles fill the viewport edge-to-edge with no decorative matting.
-// If we want the gold scrollwork back later, the source PNG needs to be
-// re-cut so the interior is transparent (only the scrollwork edges
-// remain non-transparent).
-// const brandFrameOverlay = L.imageOverlay('./branding-frame.webp', FRAME_BOUNDS, {
-//   opacity: 1,
-//   interactive: false,
-//   className: 'd4jsp-brand-frame',
-// }).addTo(map)
+// 2026-05-01 (Adam: "that frame took 6 hours to place"): restoring the
+// brand-frame ImageOverlay. Adam confirmed the parchment in his earlier
+// screenshots was a tile-background bleed (#c5b78f), not the frame
+// matting. With the tile bg now transparent, the frame can render
+// without competing with empty-tile parchment.
+const brandFrameOverlay = L.imageOverlay('./branding-frame.webp', FRAME_BOUNDS, {
+  opacity: 1,
+  interactive: false,
+  className: 'd4jsp-brand-frame',
+}).addTo(map)
+// Belt-and-suspenders: keep the overlay above tiles even if Leaflet's pane
+// stacking changes. overlayPane sits above tilePane by default but a high
+// z-index inside it puts the frame above any future POI markers too.
+if (brandFrameOverlay._image) {
+  brandFrameOverlay._image.style.pointerEvents = 'none'
+  brandFrameOverlay._image.style.zIndex = '500'
+}
 
 // Y.33 (Adam: "border perfect. view port default is a bit small it
 // should pack the width for mobile pc we will have to tune size
