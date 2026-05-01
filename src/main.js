@@ -400,31 +400,20 @@ async function boot() {
   let poisLoaded = false
   function poiKey(region, type) { return region + '_' + type }
 
-  // Y.34ay (2026-04-30): mobile-safe POI-name click → modal.
+  // Y.34az (2026-04-30): single-tap-marker-opens-modal.
   //
-  // Old approach (Y.34av) attached a click listener to the tooltip element
-  // inside `tooltipopen`. On mobile that races with Leaflet's map tap
-  // handler — the tap on the gold "FORGE OF MALICE" text often gets
-  // swallowed by the map (which closes the tooltip) before the tooltip's
-  // own listener can fire openPoiInfoModal. Result: tap name → tooltip
-  // disappears, modal never opens.
+  // The previous "tap marker → tooltip shows name → tap name → modal"
+  // flow (Y.34av/ay) was unreliable on mobile: Leaflet's tooltip pane
+  // fights with the map's tap handler, the tooltip's own click listener
+  // gets eaten, and the WeakMap-based document-level capture handler
+  // (Y.34ay) still didn't fire because synthetic clicks from touch never
+  // reached the tooltip child element under iOS Safari / mobile Chrome.
   //
-  // New approach: store the marker's POI data in a WeakMap keyed by the
-  // tooltip DOM element each time it opens, and delegate ONE document-level
-  // click handler at capture phase. Capture phase fires before any
-  // bubble-phase Leaflet handler can eat the event, so we can stopPropagation
-  // and reliably open the modal.
-  const _poiTipDataByEl = new WeakMap()
-  document.addEventListener('click', (e) => {
-    const tipEl = e.target.closest && e.target.closest('.d4-poi-name-tip')
-    if (!tipEl) return
-    const data = _poiTipDataByEl.get(tipEl)
-    if (!data) return
-    e.stopPropagation()
-    e.preventDefault()
-    openPoiInfoModal(data)
-  }, true)
-
+  // Simpler and bulletproof: tapping the marker icon opens the modal
+  // directly. We keep the tooltip bound for hover-preview on desktop
+  // (mouseover shows the gold name) but the click-to-name-then-click-modal
+  // dance is gone. Mobile users get one tap; desktop users still see the
+  // hover label and can click anywhere on the icon to open.
   async function loadAndRenderPOIs() {
     try {
       const res = await fetch('./maxroll-map.json')
@@ -469,15 +458,10 @@ async function boot() {
           interactive: true,
         })
         marker._poiData = { ...m, region }
-        marker.on('click', function() { this.openTooltip() })
-        // Y.34ay: store POI data on the tooltip element so the delegated
-        // capture-phase handler at the top of this scope can open the modal
-        // when the user taps the gold name. See the WeakMap declaration up
-        // above for why we do this instead of the old per-tooltip listener.
-        marker.on('tooltipopen', (ev) => {
-          const tipEl = ev.tooltip.getElement()
-          if (tipEl) _poiTipDataByEl.set(tipEl, marker._poiData)
-        })
+        // Y.34az: single tap on marker opens the info modal directly.
+        // Tooltip (bindTooltip above) still shows on desktop hover for the
+        // gold-name preview, but mobile no longer needs a second tap.
+        marker.on('click', () => openPoiInfoModal(marker._poiData))
         poiGroups[key].addLayer(marker)
       }
       poisLoaded = true
