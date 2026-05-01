@@ -17,7 +17,14 @@ export function initSearch(mapInstance) {
 
   if (!input || !results) return
 
-  // Init Fuse after layers are loaded (call this after initLayers)
+  // Init Fuse after layers are loaded (call this after initLayers).
+  // 2026-05-01 (Y.34bc): track the index size we built against so the
+  // input handler can rebuild after maxroll-map.json POIs land in
+  // allPOIs (~600ms after page load). Adam: "search doesnt search" —
+  // happened because Fuse was built at t=500ms when allPOIs only had
+  // the static Nahantu/Skovos data; the 2,384 maxroll POIs (bulk of
+  // Sanctuary including "Hanged Man's Hall") arrived after.
+  let fuseSize = 0
   function buildFuse() {
     fuse = new Fuse(allPOIs, {
       keys: ['name', 'desc'],
@@ -26,6 +33,10 @@ export function initSearch(mapInstance) {
       minMatchCharLength: 2,
       includeMatches: true,
     })
+    fuseSize = allPOIs.length
+  }
+  function ensureFreshFuse() {
+    if (!fuse || allPOIs.length !== fuseSize) buildFuse()
   }
 
   // Build fuse index after a short delay to ensure layers are loaded
@@ -60,14 +71,14 @@ export function initSearch(mapInstance) {
     const query = input.value.trim()
     clearBtn.style.display = query ? 'block' : 'none'
 
-    if (!query || !fuse) {
+    if (!query) {
       closeResults()
       return
     }
 
-    if (!fuse) {
-      buildFuse()
-    }
+    // Y.34bc: rebuild if maxroll POIs landed after the initial build.
+    ensureFreshFuse()
+    if (!fuse) return  // safety — can only happen pre-init
 
     const raw = fuse.search(query, { limit: 10 })
     currentResults = raw

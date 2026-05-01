@@ -16,7 +16,7 @@
 // Coord system uses Leaflet's project/unproject at maxNativeZoom so the
 // world bounds line up with the actual 8192×8192 pixel pyramid.
 
-import { initLayers, dungeonsData, refreshBuildRotationLayers, setParentBuilds, LAYER_CONFIGS } from './layers.js'
+import { initLayers, dungeonsData, refreshBuildRotationLayers, setParentBuilds, LAYER_CONFIGS, allPOIs } from './layers.js'
 import { initSearch } from './search.js'
 import { initPlanner } from './planner.js'
 
@@ -496,9 +496,31 @@ async function boot() {
           if (tipEl) _poiTipDataByEl.set(tipEl, marker._poiData)
         })
         poiGroups[key].addLayer(marker)
+
+        // Y.34bc (2026-05-01): index this POI for the search bar. The
+        // search.js Fuse index is built from layers.js → allPOIs, but
+        // those are the static src/data/*.json files (Nahantu/Skovos
+        // only). The maxroll-map.json POIs (the bulk — 2,384 markers
+        // including all of Sanctuary) were NEVER pushed to allPOIs, so
+        // typing "Hanged" returned 0 hits even though the POI was on the
+        // map. Push them here. Shape matches what search.js expects:
+        // {name, desc, lat, lng, config, marker}.
+        const llObj = ll && typeof ll.lat === 'number' ? ll : { lat: m.y, lng: m.x };
+        allPOIs.push({
+          name: m.name || cfg.label,
+          desc: m.desc || '',
+          lat: llObj.lat,
+          lng: llObj.lng,
+          config: {
+            id: t,
+            label: cfg.label,
+            color: cfg.color || '#D4AF37',
+          },
+          marker,
+        });
       }
       poisLoaded = true
-      console.log(`[D4JSP Map] loaded ${markers.length} POIs across ${seen.size} region+type groups`)
+      console.log(`[D4JSP Map] loaded ${markers.length} POIs across ${seen.size} region+type groups; allPOIs total=${allPOIs.length}`)
       // Y.34q: re-apply any toggles that were clicked before the fetch landed.
       document.querySelectorAll('.scroll-layer-item.on').forEach(item => {
         const id = item.dataset.layerId
