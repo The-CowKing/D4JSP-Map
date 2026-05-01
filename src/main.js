@@ -632,9 +632,78 @@ async function boot() {
         const rt = LAYER_ID_TO_REGION_TYPE[id]
         if (rt) setRegionTypeVisible(rt.region, rt.type, true)
       })
+      // 2026-05-01 (Adam: "find now bring into map proper position still
+      // doesn't engage the specific dungeon"). When the iframe was loaded
+      // with ?items=<name>, look up which POIs drop that item, force-enable
+      // their layers, highlight them, and fitBounds on the matches.
+      tryItemsHighlight()
     } catch (e) {
       console.error('[D4JSP Map] POI load failed:', e)
     }
+  }
+
+  // Read ?items=<name> from the iframe URL, find matching POIs by name
+  // (boss / dungeon / stronghold), highlight them, and pan/zoom.
+  async function tryItemsHighlight() {
+    let itemName
+    try {
+      const params = new URLSearchParams(window.location.search)
+      itemName = params.get('items')
+    } catch { return }
+    if (!itemName) return
+    console.log(`[D4JSP Map] ?items=${itemName} — looking up drop sources`)
+
+    // 1. Pull the item's drop sources from the trade core widget API
+    //    (already returns dropSources with rarity-aware defaults).
+    let sources = []
+    try {
+      const slug = String(itemName).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+      const r = await fetch(`https://trade.d4jsp.org/api/widget/item/${encodeURIComponent(slug)}`, { credentials: 'omit' })
+      if (r.ok) {
+        const d = await r.json()
+        sources = (d.dropSources || []).map(s => s.name).filter(Boolean)
+      }
+    } catch (e) {
+      console.warn('[D4JSP Map] item lookup failed:', e?.message || e)
+    }
+    if (sources.length === 0) {
+      console.log('[D4JSP Map] no drop sources for', itemName)
+      return
+    }
+
+    // 2. Force-enable the relevant POI layers (Bosses, Dungeons,
+    //    Strongholds, Ubers — anything that holds named encounters).
+    const layersToEnable = ['bosses', 'dungeons', 'strongholds', 'ubers']
+    for (const lid of layersToEnable) {
+      const item = document.querySelector(`.scroll-layer-item[data-layer-id="${lid}"]`)
+      if (item && !item.classList.contains('on')) item.click()
+    }
+
+    // 3. Find matching markers in allPOIs by case-insensitive name contains.
+    const target = sources.map(s => s.toLowerCase())
+    const matches = []
+    for (const p of allPOIs) {
+      const pname = String(p.name || '').toLowerCase()
+      if (target.some(t => pname.includes(t) || t.includes(pname))) {
+        matches.push(p)
+      }
+    }
+    console.log(`[D4JSP Map] matched ${matches.length} POIs of ${sources.length} drop sources`)
+    if (matches.length === 0) return
+
+    // 4. fitBounds on the matched markers, then open name tooltips for the
+    //    visible ones so the user sees them highlighted.
+    const latlngs = matches.filter(p => p.marker?.getLatLng).map(p => p.marker.getLatLng())
+    if (latlngs.length > 0) {
+      const bounds = L.latLngBounds(latlngs)
+      try { map.fitBounds(bounds, { padding: [80, 80], maxZoom: 4, animate: true }) } catch {}
+    }
+    setTimeout(() => {
+      for (const p of matches) {
+        try { p.marker?.openTooltip?.() } catch {}
+        try { p.marker?._icon?.classList?.add('d4-poi-highlight') } catch {}
+      }
+    }, 300)
   }
   // Toggle a (region, type) group on/off. Each tab now controls only
   // its own region's POIs.

@@ -442,6 +442,16 @@ html, body {
   pointer-events: auto;
   filter: drop-shadow(0 1px 2px rgba(0,0,0,0.85));
 }
+/* 2026-05-01: Find→items highlight ring on matching POIs. Pulses gold
+   so the user sees exactly where the requested item drops. */
+.d4-poi-highlight {
+  filter: drop-shadow(0 0 8px rgba(212,175,55,0.95)) drop-shadow(0 0 14px rgba(212,175,55,0.55)) !important;
+  animation: d4PoiPulse 1.6s ease-in-out infinite alternate;
+}
+@keyframes d4PoiPulse {
+  from { transform: scale(1.0); }
+  to   { transform: scale(1.18); }
+}
 .d4-poi img {
   display: block;
   pointer-events: auto;
