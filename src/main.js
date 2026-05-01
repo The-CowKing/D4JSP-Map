@@ -30,12 +30,10 @@ import _livingsteelData from './data/livingsteel.json'
 import _cellarsData     from './data/cellars.json'
 import _eventsData      from './data/events.json'
 
-// 2026-05-01 (Adam: "those files are right there.. all u gotta do is make
-// them not come from maxroll"). The 1365 tiles in /opt/d4jsp-map/dist/
-// tiles/Sanctuary/ ARE the unified maxroll pyramid that Adam just
-// confirmed loads correctly. Just switching the URL back to local —
-// the previous self-host worked, my changes elsewhere broke the visual.
-const TILE_BASE = './tiles/Sanctuary'
+// 2026-05-01: TEMP back to maxroll CDN — local Sanctuary tiles are
+// Sanctuary-only, not the unified pyramid. Scraping the full pyramid in
+// the background; once downloaded, flip back to local.
+const TILE_BASE = 'https://assets-ng.maxroll.gg/d4-tools/map6/webp'
 const TILE_MAX_NATIVE_ZOOM = 5
 const TILE_MAX_ZOOM = 7
 const TILE_PIXEL_SIZE = 256
@@ -99,8 +97,9 @@ map.setView(center, 1, { animate: false })
 // Leaflet z/x/y directory pyramid we serve from /map/tiles/Sanctuary/.
 const WorldTileLayer = L.TileLayer.extend({
   getTileUrl(coords) {
-    // Self-hosted tiles use {z}/{x}/{y}.webp directory tree.
-    return `${TILE_BASE}/${coords.z}/${coords.x}/${coords.y}.webp`
+    // Maxroll CDN flat filename format. Switching back to dir-tree once
+    // we self-host the FULL unified pyramid.
+    return `${TILE_BASE}/${coords.z}_${coords.x}_${coords.y}.webp`
   },
 })
 
