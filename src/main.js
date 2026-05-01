@@ -641,6 +641,10 @@ async function boot() {
             region: p.region || '',
             desc: p.desc || '',
             x: p.x, y: p.y,
+            // Y.34bh — required summoning materials per marker
+            // (boss-keys.json `keys` array). Modal renders these as icon
+            // chips with Buy/Find buttons.
+            keys: Array.isArray(p.keys) ? p.keys : null,
           },
         }, '*')
         return  // parent handles it; do NOT show the in-iframe modal
