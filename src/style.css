@@ -826,13 +826,13 @@ html, body {
   background-color: #080608;
   background-image: none;
 }
-/* Y.34ax: parchment-tan only on tile cells while loading, not on the whole
-   #map element. Means dark stays around the frame edge (Adam: black border)
-   but individual tile flashes blend with maxroll's empty-tile color. */
+/* 2026-05-01 (Adam: "the white shit" / "delete it"): the parchment-tan
+   tile background was bleeding past world bounds and showing as empty
+   matting next to loaded tiles. Switch to transparent so tile cells
+   show the underlying #map background (page bg #080608). Loading tiles
+   blend with the page; no parchment matting visible past world edges. */
 .leaflet-tile-pane .leaflet-tile {
-  background: #c5b78f;
-  /* Y.9 (Adam): kill any browser-side touch gestures so the map always
-     captures fingers — no page-scroll leakage even when fully zoomed out. */
+  background: transparent;
   touch-action: none;
 }
 
