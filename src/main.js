@@ -20,6 +20,16 @@ import { initLayers, dungeonsData, refreshBuildRotationLayers, setParentBuilds, 
 import { initSearch } from './search.js'
 import { initPlanner } from './planner.js'
 
+// Y.34bi — pre-Y.34 static data files (Helltide chests, Living Steel,
+// cellars, events). Adam: "we have the helltide and living steel we had
+// it on our first map". Bundled at build time. Each row has {x, y, name,
+// id} — we feed the x/y through the current worldToLatLng() so they line
+// up with the maxroll pyramid + everything else.
+import _chestsData      from './data/chests.json'
+import _livingsteelData from './data/livingsteel.json'
+import _cellarsData     from './data/cellars.json'
+import _eventsData      from './data/events.json'
+
 // --- Maxroll tile pyramid -----------------------------------------------
 // Verified live: assets-ng.maxroll.gg/d4-tools/map6/webp/{x}_{y}_{z}.webp
 // z=0 → 1 tile, z=5 → 32×32 = 1024 tiles, z=6 returns 404. Max native = 5.
@@ -363,6 +373,13 @@ async function boot() {
     altar:      { label: 'Altar of Lilith', size: 18, icon: 'altar_of_lilith.webp' },
     stronghold: { label: 'Stronghold',      size: 22, icon: 'stronghold.webp' },
     quest:      { label: 'Side Quest',      size: 18, icon: 'quest.webp' },
+    // Y.34bi — Helltide / Living Steel / Cellars / Events from the
+    // pre-Y.34 src/data/ JSON drops. Loaded into the same render pipeline
+    // as the maxroll markers via a static import (see loadAndRenderPOIs).
+    chest:        { label: 'Helltide Chest',  size: 16, icon: 'dungeon.webp' },
+    livingsteel:  { label: 'Living Steel',    size: 18, icon: 'dungeon.webp' },
+    cellar:       { label: 'Cellar',          size: 14, icon: 'dungeon.webp' },
+    event:        { label: 'Event',           size: 14, icon: 'quest.webp' },
     // Y.34bg (renamed from boss_key per Adam: "should be under ubers").
     // Covers BOTH the Uber boss arenas (Hanged Man's Hall, Darkened Way,
     // etc.) AND the Uber-key farm sources (Tree of Whispers, Pit Entrance,
@@ -471,7 +488,33 @@ async function boot() {
           if (Array.isArray(bk?.markers)) bossKeyMarkers = bk.markers
         } catch (_) { /* boss-keys is optional */ }
       }
-      const markers = baseMarkers.concat(bossKeyMarkers)
+      // Y.34bi — merge in the static src/data/ JSONs (Helltide chests,
+      // Living Steel, cellars, events). Each row is {x, y, name, id} —
+      // tag with the right type so POI_TYPES picks the right icon and
+      // the Sanctuary tab toggle wires up. We strip the `</br>...`
+      // descriptive HTML from the name and pull it into `desc` so the
+      // tooltip stays compact.
+      const _splitName = (raw) => {
+        const s = String(raw || '')
+        const i = s.indexOf('</br>')
+        if (i < 0) return { name: s, desc: '' }
+        return { name: s.slice(0, i), desc: s.slice(i + 5).replace(/<\/?br\s*\/?>(?:\s*)/gi, ' • ') }
+      }
+      const _tag = (rows, type) => (rows || []).map(r => {
+        const { name, desc } = _splitName(r.name)
+        return { ...r, type, name, desc }
+      })
+      const helltideMarkers     = _tag(_chestsData,      'chest')
+      const livingsteelMarkers  = _tag(_livingsteelData, 'livingsteel')
+      const cellarMarkers       = _tag(_cellarsData,     'cellar')
+      const eventMarkers        = _tag(_eventsData,      'event')
+
+      const markers = baseMarkers
+        .concat(bossKeyMarkers)
+        .concat(helltideMarkers)
+        .concat(livingsteelMarkers)
+        .concat(cellarMarkers)
+        .concat(eventMarkers)
       buildPoiTransform(markers)
       const seen = new Set()
       for (const m of markers) {
