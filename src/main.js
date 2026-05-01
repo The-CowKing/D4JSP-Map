@@ -553,10 +553,24 @@ async function boot() {
           interactive: true,
         })
         marker._poiData = { ...m, region }
-        // Y.34ba: tap marker → tooltip shows the name. Then a tap on the
-        // name fires the document-level multi-event handler at the top of
-        // this scope (click / touchend / pointerup) and opens the modal.
-        marker.on('click', function() { this.openTooltip() })
+        // Y.34bj (2026-05-01) — PC: single click → modal directly (hover
+        // already shows the name tooltip). Mobile: two-step (tap marker →
+        // gold name appears → tap name → modal). Adam: "on pc map should
+        // open modal single click on marker because mouse over shows name..
+        // mobile works great". Detect hover capability via matchMedia.
+        marker.on('click', function() {
+          const hoverCapable = (typeof window !== 'undefined' && window.matchMedia
+            && window.matchMedia('(hover: hover) and (pointer: fine)').matches);
+          if (hoverCapable) {
+            // Desktop — straight to modal.
+            openPoiInfoModal(marker._poiData);
+          } else {
+            // Mobile/touch — show the gold name tip first; the tap on the
+            // name fires the document-level multi-event handler that opens
+            // the modal.
+            this.openTooltip();
+          }
+        })
         marker.on('tooltipopen', (ev) => {
           const tipEl = ev.tooltip.getElement()
           if (tipEl) _poiTipDataByEl.set(tipEl, marker._poiData)
