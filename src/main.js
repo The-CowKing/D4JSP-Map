@@ -399,6 +399,32 @@ async function boot() {
   const poiGroups = {}
   let poisLoaded = false
   function poiKey(region, type) { return region + '_' + type }
+
+  // Y.34ay (2026-04-30): mobile-safe POI-name click → modal.
+  //
+  // Old approach (Y.34av) attached a click listener to the tooltip element
+  // inside `tooltipopen`. On mobile that races with Leaflet's map tap
+  // handler — the tap on the gold "FORGE OF MALICE" text often gets
+  // swallowed by the map (which closes the tooltip) before the tooltip's
+  // own listener can fire openPoiInfoModal. Result: tap name → tooltip
+  // disappears, modal never opens.
+  //
+  // New approach: store the marker's POI data in a WeakMap keyed by the
+  // tooltip DOM element each time it opens, and delegate ONE document-level
+  // click handler at capture phase. Capture phase fires before any
+  // bubble-phase Leaflet handler can eat the event, so we can stopPropagation
+  // and reliably open the modal.
+  const _poiTipDataByEl = new WeakMap()
+  document.addEventListener('click', (e) => {
+    const tipEl = e.target.closest && e.target.closest('.d4-poi-name-tip')
+    if (!tipEl) return
+    const data = _poiTipDataByEl.get(tipEl)
+    if (!data) return
+    e.stopPropagation()
+    e.preventDefault()
+    openPoiInfoModal(data)
+  }, true)
+
   async function loadAndRenderPOIs() {
     try {
       const res = await fetch('./maxroll-map.json')
@@ -444,14 +470,13 @@ async function boot() {
         })
         marker._poiData = { ...m, region }
         marker.on('click', function() { this.openTooltip() })
+        // Y.34ay: store POI data on the tooltip element so the delegated
+        // capture-phase handler at the top of this scope can open the modal
+        // when the user taps the gold name. See the WeakMap declaration up
+        // above for why we do this instead of the old per-tooltip listener.
         marker.on('tooltipopen', (ev) => {
           const tipEl = ev.tooltip.getElement()
-          if (!tipEl || tipEl._poiBound) return
-          tipEl._poiBound = true
-          tipEl.addEventListener('click', (e) => {
-            e.stopPropagation()
-            openPoiInfoModal(marker._poiData)
-          })
+          if (tipEl) _poiTipDataByEl.set(tipEl, marker._poiData)
         })
         poiGroups[key].addLayer(marker)
       }
