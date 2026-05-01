@@ -33,7 +33,9 @@ import _eventsData      from './data/events.json'
 // 2026-05-01: full unified pyramid (1365 tiles) freshly scraped from
 // maxroll into /opt/d4jsp-map/dist/tiles/Sanctuary/{z}/{x}/{y}.webp.
 // No more maxroll URL leak.
-const TILE_BASE = './tiles/Sanctuary'
+// 2026-05-01: stay on maxroll CDN for now — local tiles are Sanctuary-only
+// while maxroll's URL serves the unified multi-region pyramid Adam wants.
+const TILE_BASE = 'https://assets-ng.maxroll.gg/d4-tools/map6/webp'
 const TILE_MAX_NATIVE_ZOOM = 5
 const TILE_MAX_ZOOM = 7
 const TILE_PIXEL_SIZE = 256
@@ -97,7 +99,7 @@ map.setView(center, 1, { animate: false })
 // Leaflet z/x/y directory pyramid we serve from /map/tiles/Sanctuary/.
 const WorldTileLayer = L.TileLayer.extend({
   getTileUrl(coords) {
-    return `${TILE_BASE}/${coords.z}/${coords.x}/${coords.y}.webp`
+    return `${TILE_BASE}/${coords.z}_${coords.x}_${coords.y}.webp`
   },
 })
 
