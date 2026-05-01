@@ -573,8 +573,34 @@ async function boot() {
   const poiModalLoot  = document.getElementById('poi-info-loot')
   const poiModalClose = document.getElementById('poi-info-close')
   function openPoiInfoModal(p) {
-    if (!poiModal || !p) return
+    if (!p) return
     const cfg = POI_TYPES[p.type] || { label: p.type }
+
+    // Y.34bb (2026-05-01): when running inside an iframe, post the dungeon
+    // info to the parent so it can open a FULL-SCREEN modal in the trade
+    // core's chrome (matching the rest of the site). Drops are fetched
+    // there. Adam: "modal could take over entire screen instead of being
+    // inside the map ... only thing is there is multiple drops per dungeon
+    // so it would take alotnof tooltips do on the map part it should just
+    // be the dungeon items names not full tooltips until they are clicked".
+    try {
+      if (typeof window !== 'undefined' && window.parent && window.parent !== window) {
+        window.parent.postMessage({
+          type: 'd4jsp:open-poi-info',
+          poi: {
+            name: p.name || cfg.label,
+            type: p.type,
+            typeLabel: cfg.label,
+            region: p.region || '',
+            desc: p.desc || '',
+            x: p.x, y: p.y,
+          },
+        }, '*')
+        return  // parent handles it; do NOT show the in-iframe modal
+      }
+    } catch (_) { /* fall through to in-iframe modal if postMessage fails */ }
+
+    if (!poiModal) return
     poiModalType.textContent = cfg.label
     poiModalName.textContent = p.name || cfg.label
     poiModalRegion.textContent = p.region || ''
