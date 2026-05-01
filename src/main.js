@@ -180,15 +180,32 @@ if (brandFrameOverlay._image) {
 // width. Top/bottom of the frame may bleed slightly past the shell on
 // portrait mobile (Adam's OK with that on mobile). PC will be tuned
 // later with a width clamp.
-const containerSize = map.getSize()
-const viewportW = containerSize.x || 360 // fallback if container not laid out yet
-const frameNativeW = NATIVE_WIDTH * (1 + 2 * FRAME_OUTSET_X)
-const zoomToFitWidth = TILE_MAX_NATIVE_ZOOM - Math.log2(frameNativeW / viewportW)
-// Y.34ax (Adam: "shouldnt let it zoom out past frame touching screen
-// edge on mobile either"): pin minZoom to the frame-fit zoom so users
-// can't pinch out past the brand frame and see the dark page behind.
-map.options.minZoom = zoomToFitWidth
-map.setView(center, zoomToFitWidth, { animate: false })
+function fitFrameToViewport(animate = false) {
+  const sz = map.getSize()
+  const viewportW = sz.x || 360
+  const frameNativeWPx = NATIVE_WIDTH * (1 + 2 * FRAME_OUTSET_X)
+  const z = TILE_MAX_NATIVE_ZOOM - Math.log2(frameNativeWPx / viewportW)
+  // Y.34ax: pin minZoom to the frame-fit zoom so users can't pinch out
+  // past the brand frame and see the dark page behind.
+  map.options.minZoom = z
+  map.setView(center, z, { animate })
+}
+fitFrameToViewport(false)
+
+// 2026-05-01 (Adam: "maps still fucked" — iframe with aspect-ratio:1/1 lays
+// out AFTER leaflet inits, so the initial getSize() returns a size that
+// doesn't match the final iframe dimensions. The map locks in to that
+// stale viewport and the world tiles render too small relative to the
+// iframe. Re-fit on every resize so the frame always matches the iframe.
+const ro = new ResizeObserver(() => {
+  map.invalidateSize()
+  fitFrameToViewport(false)
+})
+ro.observe(document.getElementById('map'))
+window.addEventListener('resize', () => {
+  map.invalidateSize()
+  fitFrameToViewport(false)
+})
 
 L.control.zoom({ position: 'bottomright' }).addTo(map)
 
