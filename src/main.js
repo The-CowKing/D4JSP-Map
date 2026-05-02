@@ -361,7 +361,141 @@ async function boot() {
       const id = btn.dataset.tab
       tabButtons.forEach(b => b.classList.toggle('active', b === btn))
       tabContents.forEach(c => c.classList.toggle('hidden', c.id !== `tab-${id}`))
+      // When Items or Builds tab is clicked, refresh their content
+      if (id === 'items') renderItemsTab()
+      if (id === 'builds') renderBuildsTab()
     })
+  })
+
+  // 2026-05-02 — Items tab: render list from localStorage
+  function renderItemsTab() {
+    const itemsListEl = document.getElementById('items-list')
+    if (!itemsListEl) return
+    try {
+      const raw = localStorage.getItem('d4jsp_map_items')
+      const items = raw ? JSON.parse(raw) : []
+      if (items.length === 0) {
+        itemsListEl.innerHTML = '<div class="scroll-empty">Add items with FIND to see them here</div>'
+        return
+      }
+      itemsListEl.innerHTML = items.map(item => `
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; margin-bottom: 4px; background: rgba(212,175,55,0.04); border-left: 2px solid #D4AF37; cursor: pointer;">
+          <span style="flex: 1; font-size: 12px; color: rgba(255,255,255,0.85);">${item.name}</span>
+          <button class="items-tab-remove" data-slug="${item.slug}" style="background: none; border: none; color: #D4AF37; cursor: pointer; font-size: 14px; padding: 2px 6px;">✕</button>
+        </div>
+      `).join('')
+      // Add click handlers for item rows and remove buttons
+      itemsListEl.querySelectorAll('[style*="display: flex"]').forEach((row, idx) => {
+        row.addEventListener('click', (e) => {
+          if (e.target.className !== 'items-tab-remove') {
+            // Click on item row → highlight it
+            const item = items[idx]
+            if (item) tryItemsHighlight()  // Will re-read from URL or we need to pass it
+          }
+        })
+      })
+      itemsListEl.querySelectorAll('.items-tab-remove').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation()
+          const slug = btn.dataset.slug
+          try {
+            const raw = localStorage.getItem('d4jsp_map_items')
+            const list = raw ? JSON.parse(raw) : []
+            const filtered = list.filter(x => x.slug !== slug && x.name !== slug)
+            localStorage.setItem('d4jsp_map_items', JSON.stringify(filtered))
+            // Clear isolation if this item was active
+            if (activeIsolation?.kind === 'items' && activeIsolation?.value === slug) {
+              clearIsolation()
+              for (const p of allPOIs) {
+                if (!p?.marker) continue
+                try { p.marker.setOpacity(1) } catch {}
+                if (p.marker._icon) p.marker._icon.style.pointerEvents = ''
+                const tt = p.marker.getTooltip?.()
+                if (tt && tt._container) tt._container.style.display = ''
+              }
+            }
+            renderItemsTab()
+          } catch (e) {
+            console.error('[Items tab] remove error:', e)
+          }
+        })
+      })
+    } catch (e) {
+      console.error('[Items tab] render error:', e)
+      itemsListEl.innerHTML = '<div class="scroll-empty">Error loading items</div>'
+    }
+  }
+
+  // 2026-05-02 — Builds tab: fetch from parent API + render mini-tabs per build
+  async function renderBuildsTab() {
+    const buildsListEl = document.getElementById('builds-list')
+    if (!buildsListEl) return
+    try {
+      const response = await fetch('/api/builder/list-builds', {
+        credentials: 'include',
+      })
+      if (!response.ok) {
+        buildsListEl.innerHTML = '<div class="scroll-empty">Log in to view builds</div>'
+        return
+      }
+      const { builds } = await response.json()
+      if (!builds || builds.length === 0) {
+        buildsListEl.innerHTML = '<div class="scroll-empty">No saved builds<br/>Add one from the Builder</div>'
+        return
+      }
+      buildsListEl.innerHTML = builds.map(b => `
+        <div style="margin-bottom: 8px; padding: 8px; background: rgba(212,175,55,0.04); border-left: 2px solid #D4AF37;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <span style="font-size: 12px; font-weight: 600; color: #D4AF37;">${b.name}</span>
+            <button class="builds-tab-delete" data-id="${b.id}" style="background: none; border: none; color: #D4AF37; cursor: pointer; font-size: 12px;">✕</button>
+          </div>
+          <button class="builds-tab-show-all" data-id="${b.id}" style="width: 100%; padding: 4px; background: rgba(212,175,55,0.1); border: 1px solid #D4AF37; color: #D4AF37; font-size: 10px; cursor: pointer;">Show all dungeons for this build</button>
+        </div>
+      `).join('')
+      // Add event handlers
+      buildsListEl.querySelectorAll('.builds-tab-show-all').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const buildId = btn.dataset.id
+          const build = builds.find(b => b.id === buildId)
+          if (!build) return
+          // For now, just enable dungeons layer. Future: match specific items to POIs
+          const dungeonsToggle = document.querySelector('.scroll-layer-item[data-layer-id="dungeons"]')
+          if (dungeonsToggle && !dungeonsToggle.classList.contains('on')) {
+            dungeonsToggle.click()
+          }
+        })
+      })
+      buildsListEl.querySelectorAll('.builds-tab-delete').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const buildId = btn.dataset.id
+          try {
+            const r = await fetch(`/api/builder/delete-build?id=${buildId}`, {
+              method: 'DELETE',
+              credentials: 'include',
+            })
+            if (r.ok) {
+              renderBuildsTab()
+            }
+          } catch (e) {
+            console.error('[Builds tab] delete error:', e)
+          }
+        })
+      })
+    } catch (e) {
+      console.error('[Builds tab] render error:', e)
+      buildsListEl.innerHTML = '<div class="scroll-empty">Error loading builds</div>'
+    }
+  }
+
+  // Listen for postMessage from parent to refresh tabs
+  const origMessageHandler = window.onmessage
+  window.addEventListener('message', (e) => {
+    if (e.data?.type === 'd4jsp:items-list-changed') {
+      renderItemsTab()
+    }
+    if (e.data?.type === 'd4jsp:add-build-to-map') {
+      renderBuildsTab()
+    }
   })
 
   // ── Y.34p: POI loading + rendering ──────────────────────────
@@ -474,6 +608,11 @@ async function boot() {
   let focusDungeonName = null
   const hiddenDungeonMarkers = []  // markers temporarily hidden by focus mode
   let focusResetControl = null     // Leaflet control instance ("Show all dungeons")
+  
+  // 2026-05-02 — isolation persistence. When the user clicks FIND (items tab)
+  // or enters focus_dungeon mode, we store the isolation state here. It survives
+  // POI re-renders and modal opens/closes. Re-apply on every POI operation.
+  let activeIsolation = null  // { kind: 'items'|'focus_dungeon', value: string|string[], hiddenMarkers: [...] }
   function poiKey(region, type) { return region + '_' + type }
 
   // Y.34ba (2026-05-01): two-step name → modal that ACTUALLY works on mobile.
@@ -658,6 +797,8 @@ async function boot() {
         const rt = LAYER_ID_TO_REGION_TYPE[id]
         if (rt) setRegionTypeVisible(rt.region, rt.type, true)
       })
+      // 2026-05-02: re-apply isolation state after POI render completes
+      setTimeout(reapplyIsolation, 50)
       // 2026-05-01 (Adam: "find now bring into map proper position still
       // doesn't engage the specific dungeon"). When the iframe was loaded
       // with ?items=<name>, look up which POIs drop that item, force-enable
@@ -825,6 +966,7 @@ async function boot() {
     // matches, leaving only the matched markers visible. Reset on the topright
     // "Show all" reset control if it exists.
     const matchSet = new Set(matches)
+    const hiddenMarkersForIsolation = []  // Track hidden markers for persistence
     setTimeout(() => {
       for (const p of allPOIs) {
         if (!p?.marker) continue
@@ -838,12 +980,15 @@ async function boot() {
           if (tt && tt._container) tt._container.style.display = ''
         } else {
           // Hide non-matched markers — only on currently-loaded layers
+          hiddenMarkersForIsolation.push(p.marker)
           try { p.marker.setOpacity(0) } catch {}
           if (p.marker._icon) p.marker._icon.style.pointerEvents = 'none'
           const tt = p.marker.getTooltip?.()
           if (tt && tt._container) tt._container.style.display = 'none'
         }
       }
+      // Store isolation state for re-application after POI re-renders
+      activeIsolation = { kind: 'items', value: itemName, hiddenMarkers: hiddenMarkersForIsolation }
       // Add a topright "✕ Show all" control to exit isolation without reload
       if (!window.__itemsIsolationResetCtl) {
         const ctl = L.control({ position: 'topright' })
@@ -870,6 +1015,7 @@ async function boot() {
             }
             try { ctl.remove() } catch {}
             window.__itemsIsolationResetCtl = null
+            activeIsolation = null  // Clear isolation state
           })
           return div
         }
@@ -994,6 +1140,8 @@ async function boot() {
         if (tt) tt.style.display = 'none'
         hiddenDungeonMarkers.push(m)
       }
+      // Store isolation state for persistence across re-renders
+      activeIsolation = { kind: 'focus_dungeon', value: name, hiddenMarkers: hiddenDungeonMarkers.slice() }
     }
     requestAnimationFrame(() => requestAnimationFrame(applyHide))
     // 4. Pan/zoom to the matched marker.
@@ -1040,7 +1188,40 @@ async function boot() {
     }
     hiddenDungeonMarkers.length = 0
     hideFocusResetControl()
+    activeIsolation = null  // Clear isolation state
   }
+  
+  // 2026-05-02 — re-apply isolation state after POI re-renders
+  function reapplyIsolation() {
+    if (!activeIsolation) return
+    const { kind, hiddenMarkers } = activeIsolation
+    if (!hiddenMarkers) return
+    for (const m of hiddenMarkers) {
+      if (!m) continue
+      try { m.setOpacity?.(0) } catch (_) {}
+      const ic = m._icon
+      if (ic) ic.style.pointerEvents = 'none'
+      const tt = m._tooltip && m._tooltip._container
+      if (tt) tt.style.display = 'none'
+    }
+  }
+  
+  function clearIsolation() {
+    if (!activeIsolation) return
+    const { hiddenMarkers } = activeIsolation
+    if (hiddenMarkers) {
+      for (const m of hiddenMarkers) {
+        if (!m) continue
+        try { m.setOpacity?.(1) } catch (_) {}
+        const ic = m._icon
+        if (ic) ic.style.pointerEvents = ''
+        const tt = m._tooltip && m._tooltip._container
+        if (tt) tt.style.display = ''
+      }
+    }
+    activeIsolation = null
+  }
+  
   // URL-driven entry: on initial load (or after loadAndRenderPOIs lands),
   // if ?focus_dungeon=<name> is present, apply it.
   function tryFocusDungeon() {
