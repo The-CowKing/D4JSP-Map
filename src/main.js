@@ -687,23 +687,45 @@ async function boot() {
     //    Rakanoth's Wake → boss Rakanoth, Andariel's Visage → Andariel).
     //    If the API returns generic layer labels like "Tormented Bosses",
     //    we tokenise the ITEM name and try to match POIs by those tokens.
-    const target = sources.map(s => s.toLowerCase())
-    // Item-name tokens: split on apostrophes/spaces, drop short stop words.
-    const STOP = new Set(['the','of','a','an','and','wake','visage','will','crest','might','grandfather','talisman','ring','skies','starless'])
+    // Adam 2026-05-02: "I hit find for harlequin crest and all markers
+    // activated". The previous matcher used bidirectional includes
+    // (pname.includes(t) || t.includes(pname)) which lit up every short-
+    // named POI ("Pit", "Cellar", "Spire") because those substrings appear
+    // inside almost any source token. Tightened to one-way contains, with
+    // a minimum target length so single-letter / 2-char artifacts can't
+    // match anything. Empty / overly-generic sources also bail out.
+    const STOP = new Set([
+      'the','of','a','an','and','at','in','on','by','to','from','with',
+      'sanctuary','dungeon','dungeons','boss','bosses','altar','altars',
+      'stronghold','strongholds','region','tier','tormented','uber',
+      'wake','visage','will','crest','might','grandfather','talisman',
+      'ring','skies','starless','crown','blade','shield','plate','helm',
+    ])
+    const target = sources
+      .map(s => String(s || '').toLowerCase().trim())
+      .filter(s => s.length >= 4)
     const itemTokens = String(itemName)
       .toLowerCase()
       .split(/[\s'']+/)
       .map(t => t.replace(/[^a-z]/g, ''))
-      .filter(t => t.length > 3 && !STOP.has(t))
-    const allTargets = [...target, ...itemTokens]
+      .filter(t => t.length >= 5 && !STOP.has(t))
+    const allTargets = [...target, ...itemTokens].filter(t => t.length >= 4)
+    if (allTargets.length === 0) {
+      console.log('[D4JSP Map] no usable target tokens — skipping highlight')
+      return
+    }
     const matches = []
     for (const p of allPOIs) {
-      const pname = String(p.name || '').toLowerCase()
-      if (allTargets.some(t => t && (pname.includes(t) || t.includes(pname)))) {
+      const pname = String(p.name || '').toLowerCase().trim()
+      if (pname.length < 3) continue
+      // One-way contains only: POI name must contain a target token.
+      // The reverse (target contains pname) was the bug — caused short
+      // POI names to match every long target token.
+      if (allTargets.some(t => pname.includes(t))) {
         matches.push(p)
       }
     }
-    console.log(`[D4JSP Map] matched ${matches.length} POIs (sources=${sources.length} tokens=${itemTokens.length}: ${itemTokens.join(',')})`)
+    console.log(`[D4JSP Map] matched ${matches.length} POIs (sources=${target.length} tokens=${itemTokens.length}: ${itemTokens.join(',')})`)
     if (matches.length === 0) return
 
     // 4. fitBounds on the matched markers, then open name tooltips for the
