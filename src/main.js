@@ -409,9 +409,16 @@ async function boot() {
               for (const p of allPOIs) {
                 if (!p?.marker) continue
                 try { p.marker.setOpacity(1) } catch {}
+                try { p.marker._icon?.classList?.remove('d4-poi-highlight') } catch {}
                 if (p.marker._icon) p.marker._icon.style.pointerEvents = ''
                 const tt = p.marker.getTooltip?.()
                 if (tt && tt._container) tt._container.style.display = ''
+              }
+              // Also drop the topright "✕ Show all" reset control so it
+              // doesn't linger after the active item is removed.
+              if (window.__itemsIsolationResetCtl) {
+                try { window.__itemsIsolationResetCtl.remove() } catch {}
+                window.__itemsIsolationResetCtl = null
               }
             }
             renderItemsTab()
@@ -924,33 +931,34 @@ async function boot() {
           '*'
         )
       } catch {}
-      // Force-enable Dungeons + Events layers if we had ANY drop sources from
-      // the API (i.e., we know the item drops, just couldn't pin specific POIs).
-      if (sources.length > 0) {
-        for (const lid of ['dungeons', 'events']) {
-          const item = document.querySelector(`.scroll-layer-item[data-layer-id="${lid}"]`)
-          if (item && !item.classList.contains('on')) item.click()
-        }
-      }
+      // 2026-05-02 (Adam P0): Items must be INDEPENDENT of Layers — FIND
+      // never auto-toggles layer checkboxes. No-match → notify parent and
+      // bail. The Items tab list is reserved for *successful* finds only,
+      // so we don't add the item here either.
       return
     }
 
-    // 4. NOW (only after we have matches) force-enable the layers that those
-    //    matched POIs belong to. Avoids the previous "all POIs lit up" bug
-    //    where layers got enabled regardless of match count.
-    const matchedLayerIds = new Set(
-      matches.map(m => m.layerId || m.layer || m.layer_id).filter(Boolean)
-    )
-    // Fallback: if matches don't carry a layerId, enable the standard
-    // encounter layers — better than zero so the markers actually render.
-    const layersToEnable = matchedLayerIds.size > 0
-      ? Array.from(matchedLayerIds)
-      : ['bosses', 'dungeons', 'strongholds', 'ubers']
-    for (const lid of layersToEnable) {
-      const item = document.querySelector(`.scroll-layer-item[data-layer-id="${lid}"]`)
-      if (item && !item.classList.contains('on')) item.click()
+    // 4. 2026-05-02 (Adam P0): Items are INDEPENDENT of Layers. Persist the
+    //    searched item to the Items tab list (localStorage), and DO NOT
+    //    auto-toggle layer checkboxes — isolation acts on whatever markers
+    //    are currently visible. The X-to-remove button on each Items row
+    //    clears that item from this list and exits isolation.
+    try {
+      const slug = String(itemName).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+      const raw = localStorage.getItem('d4jsp_map_items')
+      const list = raw ? JSON.parse(raw) : []
+      if (!list.some(x => x.slug === slug || x.name === itemName)) {
+        list.push({ name: itemName, slug })
+        localStorage.setItem('d4jsp_map_items', JSON.stringify(list))
+      }
+      if (typeof renderItemsTab === 'function') renderItemsTab()
+      // Notify parent in case it mirrors the items list outside the iframe.
+      try { window.parent?.postMessage({ type: 'd4jsp:items-list-changed' }, '*') } catch {}
+    } catch (e) {
+      console.error('[D4JSP Map] Items tab persist error:', e)
     }
-    // Wait two animation frames for the click handler to populate markers.
+    // Wait two animation frames so any in-flight DOM work settles before
+    // we read marker state for fitBounds / isolation.
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)))
 
     // 5. fitBounds on the matched markers, then open name tooltips for the
