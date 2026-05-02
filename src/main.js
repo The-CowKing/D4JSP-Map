@@ -709,13 +709,18 @@ async function boot() {
       return
     }
 
-    // 2. Force-enable the relevant POI layers (Bosses, Dungeons,
-    //    Strongholds, Ubers — anything that holds named encounters).
-    const layersToEnable = ['bosses', 'dungeons', 'strongholds', 'ubers']
-    for (const lid of layersToEnable) {
-      const item = document.querySelector(`.scroll-layer-item[data-layer-id="${lid}"]`)
-      if (item && !item.classList.contains('on')) item.click()
-    }
+    // Adam 2026-05-02 round 4: "tried to find this item.. it's still popping
+    // all pois instead of specific drop locations". Root cause was the
+    // OLD ordering — we force-enabled Bosses + Dungeons + Strongholds + Ubers
+    // BEFORE checking whether we had any matches. When the matcher came up
+    // empty (e.g. Fists of Fate has no POI named "fists" or "fate"), every
+    // marker from every just-enabled layer was on the map with NO highlight,
+    // visually identical to "all POIs lit up".
+    //
+    // New ordering: match FIRST against allPOIs (which is populated regardless
+    // of layer-toggle state), only enable the layers that actually contain
+    // matched POIs, and bail with a clean console message if nothing matches.
+    // No layers get unnecessarily toggled on for a failed search.
 
     // 3. Find matching markers in allPOIs.
     //    Strategy: try drop sources first; fall back to item name tokens.
@@ -762,9 +767,38 @@ async function boot() {
       }
     }
     console.log(`[D4JSP Map] matched ${matches.length} POIs (sources=${target.length} tokens=${itemTokens.length}: ${itemTokens.join(',')})`)
-    if (matches.length === 0) return
+    if (matches.length === 0) {
+      // Notify parent (trade app) so it can show a toast. Don't enable any
+      // layers — keep the map in its current state instead of lighting up
+      // every dungeon/boss/stronghold for a search that returned nothing.
+      try {
+        window.parent?.postMessage(
+          { type: 'd4jsp:items-no-match', itemName, sources: target, tokens: itemTokens },
+          '*'
+        )
+      } catch {}
+      return
+    }
 
-    // 4. fitBounds on the matched markers, then open name tooltips for the
+    // 4. NOW (only after we have matches) force-enable the layers that those
+    //    matched POIs belong to. Avoids the previous "all POIs lit up" bug
+    //    where layers got enabled regardless of match count.
+    const matchedLayerIds = new Set(
+      matches.map(m => m.layerId || m.layer || m.layer_id).filter(Boolean)
+    )
+    // Fallback: if matches don't carry a layerId, enable the standard
+    // encounter layers — better than zero so the markers actually render.
+    const layersToEnable = matchedLayerIds.size > 0
+      ? Array.from(matchedLayerIds)
+      : ['bosses', 'dungeons', 'strongholds', 'ubers']
+    for (const lid of layersToEnable) {
+      const item = document.querySelector(`.scroll-layer-item[data-layer-id="${lid}"]`)
+      if (item && !item.classList.contains('on')) item.click()
+    }
+    // Wait two animation frames for the click handler to populate markers.
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)))
+
+    // 5. fitBounds on the matched markers, then open name tooltips for the
     //    visible ones so the user sees them highlighted.
     const latlngs = matches.filter(p => p.marker?.getLatLng).map(p => p.marker.getLatLng())
     if (latlngs.length > 0) {
