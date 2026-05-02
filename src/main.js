@@ -367,7 +367,10 @@ async function boot() {
     })
   })
 
-  // 2026-05-02 — Items tab: render list from localStorage
+  // 2026-05-02 — Items tab: list rendered from localStorage `d4jsp_map_items`.
+  // No isolation. Click row → applyItemHighlight() (idempotent re-apply).
+  // Click ✕   → clearItemHighlight() (only that source's highlights drop;
+  //              other items + builds keep their highlights).
   function renderItemsTab() {
     const itemsListEl = document.getElementById('items-list')
     if (!itemsListEl) return
@@ -379,19 +382,16 @@ async function boot() {
         return
       }
       itemsListEl.innerHTML = items.map(item => `
-        <div class="items-tab-row" data-item-name="${item.name}" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; margin-bottom: 4px; background: rgba(212,175,55,0.04); border-left: 2px solid #D4AF37; cursor: pointer;">
-          <span style="flex: 1; font-size: 12px; color: rgba(255,255,255,0.85);">${item.name}</span>
-          <button class="items-tab-remove" data-slug="${item.slug}" style="background: none; border: none; color: #D4AF37; cursor: pointer; font-size: 14px; padding: 2px 6px;">✕</button>
+        <div class="items-tab-row" data-item-name="${escapeHtml(item.name)}" data-slug="${escapeHtml(item.slug)}" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; margin-bottom: 4px; background: rgba(212,175,55,0.04); border-left: 2px solid #D4AF37; cursor: pointer;">
+          <span style="flex: 1; font-size: 12px; color: rgba(255,255,255,0.85);">${escapeHtml(item.name)}</span>
+          <button class="items-tab-remove" data-slug="${escapeHtml(item.slug)}" style="background: none; border: none; color: #D4AF37; cursor: pointer; font-size: 14px; padding: 2px 6px;">✕</button>
         </div>
       `).join('')
-      // Add click handlers for item rows and remove buttons
       itemsListEl.querySelectorAll('.items-tab-row').forEach((row) => {
         row.addEventListener('click', (e) => {
-          if (e.target.className !== 'items-tab-remove') {
-            // Click on item row → highlight it
-            const itemName = row.dataset.itemName
-            if (itemName) tryItemsHighlight(itemName)
-          }
+          if (e.target.classList && e.target.classList.contains('items-tab-remove')) return
+          const itemName = row.dataset.itemName
+          if (itemName) applyItemHighlight(itemName, { fitBounds: true })
         })
       })
       itemsListEl.querySelectorAll('.items-tab-remove').forEach(btn => {
@@ -401,26 +401,9 @@ async function boot() {
           try {
             const raw = localStorage.getItem('d4jsp_map_items')
             const list = raw ? JSON.parse(raw) : []
-            const filtered = list.filter(x => x.slug !== slug && x.name !== slug)
+            const filtered = list.filter(x => x.slug !== slug)
             localStorage.setItem('d4jsp_map_items', JSON.stringify(filtered))
-            // Clear isolation if this item was active
-            if (activeIsolation?.kind === 'items' && (activeIsolation?.value === slug || activeIsolation?.value?.toLowerCase().replace(/[^a-z0-9]+/g, '-') === slug)) {
-              clearIsolation()
-              for (const p of allPOIs) {
-                if (!p?.marker) continue
-                try { p.marker.setOpacity(1) } catch {}
-                try { p.marker._icon?.classList?.remove('d4-poi-highlight') } catch {}
-                if (p.marker._icon) p.marker._icon.style.pointerEvents = ''
-                const tt = p.marker.getTooltip?.()
-                if (tt && tt._container) tt._container.style.display = ''
-              }
-              // Also drop the topright "✕ Show all" reset control so it
-              // doesn't linger after the active item is removed.
-              if (window.__itemsIsolationResetCtl) {
-                try { window.__itemsIsolationResetCtl.remove() } catch {}
-                window.__itemsIsolationResetCtl = null
-              }
-            }
+            clearItemHighlight(slug)
             renderItemsTab()
           } catch (e) {
             console.error('[Items tab] remove error:', e)
@@ -433,58 +416,50 @@ async function boot() {
     }
   }
 
-  // 2026-05-02 — Builds tab: fetch from parent API + render mini-tabs per build
-  async function renderBuildsTab() {
+  // 2026-05-02 — Builds tab: list rendered from localStorage `d4jsp_map_builds`.
+  // Each entry persists as { slug, name, items: [<item names>] } so the
+  // map can re-apply the build's highlights on reload without re-fetching.
+  // Click row → applyBuildHighlight (highlights every drop POI for every
+  // item in the build). Click ✕ → clearBuildHighlight + drop from list.
+  // Layer checkboxes are NEVER touched here — same rule as the Items tab.
+  function renderBuildsTab() {
     const buildsListEl = document.getElementById('builds-list')
     if (!buildsListEl) return
     try {
-      const response = await fetch('/api/builder/list-builds', {
-        credentials: 'include',
-      })
-      if (!response.ok) {
-        buildsListEl.innerHTML = '<div class="scroll-empty">Log in to view builds</div>'
-        return
-      }
-      const { builds } = await response.json()
-      if (!builds || builds.length === 0) {
-        buildsListEl.innerHTML = '<div class="scroll-empty">No saved builds<br/>Add one from the Builder</div>'
+      const raw = localStorage.getItem('d4jsp_map_builds')
+      const builds = raw ? JSON.parse(raw) : []
+      if (builds.length === 0) {
+        buildsListEl.innerHTML = '<div class="scroll-empty">Add a build with FIND from the Builder<br/>to see it here</div>'
         return
       }
       buildsListEl.innerHTML = builds.map(b => `
-        <div style="margin-bottom: 8px; padding: 8px; background: rgba(212,175,55,0.04); border-left: 2px solid #D4AF37;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <span style="font-size: 12px; font-weight: 600; color: #D4AF37;">${b.name}</span>
-            <button class="builds-tab-delete" data-id="${b.id}" style="background: none; border: none; color: #D4AF37; cursor: pointer; font-size: 12px;">✕</button>
-          </div>
-          <button class="builds-tab-show-all" data-id="${b.id}" style="width: 100%; padding: 4px; background: rgba(212,175,55,0.1); border: 1px solid #D4AF37; color: #D4AF37; font-size: 10px; cursor: pointer;">Show all dungeons for this build</button>
+        <div class="builds-tab-row" data-slug="${escapeHtml(b.slug)}" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; margin-bottom: 4px; background: rgba(212,175,55,0.04); border-left: 2px solid #D4AF37; cursor: pointer;">
+          <span style="flex: 1; font-size: 12px; color: rgba(255,255,255,0.85); font-weight: 600;">${escapeHtml(b.name)}</span>
+          <button class="builds-tab-remove" data-slug="${escapeHtml(b.slug)}" style="background: none; border: none; color: #D4AF37; cursor: pointer; font-size: 14px; padding: 2px 6px;">✕</button>
         </div>
       `).join('')
-      // Add event handlers
-      buildsListEl.querySelectorAll('.builds-tab-show-all').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const buildId = btn.dataset.id
-          const build = builds.find(b => b.id === buildId)
-          if (!build) return
-          // For now, just enable dungeons layer. Future: match specific items to POIs
-          const dungeonsToggle = document.querySelector('.scroll-layer-item[data-layer-id="dungeons"]')
-          if (dungeonsToggle && !dungeonsToggle.classList.contains('on')) {
-            dungeonsToggle.click()
-          }
+      buildsListEl.querySelectorAll('.builds-tab-row').forEach((row) => {
+        row.addEventListener('click', (e) => {
+          if (e.target.classList && e.target.classList.contains('builds-tab-remove')) return
+          const slug = row.dataset.slug
+          const entry = builds.find(b => b.slug === slug)
+          if (!entry) return
+          applyBuildHighlight(slug, entry.items || [], { fitBounds: true })
         })
       })
-      buildsListEl.querySelectorAll('.builds-tab-delete').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const buildId = btn.dataset.id
+      buildsListEl.querySelectorAll('.builds-tab-remove').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation()
+          const slug = btn.dataset.slug
           try {
-            const r = await fetch(`/api/builder/delete-build?id=${buildId}`, {
-              method: 'DELETE',
-              credentials: 'include',
-            })
-            if (r.ok) {
-              renderBuildsTab()
-            }
+            const raw = localStorage.getItem('d4jsp_map_builds')
+            const list = raw ? JSON.parse(raw) : []
+            const filtered = list.filter(x => x.slug !== slug)
+            localStorage.setItem('d4jsp_map_builds', JSON.stringify(filtered))
+            clearBuildHighlight(slug)
+            renderBuildsTab()
           } catch (e) {
-            console.error('[Builds tab] delete error:', e)
+            console.error('[Builds tab] remove error:', e)
           }
         })
       })
@@ -494,14 +469,34 @@ async function boot() {
     }
   }
 
-  // Listen for postMessage from parent to refresh tabs
-  const origMessageHandler = window.onmessage
+  // Persist a build to localStorage (idempotent on slug) and apply its
+  // highlight. Called from the postMessage handler when the trade-app's
+  // BuildGuideView "+ Add to Map" button fires.
+  async function persistAndHighlightBuild(slug, name, items) {
+    try {
+      const raw = localStorage.getItem('d4jsp_map_builds')
+      const list = raw ? JSON.parse(raw) : []
+      const idx = list.findIndex(b => b.slug === slug)
+      const entry = { slug, name, items: Array.isArray(items) ? items.filter(Boolean) : [] }
+      if (idx >= 0) list[idx] = entry
+      else list.push(entry)
+      localStorage.setItem('d4jsp_map_builds', JSON.stringify(list))
+    } catch (e) {
+      console.error('[Builds] persist error:', e)
+    }
+    renderBuildsTab()
+    await applyBuildHighlight(slug, items || [], { fitBounds: true })
+  }
+
+  // Listen for postMessage from parent to refresh tabs / apply highlights.
   window.addEventListener('message', (e) => {
     if (e.data?.type === 'd4jsp:items-list-changed') {
       renderItemsTab()
     }
     if (e.data?.type === 'd4jsp:add-build-to-map') {
-      renderBuildsTab()
+      const b = e.data.build || {}
+      if (!b.slug) return
+      persistAndHighlightBuild(b.slug, b.name || b.slug, Array.isArray(b.items) ? b.items : [])
     }
   })
 
@@ -616,11 +611,185 @@ async function boot() {
   const hiddenDungeonMarkers = []  // markers temporarily hidden by focus mode
   let focusResetControl = null     // Leaflet control instance ("Show all dungeons")
   
-  // 2026-05-02 — isolation persistence. When the user clicks FIND (items tab)
-  // or enters focus_dungeon mode, we store the isolation state here. It survives
-  // POI re-renders and modal opens/closes. Re-apply on every POI operation.
-  let activeIsolation = null  // { kind: 'items'|'focus_dungeon', value: string|string[], hiddenMarkers: [...] }
+  // 2026-05-02 — focus_dungeon isolation persistence. Items + Builds use the
+  // separate highlightSources map below (highlight-only, never hides others).
+  // focus_dungeon mode (aspect "Show on Map") still isolates a single
+  // dungeon — different UX, separate state.
+  let activeIsolation = null  // { kind: 'focus_dungeon', value: string, hiddenMarkers: [...] }
   function poiKey(region, type) { return region + '_' + type }
+
+  // 2026-05-02 — Items + Builds highlight system. Both share the same
+  // in-memory `highlightSources` Map: each entry maps a source id (e.g.
+  // "item:harlequin-crest" or "build:abc-slug") to a Set of L.Markers.
+  // recomputeHighlights() unions all sets, applies the highlight class
+  // to those markers' _icons, and force-shows any marker whose layer is
+  // currently OFF so the user sees it. Layer checkboxes are NEVER
+  // modified by this system. localStorage is the user-visible source of
+  // truth (Items tab + Builds tab); highlightSources is rebuilt from
+  // localStorage on boot so state survives refresh.
+  const highlightSources = new Map()
+
+  function slugifyItem(s) {
+    return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+  }
+
+  function isMarkerInActiveLayer(p) {
+    const region = p?.marker?._poiData?.region
+    const type = p?.config?.id
+    if (!region || !type) return false
+    const g = poiGroups[poiKey(region, type)]
+    return !!(g && map.hasLayer(g))
+  }
+
+  function recomputeHighlights() {
+    const wantHighlight = new Set()
+    for (const set of highlightSources.values()) {
+      for (const m of set) wantHighlight.add(m)
+    }
+    for (const p of allPOIs) {
+      if (!p?.marker) continue
+      const m = p.marker
+      const should = wantHighlight.has(m)
+      const inActive = isMarkerInActiveLayer(p)
+      if (should) {
+        // Force-show: if the parent layer is off, add the marker directly
+        // to the map so the user sees it. Tag it so we can clean up.
+        if (!inActive && !map.hasLayer(m)) {
+          try { map.addLayer(m) } catch (_) {}
+          m._d4_forceShown = true
+        }
+        try { m._icon && m._icon.classList.add('d4-poi-highlight') } catch (_) {}
+        if (m._icon) m._icon.style.pointerEvents = ''
+      } else {
+        try { m._icon && m._icon.classList.remove('d4-poi-highlight') } catch (_) {}
+        if (m._d4_forceShown && !inActive) {
+          try { map.removeLayer(m) } catch (_) {}
+        }
+        m._d4_forceShown = false
+      }
+    }
+  }
+
+  function fitBoundsToHighlights() {
+    const want = new Set()
+    for (const set of highlightSources.values()) {
+      for (const m of set) want.add(m)
+    }
+    const lls = []
+    for (const m of want) {
+      if (m && typeof m.getLatLng === 'function') {
+        try { lls.push(m.getLatLng()) } catch (_) {}
+      }
+    }
+    if (lls.length === 0) return
+    const bounds = L.latLngBounds(lls)
+    try { map.fitBounds(bounds, { padding: [80, 80], maxZoom: 4, animate: true }) } catch (_) {}
+  }
+
+  // Item lookup → matched POIs. Same matching logic the old isolation
+  // path used: fetch /api/widget/item/<slug> drop sources, tokenize the
+  // item name as a fallback, one-way contains match against allPOIs name.
+  async function findMatchesForItem(itemName) {
+    if (!itemName) return []
+    let sources = []
+    try {
+      const slug = slugifyItem(itemName)
+      const r = await fetch(`https://trade.d4jsp.org/api/widget/item/${encodeURIComponent(slug)}`, { credentials: 'omit' })
+      if (r.ok) {
+        const d = await r.json()
+        sources = (d.dropSources || []).map(s => s.name).filter(Boolean)
+      }
+    } catch (e) {
+      console.warn('[D4JSP Map] item lookup failed:', e?.message || e)
+    }
+    const STOP = new Set([
+      'the','of','a','an','and','at','in','on','by','to','from','with',
+      'sanctuary','dungeon','dungeons','boss','bosses','altar','altars',
+      'stronghold','strongholds','region','tier','tormented','uber',
+      'wake','visage','will','crest','might','grandfather','talisman',
+      'ring','skies','starless','crown','blade','shield','plate','helm',
+    ])
+    const target = sources
+      .map(s => String(s || '').toLowerCase().trim())
+      .filter(s => s.length >= 4)
+    const itemTokens = String(itemName)
+      .toLowerCase()
+      .split(/[\s'']+/)
+      .map(t => t.replace(/[^a-z]/g, ''))
+      .filter(t => t.length >= 5 && !STOP.has(t))
+    const allTargets = [...target, ...itemTokens].filter(t => t.length >= 4)
+    if (allTargets.length === 0) return []
+    const matches = []
+    for (const p of allPOIs) {
+      const pname = String(p.name || '').toLowerCase().trim()
+      if (pname.length < 3) continue
+      if (allTargets.some(t => pname.includes(t))) matches.push(p)
+    }
+    return matches
+  }
+
+  async function applyItemHighlight(itemName, opts = {}) {
+    const matches = await findMatchesForItem(itemName)
+    if (matches.length === 0) return false
+    const slug = slugifyItem(itemName)
+    const set = new Set(matches.map(p => p.marker).filter(Boolean))
+    highlightSources.set('item:' + slug, set)
+    recomputeHighlights()
+    if (opts.fitBounds !== false) fitBoundsToHighlights()
+    return true
+  }
+
+  function clearItemHighlight(slug) {
+    highlightSources.delete('item:' + slug)
+    recomputeHighlights()
+  }
+
+  async function applyBuildHighlight(buildSlug, items, opts = {}) {
+    const all = new Set()
+    for (const name of (items || [])) {
+      try {
+        const matches = await findMatchesForItem(name)
+        for (const p of matches) if (p.marker) all.add(p.marker)
+      } catch (_) {}
+    }
+    highlightSources.set('build:' + buildSlug, all)
+    recomputeHighlights()
+    if (opts.fitBounds !== false) fitBoundsToHighlights()
+  }
+
+  function clearBuildHighlight(buildSlug) {
+    highlightSources.delete('build:' + buildSlug)
+    recomputeHighlights()
+  }
+
+  // Rehydrate Items + Builds highlight state from localStorage. Called
+  // once after POIs finish loading.
+  async function rehydrateHighlightsFromStorage() {
+    try {
+      const itemsRaw = localStorage.getItem('d4jsp_map_items')
+      const items = itemsRaw ? JSON.parse(itemsRaw) : []
+      for (const it of items) {
+        if (it?.name) await applyItemHighlight(it.name, { fitBounds: false })
+      }
+    } catch (e) { console.warn('[D4JSP Map] items rehydrate error:', e?.message || e) }
+    try {
+      const buildsRaw = localStorage.getItem('d4jsp_map_builds')
+      const builds = buildsRaw ? JSON.parse(buildsRaw) : []
+      for (const b of builds) {
+        if (b?.slug) await applyBuildHighlight(b.slug, b.items || [], { fitBounds: false })
+      }
+    } catch (e) { console.warn('[D4JSP Map] builds rehydrate error:', e?.message || e) }
+    if (highlightSources.size > 0) fitBoundsToHighlights()
+  }
+  // Expose for console debugging.
+  window.__d4MapHighlights = {
+    sources: highlightSources,
+    apply: applyItemHighlight,
+    clear: clearItemHighlight,
+    applyBuild: applyBuildHighlight,
+    clearBuild: clearBuildHighlight,
+    recompute: recomputeHighlights,
+  }
 
   // Y.34ba (2026-05-01): two-step name → modal that ACTUALLY works on mobile.
   //
@@ -804,13 +973,17 @@ async function boot() {
         const rt = LAYER_ID_TO_REGION_TYPE[id]
         if (rt) setRegionTypeVisible(rt.region, rt.type, true)
       })
-      // 2026-05-02: re-apply isolation state after POI render completes
+      // 2026-05-02: re-apply focus_dungeon isolation state after POI render
+      // completes (separate from the items/builds highlight system below).
       setTimeout(reapplyIsolation, 50)
-      // 2026-05-01 (Adam: "find now bring into map proper position still
-      // doesn't engage the specific dungeon"). When the iframe was loaded
-      // with ?items=<name>, look up which POIs drop that item, force-enable
-      // their layers, highlight them, and fitBounds on the matches.
-      tryItemsHighlight()
+      // 2026-05-02: rehydrate the Items + Builds tab highlight state from
+      // localStorage, then handle a fresh ?items=<name> deep-link if present.
+      // Both apply via the unified highlightSources system — no isolation,
+      // no layer-checkbox toggles, no "✕ Show all" reset control.
+      setTimeout(async () => {
+        await rehydrateHighlightsFromStorage()
+        await tryItemsHighlight()
+      }, 60)
       // 2026-05-02 — aspect-ship Show-on-Map loop: if the iframe was loaded
       // with ?focus_dungeon=<name>, isolate that single dungeon. Runs AFTER
       // tryItemsHighlight so a coincidental items= can't fight us for the
@@ -828,211 +1001,46 @@ async function boot() {
     }
   }
 
-  // Read ?items=<name> from the iframe URL, find matching POIs by name
-  // (boss / dungeon / stronghold), highlight them, and pan/zoom.
+  // Read ?items=<name> from the iframe URL (initial deep-link load), or
+  // accept a passed item name (current re-apply path is via Items tab
+  // click → applyItemHighlight directly). Highlight-only — no isolation.
   async function tryItemsHighlight(passedItemName) {
     let itemName = passedItemName
     if (!itemName) {
       try {
         const params = new URLSearchParams(window.location.search)
         itemName = params.get('items')
-      } catch { return }
+      } catch (_) { return }
     }
     if (!itemName) return
-    console.log(`[D4JSP Map] ?items=${itemName} — looking up drop sources`)
-
-    // 1. Pull the item's drop sources from the trade core widget API
-    //    (already returns dropSources with rarity-aware defaults).
-    let sources = []
-    try {
-      const slug = String(itemName).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
-      const r = await fetch(`https://trade.d4jsp.org/api/widget/item/${encodeURIComponent(slug)}`, { credentials: 'omit' })
-      if (r.ok) {
-        const d = await r.json()
-        sources = (d.dropSources || []).map(s => s.name).filter(Boolean)
-      }
-    } catch (e) {
-      console.warn('[D4JSP Map] item lookup failed:', e?.message || e)
-    }
-    if (sources.length === 0) {
-      console.log('[D4JSP Map] no drop sources for', itemName)
-      return
-    }
-
-    // Adam 2026-05-02 round 4: "tried to find this item.. it's still popping
-    // all pois instead of specific drop locations". Root cause was the
-    // OLD ordering — we force-enabled Bosses + Dungeons + Strongholds + Ubers
-    // BEFORE checking whether we had any matches. When the matcher came up
-    // empty (e.g. Fists of Fate has no POI named "fists" or "fate"), every
-    // marker from every just-enabled layer was on the map with NO highlight,
-    // visually identical to "all POIs lit up".
-    //
-    // New ordering: match FIRST against allPOIs (which is populated regardless
-    // of layer-toggle state), only enable the layers that actually contain
-    // matched POIs, and bail with a clean console message if nothing matches.
-    // No layers get unnecessarily toggled on for a failed search.
-
-    // 3. Find matching markers in allPOIs.
-    //    Strategy: try drop sources first; fall back to item name tokens.
-    //    Many uniques are named after the boss they drop from (e.g.
-    //    Rakanoth's Wake → boss Rakanoth, Andariel's Visage → Andariel).
-    //    If the API returns generic layer labels like "Tormented Bosses",
-    //    we tokenise the ITEM name and try to match POIs by those tokens.
-    // Adam 2026-05-02: "I hit find for harlequin crest and all markers
-    // activated". The previous matcher used bidirectional includes
-    // (pname.includes(t) || t.includes(pname)) which lit up every short-
-    // named POI ("Pit", "Cellar", "Spire") because those substrings appear
-    // inside almost any source token. Tightened to one-way contains, with
-    // a minimum target length so single-letter / 2-char artifacts can't
-    // match anything. Empty / overly-generic sources also bail out.
-    const STOP = new Set([
-      'the','of','a','an','and','at','in','on','by','to','from','with',
-      'sanctuary','dungeon','dungeons','boss','bosses','altar','altars',
-      'stronghold','strongholds','region','tier','tormented','uber',
-      'wake','visage','will','crest','might','grandfather','talisman',
-      'ring','skies','starless','crown','blade','shield','plate','helm',
-    ])
-    const target = sources
-      .map(s => String(s || '').toLowerCase().trim())
-      .filter(s => s.length >= 4)
-    const itemTokens = String(itemName)
-      .toLowerCase()
-      .split(/[\s'']+/)
-      .map(t => t.replace(/[^a-z]/g, ''))
-      .filter(t => t.length >= 5 && !STOP.has(t))
-    const allTargets = [...target, ...itemTokens].filter(t => t.length >= 4)
-    if (allTargets.length === 0) {
-      console.log('[D4JSP Map] no usable target tokens — skipping highlight')
-      return
-    }
-    const matches = []
-    for (const p of allPOIs) {
-      const pname = String(p.name || '').toLowerCase().trim()
-      if (pname.length < 3) continue
-      // One-way contains only: POI name must contain a target token.
-      // The reverse (target contains pname) was the bug — caused short
-      // POI names to match every long target token.
-      if (allTargets.some(t => pname.includes(t))) {
-        matches.push(p)
-      }
-    }
-    console.log(`[D4JSP Map] matched ${matches.length} POIs (sources=${target.length} tokens=${itemTokens.length}: ${itemTokens.join(',')})`)
-    if (matches.length === 0) {
-      // Adam 2026-05-02 round 5 ("we need to just take to map with those
-      // dungeons activated on map"): when item lookup returned drop sources
-      // but NONE matched specific POIs (e.g. boss-name sources like
-      // "Lord Zir" / "Echo of Andariel" that don't have a dungeon-named POI),
-      // we still want SOMETHING useful to happen — turn on the Dungeons +
-      // Events layers so user sees the full map of where things drop, even
-      // if we can't pin a specific POI. Better than empty map.
+    console.log(`[D4JSP Map] items=${itemName} — looking up drop sources`)
+    const ok = await applyItemHighlight(itemName, { fitBounds: true })
+    if (!ok) {
+      console.log('[D4JSP Map] no matches for', itemName)
       try {
         window.parent?.postMessage(
-          { type: 'd4jsp:items-no-match', itemName, sources: target, tokens: itemTokens },
+          { type: 'd4jsp:items-no-match', itemName },
           '*'
         )
-      } catch {}
-      // 2026-05-02 (Adam P0): Items must be INDEPENDENT of Layers — FIND
-      // never auto-toggles layer checkboxes. No-match → notify parent and
-      // bail. The Items tab list is reserved for *successful* finds only,
-      // so we don't add the item here either.
+      } catch (_) {}
       return
     }
-
-    // 4. 2026-05-02 (Adam P0): Items are INDEPENDENT of Layers. Persist the
-    //    searched item to the Items tab list (localStorage), and DO NOT
-    //    auto-toggle layer checkboxes — isolation acts on whatever markers
-    //    are currently visible. The X-to-remove button on each Items row
-    //    clears that item from this list and exits isolation.
+    // Persist the searched item to the Items tab list (localStorage). The
+    // Items tab list is the user-visible source of truth; X-remove there
+    // calls clearItemHighlight to drop just that source's highlights.
     try {
-      const slug = String(itemName).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+      const slug = slugifyItem(itemName)
       const raw = localStorage.getItem('d4jsp_map_items')
       const list = raw ? JSON.parse(raw) : []
-      if (!list.some(x => x.slug === slug || x.name === itemName)) {
+      if (!list.some(x => x.slug === slug)) {
         list.push({ name: itemName, slug })
         localStorage.setItem('d4jsp_map_items', JSON.stringify(list))
       }
       if (typeof renderItemsTab === 'function') renderItemsTab()
-      // Notify parent in case it mirrors the items list outside the iframe.
-      try { window.parent?.postMessage({ type: 'd4jsp:items-list-changed' }, '*') } catch {}
+      try { window.parent?.postMessage({ type: 'd4jsp:items-list-changed' }, '*') } catch (_) {}
     } catch (e) {
       console.error('[D4JSP Map] Items tab persist error:', e)
     }
-    // Wait two animation frames so any in-flight DOM work settles before
-    // we read marker state for fitBounds / isolation.
-    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)))
-
-    // 5. fitBounds on the matched markers, then open name tooltips for the
-    //    visible ones so the user sees them highlighted.
-    const latlngs = matches.filter(p => p.marker?.getLatLng).map(p => p.marker.getLatLng())
-    if (latlngs.length > 0) {
-      const bounds = L.latLngBounds(latlngs)
-      try { map.fitBounds(bounds, { padding: [80, 80], maxZoom: 4, animate: true }) } catch {}
-    }
-
-    // Adam 2026-05-02 round 5 ("all the other pois shouldn't show up only the
-    // find ones"): isolate matched POIs by hiding every other marker on the
-    // currently-active layers. Same pattern as focus_dungeon mode below —
-    // setOpacity(0) + pointer-events:none + tooltip display:none on non-
-    // matches, leaving only the matched markers visible. Reset on the topright
-    // "Show all" reset control if it exists.
-    const matchSet = new Set(matches)
-    const hiddenMarkersForIsolation = []  // Track hidden markers for persistence
-    setTimeout(() => {
-      for (const p of allPOIs) {
-        if (!p?.marker) continue
-        if (matchSet.has(p)) {
-          // Highlight matched
-          try { p.marker.setOpacity(1) } catch {}
-          try { p.marker.openTooltip?.() } catch {}
-          try { p.marker._icon?.classList?.add('d4-poi-highlight') } catch {}
-          if (p.marker._icon) p.marker._icon.style.pointerEvents = ''
-          const tt = p.marker.getTooltip?.()
-          if (tt && tt._container) tt._container.style.display = ''
-        } else {
-          // Hide non-matched markers — only on currently-loaded layers
-          hiddenMarkersForIsolation.push(p.marker)
-          try { p.marker.setOpacity(0) } catch {}
-          if (p.marker._icon) p.marker._icon.style.pointerEvents = 'none'
-          const tt = p.marker.getTooltip?.()
-          if (tt && tt._container) tt._container.style.display = 'none'
-        }
-      }
-      // Store isolation state for re-application after POI re-renders
-      activeIsolation = { kind: 'items', value: itemName, hiddenMarkers: hiddenMarkersForIsolation }
-      // Add a topright "✕ Show all" control to exit isolation without reload
-      if (!window.__itemsIsolationResetCtl) {
-        const ctl = L.control({ position: 'topright' })
-        ctl.onAdd = function() {
-          const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control')
-          div.style.background = 'rgba(8,6,8,0.9)'
-          div.style.border = '1px solid #D4AF37'
-          div.style.borderRadius = '4px'
-          div.style.padding = '6px 12px'
-          div.style.cursor = 'pointer'
-          div.style.fontFamily = "'Cinzel', serif"
-          div.style.fontSize = '11px'
-          div.style.letterSpacing = '0.1em'
-          div.style.color = '#D4AF37'
-          div.innerHTML = '✕ Show all'
-          L.DomEvent.on(div, 'click', () => {
-            for (const p of allPOIs) {
-              if (!p?.marker) continue
-              try { p.marker.setOpacity(1) } catch {}
-              if (p.marker._icon) p.marker._icon.style.pointerEvents = ''
-              const tt = p.marker.getTooltip?.()
-              if (tt && tt._container) tt._container.style.display = ''
-              try { p.marker._icon?.classList?.remove('d4-poi-highlight') } catch {}
-            }
-            try { ctl.remove() } catch {}
-            window.__itemsIsolationResetCtl = null
-            activeIsolation = null  // Clear isolation state
-          })
-          return div
-        }
-        ctl.addTo(map)
-        window.__itemsIsolationResetCtl = ctl
-      }
-    }, 300)
   }
   // ── 2026-05-02 — focus_dungeon mode ─────────────────────────────────────
   // BuildGuideView's aspect-detail "Show on Map" CTA navigates the trade-core
@@ -1284,6 +1292,10 @@ async function boot() {
       ;['Sanctuary', 'Nahantu', 'Skovos'].forEach(region =>
         setRegionTypeVisible(region, rt.type, on)
       )
+      // 2026-05-02: when a layer toggles, recompute the highlight overlay
+      // so force-shown markers (matched by Items/Builds whose parent layer
+      // is off) stay visible / clean up appropriately.
+      try { recomputeHighlights() } catch (_) {}
     })
   }
   // Y.34aw — single Layers tab covering every region. Items are the
