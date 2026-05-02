@@ -326,6 +326,22 @@ async function boot() {
     if (e.data && e.data.type === 'd4jsp:builds') {
       setParentBuilds(e.data.builds || [], map)
     }
+    // 2026-05-02 — aspect-ship Show-on-Map loop: trade-app's BuildGuideView
+    // posts {type:'d4jsp:focus-dungeon', name:'<dungeon name>'} when the
+    // user clicks "Show on Map" from an aspect's detail tooltip. Iframe may
+    // already be mounted (user revisits the Map subtab from a different
+    // aspect), so the URL-based deep-link path can't fire — postMessage is
+    // the in-flight signal. If POIs aren't loaded yet, queue the request
+    // so loadAndRenderPOIs can apply it once allPOIs is populated.
+    if (e.data && e.data.type === 'd4jsp:focus-dungeon') {
+      const name = e.data.name
+      if (!name) return
+      if (!poisLoaded) {
+        pendingFocusDungeon = name
+      } else {
+        enterFocusDungeonMode(name)
+      }
+    }
   })
   window.parent.postMessage({ type: 'd4jsp:map-ready' }, '*')
 
@@ -450,6 +466,14 @@ async function boot() {
   // "Nahantu_dungeon", etc.
   const poiGroups = {}
   let poisLoaded = false
+  // 2026-05-02 — focus_dungeon mode state. Set by enterFocusDungeonMode() and
+  // cleared by exitFocusDungeonMode(). pendingFocusDungeon holds the name
+  // when a postMessage arrives BEFORE POIs finish loading; loadAndRenderPOIs
+  // applies it once allPOIs is populated.
+  let pendingFocusDungeon = null
+  let focusDungeonName = null
+  const hiddenDungeonMarkers = []  // markers temporarily hidden by focus mode
+  let focusResetControl = null     // Leaflet control instance ("Show all dungeons")
   function poiKey(region, type) { return region + '_' + type }
 
   // Y.34ba (2026-05-01): two-step name → modal that ACTUALLY works on mobile.
@@ -639,6 +663,18 @@ async function boot() {
       // with ?items=<name>, look up which POIs drop that item, force-enable
       // their layers, highlight them, and fitBounds on the matches.
       tryItemsHighlight()
+      // 2026-05-02 — aspect-ship Show-on-Map loop: if the iframe was loaded
+      // with ?focus_dungeon=<name>, isolate that single dungeon. Runs AFTER
+      // tryItemsHighlight so a coincidental items= can't fight us for the
+      // viewport (focus_dungeon is the more specific intent — last write
+      // wins on the flyTo). Also drain any pending postMessage that
+      // arrived before POIs finished loading.
+      tryFocusDungeon()
+      if (pendingFocusDungeon) {
+        const queued = pendingFocusDungeon
+        pendingFocusDungeon = null
+        enterFocusDungeonMode(queued)
+      }
     } catch (e) {
       console.error('[D4JSP Map] POI load failed:', e)
     }
@@ -742,6 +778,189 @@ async function boot() {
       }
     }, 300)
   }
+  // ── 2026-05-02 — focus_dungeon mode ─────────────────────────────────────
+  // BuildGuideView's aspect-detail "Show on Map" CTA navigates the trade-core
+  // to ?tab=character&map=1&focus_dungeon=<name>. ProfileView reads the param,
+  // forwards it as a prop to MapIframe, which appends it to the iframe URL
+  // (initial load) AND postMessages it on subsequent prop changes (already-
+  // loaded iframe). Either way the map ends up here:
+  //
+  //   1. Force-enable the Dungeons layer (so the matched marker is on map).
+  //   2. Find the matched dungeon marker in allPOIs (case-insensitive).
+  //   3. Hide every OTHER dungeon marker (marker.setOpacity(0) + pointer-
+  //      events:none on _icon, so the lone visible marker isn't competing
+  //      with the rest of Sanctuary's dungeon density).
+  //   4. flyTo + auto-open the trade-core DungeonInfoModal via the same
+  //      postMessage path search.js uses (d4jsp:open-poi-info).
+  //   5. Add a "Show all dungeons" Leaflet control so the user can exit
+  //      focus mode without reloading.
+  function isDungeonPoi(p) {
+    return p && p.config && p.config.id === 'dungeon'
+  }
+  function findDungeonByName(name) {
+    const target = String(name || '').toLowerCase().trim()
+    if (!target) return null
+    // Exact (case-insensitive) match first — most aspect→dungeon links
+    // pass the canonical dungeon display name straight through.
+    const exact = allPOIs.find(p => isDungeonPoi(p) &&
+      String(p.name || '').toLowerCase().trim() === target)
+    if (exact) return exact
+    // POI name contains target (e.g. data has "Lost Archives — Dry Steppes",
+    // CTA passes "Lost Archives").
+    const sub = allPOIs.find(p => isDungeonPoi(p) &&
+      String(p.name || '').toLowerCase().includes(target))
+    if (sub) return sub
+    // Target contains POI name (rare; e.g. CTA passes "Lost Archives Dungeon"
+    // and data is "Lost Archives"). Filter to length >= 4 to avoid trivial
+    // substring matches like "the".
+    const rev = allPOIs.find(p => isDungeonPoi(p) &&
+      String(p.name || '').toLowerCase().trim().length >= 4 &&
+      target.includes(String(p.name || '').toLowerCase().trim()))
+    return rev || null
+  }
+  function ensureFocusResetControl() {
+    if (focusResetControl) return
+    focusResetControl = L.control({ position: 'topright' })
+    focusResetControl.onAdd = function () {
+      const c = L.DomUtil.create('div', 'leaflet-bar leaflet-control d4jsp-focus-reset')
+      c.style.cssText = [
+        'padding:6px 10px',
+        'background:rgba(8,6,8,0.92)',
+        'color:#D4AF37',
+        'font-family:Cinzel,serif',
+        'font-size:11px',
+        'font-weight:700',
+        'letter-spacing:0.05em',
+        'text-transform:uppercase',
+        'border:1px solid #D4AF37',
+        'cursor:pointer',
+        'user-select:none',
+        'box-shadow:0 2px 8px rgba(0,0,0,0.5)',
+      ].join(';')
+      c.textContent = '✕ Show all dungeons'
+      c.title = 'Exit focus mode and re-show every dungeon marker'
+      L.DomEvent.disableClickPropagation(c)
+      L.DomEvent.on(c, 'click', () => exitFocusDungeonMode())
+      return c
+    }
+  }
+  function showFocusResetControl() {
+    ensureFocusResetControl()
+    try { focusResetControl.addTo(map) } catch (_) {}
+  }
+  function hideFocusResetControl() {
+    if (!focusResetControl) return
+    try { focusResetControl.remove() } catch (_) {}
+  }
+  function enterFocusDungeonMode(name) {
+    if (!name) return false
+    // Idempotent: both the URL parse (tryFocusDungeon) and the parent's
+    // MapIframe useEffect can fire for the same dungeon — bail if we're
+    // already focused on it. Compare case-insensitively for safety.
+    if (focusDungeonName &&
+        String(focusDungeonName).toLowerCase().trim() ===
+        String(name).toLowerCase().trim()) {
+      return true
+    }
+    // 1. Force-enable the Dungeons layer toggle so the matched marker is
+    //    on the map. The layer-list click handler flips visibility for
+    //    every region's dungeon group at once.
+    const dungeonsToggle = document.querySelector(
+      '.scroll-layer-item[data-layer-id="dungeons"]')
+    if (dungeonsToggle && !dungeonsToggle.classList.contains('on')) {
+      try { dungeonsToggle.click() } catch (_) {}
+    }
+    // 2. Locate the matched dungeon in allPOIs.
+    const matched = findDungeonByName(name)
+    if (!matched) {
+      console.warn('[D4JSP Map] focus_dungeon: no match for', name)
+      return false
+    }
+    focusDungeonName = name
+    // 3. Hide every OTHER dungeon. Defer one rAF so Leaflet has had a
+    //    frame to actually render markers from the layer we just enabled
+    //    (their `_icon` element doesn't exist until then, and we want to
+    //    null pointer-events on it so an invisible marker can't be tapped).
+    const applyHide = () => {
+      hiddenDungeonMarkers.length = 0
+      for (const p of allPOIs) {
+        if (!isDungeonPoi(p) || p === matched) continue
+        const m = p.marker
+        if (!m) continue
+        try { m.setOpacity?.(0) } catch (_) {}
+        const ic = m._icon
+        if (ic) ic.style.pointerEvents = 'none'
+        const tt = m._tooltip && m._tooltip._container
+        if (tt) tt.style.display = 'none'
+        hiddenDungeonMarkers.push(m)
+      }
+    }
+    requestAnimationFrame(() => requestAnimationFrame(applyHide))
+    // 4. Pan/zoom to the matched marker.
+    const TARGET_ZOOM = Math.min(5, (map.getMaxZoom?.() ?? 5))
+    try { map.flyTo([matched.lat, matched.lng], TARGET_ZOOM, { duration: 0.8 }) } catch (_) {}
+    // 5. After camera settles, post the dungeon-info to the parent so the
+    //    trade-core opens its full-screen DungeonInfoModal — same payload
+    //    shape openPoiInfoModal() builds, same shape search.js posts.
+    setTimeout(() => {
+      const poiData = matched.marker?._poiData
+      if (!poiData) return
+      try {
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({
+            type: 'd4jsp:open-poi-info',
+            poi: {
+              name: poiData.name || matched.name,
+              type: poiData.type || 'dungeon',
+              typeLabel: matched.config?.label || 'Dungeon',
+              region: poiData.region || '',
+              desc: poiData.desc || '',
+              x: poiData.x, y: poiData.y,
+            },
+          }, '*')
+        } else {
+          // Standalone /map/ visit (no parent) — open the in-iframe modal
+          // by simulating the marker click handler path.
+          matched.marker.openTooltip?.()
+        }
+      } catch (_) {}
+    }, 900)
+    // 6. Show the reset control.
+    showFocusResetControl()
+    return true
+  }
+  function exitFocusDungeonMode() {
+    focusDungeonName = null
+    for (const m of hiddenDungeonMarkers) {
+      try { m.setOpacity?.(1) } catch (_) {}
+      const ic = m._icon
+      if (ic) ic.style.pointerEvents = ''
+      const tt = m._tooltip && m._tooltip._container
+      if (tt) tt.style.display = ''
+    }
+    hiddenDungeonMarkers.length = 0
+    hideFocusResetControl()
+  }
+  // URL-driven entry: on initial load (or after loadAndRenderPOIs lands),
+  // if ?focus_dungeon=<name> is present, apply it.
+  function tryFocusDungeon() {
+    let name = null
+    try {
+      const params = new URLSearchParams(window.location.search)
+      name = params.get('focus_dungeon')
+    } catch (_) { return }
+    if (!name) return
+    enterFocusDungeonMode(name)
+  }
+  // Expose for console debugging + so the postMessage handler at boot scope
+  // can invoke them by reference even if it was registered before this
+  // function-block ran (function declarations are hoisted within boot()).
+  window.__focusDungeon = {
+    enter: enterFocusDungeonMode,
+    exit: exitFocusDungeonMode,
+    tryFromUrl: tryFocusDungeon,
+  }
+
   // Toggle a (region, type) group on/off. Each tab now controls only
   // its own region's POIs.
   function setRegionTypeVisible(region, type, on) {
