@@ -817,10 +817,64 @@ async function boot() {
       const bounds = L.latLngBounds(latlngs)
       try { map.fitBounds(bounds, { padding: [80, 80], maxZoom: 4, animate: true }) } catch {}
     }
+
+    // Adam 2026-05-02 round 5 ("all the other pois shouldn't show up only the
+    // find ones"): isolate matched POIs by hiding every other marker on the
+    // currently-active layers. Same pattern as focus_dungeon mode below —
+    // setOpacity(0) + pointer-events:none + tooltip display:none on non-
+    // matches, leaving only the matched markers visible. Reset on the topright
+    // "Show all" reset control if it exists.
+    const matchSet = new Set(matches)
     setTimeout(() => {
-      for (const p of matches) {
-        try { p.marker?.openTooltip?.() } catch {}
-        try { p.marker?._icon?.classList?.add('d4-poi-highlight') } catch {}
+      for (const p of allPOIs) {
+        if (!p?.marker) continue
+        if (matchSet.has(p)) {
+          // Highlight matched
+          try { p.marker.setOpacity(1) } catch {}
+          try { p.marker.openTooltip?.() } catch {}
+          try { p.marker._icon?.classList?.add('d4-poi-highlight') } catch {}
+          if (p.marker._icon) p.marker._icon.style.pointerEvents = ''
+          const tt = p.marker.getTooltip?.()
+          if (tt && tt._container) tt._container.style.display = ''
+        } else {
+          // Hide non-matched markers — only on currently-loaded layers
+          try { p.marker.setOpacity(0) } catch {}
+          if (p.marker._icon) p.marker._icon.style.pointerEvents = 'none'
+          const tt = p.marker.getTooltip?.()
+          if (tt && tt._container) tt._container.style.display = 'none'
+        }
+      }
+      // Add a topright "✕ Show all" control to exit isolation without reload
+      if (!window.__itemsIsolationResetCtl) {
+        const ctl = L.control({ position: 'topright' })
+        ctl.onAdd = function() {
+          const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control')
+          div.style.background = 'rgba(8,6,8,0.9)'
+          div.style.border = '1px solid #D4AF37'
+          div.style.borderRadius = '4px'
+          div.style.padding = '6px 12px'
+          div.style.cursor = 'pointer'
+          div.style.fontFamily = "'Cinzel', serif"
+          div.style.fontSize = '11px'
+          div.style.letterSpacing = '0.1em'
+          div.style.color = '#D4AF37'
+          div.innerHTML = '✕ Show all'
+          L.DomEvent.on(div, 'click', () => {
+            for (const p of allPOIs) {
+              if (!p?.marker) continue
+              try { p.marker.setOpacity(1) } catch {}
+              if (p.marker._icon) p.marker._icon.style.pointerEvents = ''
+              const tt = p.marker.getTooltip?.()
+              if (tt && tt._container) tt._container.style.display = ''
+              try { p.marker._icon?.classList?.remove('d4-poi-highlight') } catch {}
+            }
+            try { ctl.remove() } catch {}
+            window.__itemsIsolationResetCtl = null
+          })
+          return div
+        }
+        ctl.addTo(map)
+        window.__itemsIsolationResetCtl = ctl
       }
     }, 300)
   }
