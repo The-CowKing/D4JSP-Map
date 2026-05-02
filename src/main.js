@@ -379,18 +379,18 @@ async function boot() {
         return
       }
       itemsListEl.innerHTML = items.map(item => `
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; margin-bottom: 4px; background: rgba(212,175,55,0.04); border-left: 2px solid #D4AF37; cursor: pointer;">
+        <div class="items-tab-row" data-item-name="${item.name}" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; margin-bottom: 4px; background: rgba(212,175,55,0.04); border-left: 2px solid #D4AF37; cursor: pointer;">
           <span style="flex: 1; font-size: 12px; color: rgba(255,255,255,0.85);">${item.name}</span>
           <button class="items-tab-remove" data-slug="${item.slug}" style="background: none; border: none; color: #D4AF37; cursor: pointer; font-size: 14px; padding: 2px 6px;">✕</button>
         </div>
       `).join('')
       // Add click handlers for item rows and remove buttons
-      itemsListEl.querySelectorAll('[style*="display: flex"]').forEach((row, idx) => {
+      itemsListEl.querySelectorAll('.items-tab-row').forEach((row) => {
         row.addEventListener('click', (e) => {
           if (e.target.className !== 'items-tab-remove') {
             // Click on item row → highlight it
-            const item = items[idx]
-            if (item) tryItemsHighlight()  // Will re-read from URL or we need to pass it
+            const itemName = row.dataset.itemName
+            if (itemName) tryItemsHighlight(itemName)
           }
         })
       })
@@ -404,7 +404,7 @@ async function boot() {
             const filtered = list.filter(x => x.slug !== slug && x.name !== slug)
             localStorage.setItem('d4jsp_map_items', JSON.stringify(filtered))
             // Clear isolation if this item was active
-            if (activeIsolation?.kind === 'items' && activeIsolation?.value === slug) {
+            if (activeIsolation?.kind === 'items' && (activeIsolation?.value === slug || activeIsolation?.value?.toLowerCase().replace(/[^a-z0-9]+/g, '-') === slug)) {
               clearIsolation()
               for (const p of allPOIs) {
                 if (!p?.marker) continue
@@ -823,12 +823,14 @@ async function boot() {
 
   // Read ?items=<name> from the iframe URL, find matching POIs by name
   // (boss / dungeon / stronghold), highlight them, and pan/zoom.
-  async function tryItemsHighlight() {
-    let itemName
-    try {
-      const params = new URLSearchParams(window.location.search)
-      itemName = params.get('items')
-    } catch { return }
+  async function tryItemsHighlight(passedItemName) {
+    let itemName = passedItemName
+    if (!itemName) {
+      try {
+        const params = new URLSearchParams(window.location.search)
+        itemName = params.get('items')
+      } catch { return }
+    }
     if (!itemName) return
     console.log(`[D4JSP Map] ?items=${itemName} — looking up drop sources`)
 
