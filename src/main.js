@@ -768,15 +768,27 @@ async function boot() {
     }
     console.log(`[D4JSP Map] matched ${matches.length} POIs (sources=${target.length} tokens=${itemTokens.length}: ${itemTokens.join(',')})`)
     if (matches.length === 0) {
-      // Notify parent (trade app) so it can show a toast. Don't enable any
-      // layers — keep the map in its current state instead of lighting up
-      // every dungeon/boss/stronghold for a search that returned nothing.
+      // Adam 2026-05-02 round 5 ("we need to just take to map with those
+      // dungeons activated on map"): when item lookup returned drop sources
+      // but NONE matched specific POIs (e.g. boss-name sources like
+      // "Lord Zir" / "Echo of Andariel" that don't have a dungeon-named POI),
+      // we still want SOMETHING useful to happen — turn on the Dungeons +
+      // Events layers so user sees the full map of where things drop, even
+      // if we can't pin a specific POI. Better than empty map.
       try {
         window.parent?.postMessage(
           { type: 'd4jsp:items-no-match', itemName, sources: target, tokens: itemTokens },
           '*'
         )
       } catch {}
+      // Force-enable Dungeons + Events layers if we had ANY drop sources from
+      // the API (i.e., we know the item drops, just couldn't pin specific POIs).
+      if (sources.length > 0) {
+        for (const lid of ['dungeons', 'events']) {
+          const item = document.querySelector(`.scroll-layer-item[data-layer-id="${lid}"]`)
+          if (item && !item.classList.contains('on')) item.click()
+        }
+      }
       return
     }
 
