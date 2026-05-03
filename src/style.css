@@ -445,12 +445,14 @@ html, body {
 /* 2026-05-01: Find→items highlight ring on matching POIs. Pulses gold
    so the user sees exactly where the requested item drops. */
 .d4-poi-highlight {
-  filter: drop-shadow(0 0 8px rgba(212,175,55,0.95)) drop-shadow(0 0 14px rgba(212,175,55,0.55)) !important;
+  /* fix: pulse via filter, not transform. transform was overriding the
+     inline translate3d() Leaflet sets per-marker, stacking every matched
+     POI at viewport (0,0). filter does not conflict with transform. */
   animation: d4PoiPulse 1.6s ease-in-out infinite alternate;
 }
 @keyframes d4PoiPulse {
-  from { transform: scale(1.0); }
-  to   { transform: scale(1.18); }
+  from { filter: drop-shadow(0 0 6px rgba(212,175,55,0.80)) drop-shadow(0 0 10px rgba(212,175,55,0.40)); }
+  to   { filter: drop-shadow(0 0 14px rgba(212,175,55,1.00)) drop-shadow(0 0 22px rgba(212,175,55,0.75)); }
 }
 .d4-poi img {
   display: block;
