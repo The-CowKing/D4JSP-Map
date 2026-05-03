@@ -46,10 +46,25 @@ scp -r -i .../d4jsp_kvm4_claude out/* root@177.7.32.128:/var/www/builder/
 
 ## Map app (static)
 
+Nginx serves the map from **`/opt/d4jsp-map/dist/`** on KVM 4 (per
+`/etc/nginx/sites-enabled/d4jsp` → `location /map/ { alias /opt/d4jsp-map/dist/; }`).
+A prior version of this doc said `/var/www/map/` — that path is NOT served and
+will silently 404. 2026-05-03: corrected after a P0 deploy hit the wrong path
+and broke `/map/assets/*.js` for ~3 minutes.
+
 ```bash
 cd C:/Users/Owner/D4JSP-Map
 npm run build  # produces dist/
-scp -r -i .../d4jsp_kvm4_claude dist/* root@177.7.32.128:/var/www/map/
+scp -r -i .../d4jsp_kvm4_claude dist/* root@177.7.32.128:/opt/d4jsp-map/dist/
+# Optional: leave a timestamped backup before swap
+ssh -i .../d4jsp_kvm4_claude root@177.7.32.128 "ls /opt/d4jsp-map/dist/"
+```
+
+Verify live:
+```bash
+curl -I https://trade.d4jsp.org/map/                       # → 200
+curl -I https://trade.d4jsp.org/map/boss-keys.json         # → 200
+curl -I https://trade.d4jsp.org/map/assets/index-*.js      # → 200 (hashed name)
 ```
 
 ## WP edits (Cloud)
