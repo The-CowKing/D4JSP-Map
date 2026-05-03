@@ -720,11 +720,41 @@ async function boot() {
     try { map.fitBounds(bounds, { padding: [80, 80], maxZoom: 4, animate: true }) } catch (_) {}
   }
 
-  // Item lookup → matched POIs. Same matching logic the old isolation
-  // path used: fetch /api/widget/item/<slug> drop sources, tokenize the
-  // item name as a fallback, one-way contains match against allPOIs name.
+  // Item lookup → matched POIs. Three-tier matching:
+  //   1. Direct: scan p.drops + p.keys + p.boss_name on every POI for an
+  //      EXACT (case-insensitive) match against the item name. boss-keys.json
+  //      is the source of truth for arena drop pools, and this catches every
+  //      arena that drops an item — including the ones whose POI name doesn't
+  //      contain a curated drop-source token (Malignant Burrow, Forge of
+  //      Hatred, Nevesk - Echo of Lilith, etc. drop Mythic Uniques but their
+  //      name has no overlap with the API's curated source list).
+  //   2. API substring: fetch /api/widget/item/<slug> dropSources, lowercase,
+  //      and substring-match against POI names. Catches d4_item_drops curated
+  //      sources whose `source_name` happens to equal a POI name.
+  //   3. Token: tokenize the item name (filter STOP words) and substring-match.
+  //      Last-resort fallback for items where neither of the above hits.
+  // The Set return type dedupes across the three tiers.
   async function findMatchesForItem(itemName) {
     if (!itemName) return []
+    const matchSet = new Set()
+    const itemLc = String(itemName).toLowerCase().trim()
+
+    // Tier 1 — direct drops/keys/boss_name match
+    if (itemLc) {
+      for (const p of allPOIs) {
+        if (!p) continue
+        const drops = Array.isArray(p.drops) ? p.drops : null
+        const keys = Array.isArray(p.keys) ? p.keys : null
+        const bossName = p.boss_name ? String(p.boss_name).toLowerCase().trim() : null
+        let hit = false
+        if (drops && drops.some(d => String(d || '').toLowerCase().trim() === itemLc)) hit = true
+        if (!hit && keys && keys.some(k => String(k || '').toLowerCase().trim() === itemLc)) hit = true
+        if (!hit && bossName && (bossName === itemLc || bossName.includes(itemLc) || itemLc.includes(bossName))) hit = true
+        if (hit) matchSet.add(p)
+      }
+    }
+
+    // Tier 2 — API curated source names
     let sources = []
     try {
       const slug = slugifyItem(itemName)
@@ -746,20 +776,22 @@ async function boot() {
     const target = sources
       .map(s => String(s || '').toLowerCase().trim())
       .filter(s => s.length >= 4)
+    // Tier 3 — item-name tokens
     const itemTokens = String(itemName)
       .toLowerCase()
       .split(/[\s'']+/)
       .map(t => t.replace(/[^a-z]/g, ''))
       .filter(t => t.length >= 5 && !STOP.has(t))
     const allTargets = [...target, ...itemTokens].filter(t => t.length >= 4)
-    if (allTargets.length === 0) return []
-    const matches = []
-    for (const p of allPOIs) {
-      const pname = String(p.name || '').toLowerCase().trim()
-      if (pname.length < 3) continue
-      if (allTargets.some(t => pname.includes(t))) matches.push(p)
+    if (allTargets.length > 0) {
+      for (const p of allPOIs) {
+        if (matchSet.has(p)) continue
+        const pname = String(p.name || '').toLowerCase().trim()
+        if (pname.length < 3) continue
+        if (allTargets.some(t => pname.includes(t))) matchSet.add(p)
+      }
     }
-    return matches
+    return [...matchSet]
   }
 
   async function applyItemHighlight(itemName, opts = {}) {
@@ -1027,6 +1059,16 @@ async function boot() {
             color: cfg.color || '#D4AF37',
           },
           marker,
+          // 2026-05-03 — carry boss-keys drops onto the POI itself so
+          // findMatchesForItem can match an item directly against this
+          // arena's drop list (the API's curated dropSources misses many
+          // arenas; the static boss-keys.json data is the source of truth
+          // for who drops what). Includes both the curated drops AND the
+          // arena's required keys so "Find Igneous Core" lights up the
+          // arenas that consume it.
+          drops: Array.isArray(m.drops) ? m.drops : null,
+          keys: Array.isArray(m.keys) ? m.keys : null,
+          boss_name: m.boss_name || null,
         });
       }
       // 2026-05-03 (P0-3 ITEMS in FIND) — items are not POIs, so the user-
