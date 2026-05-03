@@ -1,5 +1,5 @@
 {
-  "_doc": "Uber boss arenas + Uber-key farm sources. Markers are tagged type='uber' (controls icon/layer toggle) with a per-marker typeLabel override so the modal header reads BOSS for arenas and UBER FARM for material sources. Drops are fetched from d4_dungeon_drops keyed by name (so Hanged Man's Hall already shows Andariel + her drops because the BOSS_DROPS seed populated those rows).",
+  "_doc": "Uber boss arenas + Uber-key farm sources. Markers are tagged type='uber' (controls icon/layer toggle) with a per-marker typeLabel override so the modal header reads BOSS for arenas and UBER FARM for material sources. Boss-arena rows include boss_name (the actual boss inside) and drops (Uber Unique pool / Mythic pool — verified May 2026). Drop pools are also exposed via postMessage to the trade-core iframe parent so the Items tab can populate.",
   "markers": [
     {
       "name": "Tree of Whispers",
@@ -35,7 +35,19 @@
       "desc": "Andariel summon arena. Use 2× Sandscorched Shackles + 2× Pincushioned Doll to summon Andariel here.",
       "x": -148,
       "y": 110,
-      "keys": ["Sandscorched Shackles", "Pincushioned Doll"]
+      "keys": ["Sandscorched Shackles", "Pincushioned Doll"],
+      "boss_name": "Andariel",
+      "tormented": true,
+      "drops": [
+        "Harlequin Crest",
+        "Melted Heart of Selig",
+        "Andariel's Visage",
+        "Ahavarion, Spear of Lycander",
+        "Ring of Starless Skies",
+        "Tyrael's Might",
+        "The Grandfather",
+        "Doombringer"
+      ]
     },
     {
       "name": "Gaping Crevasse",
@@ -44,34 +56,77 @@
       "desc": "Duriel summon arena. Use 2× Mucus-Slick Egg + 2× Shard of Agony to summon Duriel here.",
       "x": -160,
       "y": 130,
-      "keys": ["Mucus-Slick Egg", "Shard of Agony"]
+      "keys": ["Mucus-Slick Egg", "Shard of Agony"],
+      "boss_name": "Duriel",
+      "tormented": true,
+      "drops": [
+        "Harlequin Crest",
+        "Melted Heart of Selig",
+        "Andariel's Visage",
+        "Ahavarion, Spear of Lycander",
+        "Ring of Starless Skies",
+        "Tyrael's Might",
+        "The Grandfather",
+        "Doombringer"
+      ]
     },
     {
       "name": "Hall of the Penitent",
       "type": "uber",
       "typeLabel": "Boss",
-      "desc": "Grigoire summon arena. Living Steel charges the altar here.",
+      "desc": "Grigoire, the Galvanic Saint summon arena. Use Living Steel to charge the altar here.",
       "x": -100,
       "y": 70,
-      "keys": ["Living Steel"]
+      "keys": ["Living Steel"],
+      "boss_name": "Grigoire, the Galvanic Saint",
+      "tormented": true,
+      "drops": [
+        "Razorplate",
+        "Hellhammer",
+        "Insatiable Fury",
+        "Tibault's Will",
+        "Flickerstep",
+        "Tassets of the Dawning Sky",
+        "Resplendent Spark"
+      ]
     },
     {
       "name": "Darkened Way",
       "type": "uber",
       "typeLabel": "Boss",
-      "desc": "Lord Zir summon arena. Exquisite Blood charges the altar here.",
+      "desc": "Lord Zir summon arena. Use Exquisite Blood to charge the altar here.",
       "x": -45,
       "y": 95,
-      "keys": ["Exquisite Blood"]
+      "keys": ["Exquisite Blood"],
+      "boss_name": "Lord Zir",
+      "tormented": true,
+      "drops": [
+        "Banished Lord's Talisman",
+        "Mortacrux",
+        "Black River",
+        "Beastfall Boots",
+        "Shroud of False Death",
+        "Resplendent Spark"
+      ]
     },
     {
       "name": "Glacial Fissure",
       "type": "uber",
       "typeLabel": "Boss",
-      "desc": "Beast in Ice summon arena. Distilled Fear + Sigil charges the altar here.",
+      "desc": "Beast in the Ice summon arena. Use Distilled Fear + Sigil of the Beast to charge the altar here.",
       "x": -95,
       "y": 47,
-      "keys": ["Distilled Fear", "Sigil of the Beast"]
+      "keys": ["Distilled Fear", "Sigil of the Beast"],
+      "boss_name": "Beast in the Ice",
+      "tormented": true,
+      "drops": [
+        "Shako",
+        "Starless Skies",
+        "Mother's Embrace",
+        "Penitent Greaves",
+        "Esadora's Overflowing Cameo",
+        "Resplendent Spark"
+      ]
     }
   ]
 }

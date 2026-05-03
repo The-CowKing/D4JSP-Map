@@ -611,6 +611,22 @@ html, body {
   text-transform: uppercase;
   color: var(--gold-dim);
 }
+/* Y.34bj — Tormented boss name suffix on lair line */
+#poi-info-modal .poi-info-name .poi-info-boss {
+  color: #d4af37;
+  font-weight: 500;
+  font-size: 0.9em;
+  letter-spacing: 0.04em;
+}
+/* Clickable drops (boss arenas) → applyItemHighlight on click */
+#poi-info-modal .poi-info-loot-item.poi-info-loot-clickable {
+  cursor: pointer;
+  border-bottom: 1px solid rgba(212,175,55,0.08);
+  transition: background 0.12s ease;
+}
+#poi-info-modal .poi-info-loot-item.poi-info-loot-clickable:hover {
+  background: rgba(212,175,55,0.06);
+}
 
 /* User-saved waypoint markers on the map */
 .d4jsp-user-waypoint {

@@ -469,6 +469,40 @@ async function boot() {
     }
   }
 
+  // Y.34bj (2026-05-02) — when a boss-arena popup opens, auto-inject its
+  // drops into the Items tab so the user can see them listed and click to
+  // re-highlight. Tagged source='boss:<lairName>' so a future cleanup pass
+  // can distinguish auto-added boss drops from user-FIND adds. Idempotent
+  // on slug. Also applies highlight + fires the parent postMessage so the
+  // trade-core's Items list stays in sync.
+  function addBossDropsToItemsTab(drops, sourceName) {
+    if (!Array.isArray(drops) || drops.length === 0) return
+    try {
+      const raw = localStorage.getItem('d4jsp_map_items')
+      const list = raw ? JSON.parse(raw) : []
+      let changed = false
+      const seen = new Set(list.map(x => x.slug))
+      for (const itemName of drops) {
+        if (!itemName) continue
+        const slug = slugifyItem(itemName)
+        if (seen.has(slug)) continue
+        list.push({ name: itemName, slug, source: sourceName ? `boss:${sourceName}` : 'boss' })
+        seen.add(slug)
+        changed = true
+        // Fire-and-forget highlight so the marker pops without blocking
+        // the popup render.
+        try { applyItemHighlight(itemName, { fitBounds: false }) } catch (_) {}
+      }
+      if (changed) {
+        localStorage.setItem('d4jsp_map_items', JSON.stringify(list))
+        if (typeof renderItemsTab === 'function') renderItemsTab()
+        try { window.parent?.postMessage({ type: 'd4jsp:items-list-changed' }, '*') } catch (_) {}
+      }
+    } catch (e) {
+      console.warn('[D4JSP Map] addBossDropsToItemsTab error:', e?.message || e)
+    }
+  }
+
   // Persist a build to localStorage (idempotent on slug) and apply its
   // highlight. Called from the postMessage handler when the trade-app's
   // BuildGuideView "+ Add to Map" button fires.
@@ -1173,15 +1207,24 @@ async function boot() {
       if (!poiData) return
       try {
         if (window.parent && window.parent !== window) {
+          // Y.34bj — propagate keys/boss_name/drops so the parent modal
+          // gets the same Tormented arena info openPoiInfoModal sends.
+          if (Array.isArray(poiData.drops) && poiData.drops.length > 0) {
+            try { addBossDropsToItemsTab(poiData.drops, poiData.name || matched.name) } catch (_) {}
+          }
           window.parent.postMessage({
             type: 'd4jsp:open-poi-info',
             poi: {
               name: poiData.name || matched.name,
               type: poiData.type || 'dungeon',
-              typeLabel: matched.config?.label || 'Dungeon',
+              typeLabel: poiData.typeLabel || matched.config?.label || 'Dungeon',
               region: poiData.region || '',
               desc: poiData.desc || '',
               x: poiData.x, y: poiData.y,
+              keys: Array.isArray(poiData.keys) ? poiData.keys : null,
+              boss_name: poiData.boss_name || null,
+              tormented: poiData.tormented === true,
+              drops: Array.isArray(poiData.drops) ? poiData.drops : null,
             },
           }, '*')
         } else {
@@ -1340,6 +1383,14 @@ async function boot() {
     // info to the parent so it can open a FULL-SCREEN modal in the trade
     // core's chrome (matching the rest of the site). Drops are fetched
     // there.
+    // Y.34bj (2026-05-02) — boss arena rows (boss-keys.json type='uber' /
+    // typeLabel='Boss') carry boss_name + drops so the popup can show
+    // "Andariel" under "Hanged Man's Hall" and the Tormented Uber pool
+    // without a server round-trip. Auto-inject those drops into the
+    // Items tab too so they cross-link with the highlight system.
+    if (Array.isArray(p.drops) && p.drops.length > 0) {
+      try { addBossDropsToItemsTab(p.drops, p.name || displayLabel) } catch (_) {}
+    }
     try {
       if (typeof window !== 'undefined' && window.parent && window.parent !== window) {
         window.parent.postMessage({
@@ -1355,6 +1406,12 @@ async function boot() {
             // (boss-keys.json `keys` array). Modal renders these as icon
             // chips with Buy/Find buttons.
             keys: Array.isArray(p.keys) ? p.keys : null,
+            // Y.34bj — Tormented boss arena fields. Parent modal renders
+            // boss_name as a sub-header beneath the lair name and drops
+            // as a clickable list (each drop opens FIND for that item).
+            boss_name: p.boss_name || null,
+            tormented: p.tormented === true,
+            drops: Array.isArray(p.drops) ? p.drops : null,
           },
         }, '*')
         return  // parent handles it; do NOT show the in-iframe modal
@@ -1362,14 +1419,50 @@ async function boot() {
     } catch (_) { /* fall through to in-iframe modal if postMessage fails */ }
 
     if (!poiModal) return
-    poiModalType.textContent = cfg.label
-    poiModalName.textContent = p.name || cfg.label
+    poiModalType.textContent = displayLabel
+    // Y.34bj — when the row carries boss_name (Tormented arenas), show
+    // it under the lair name so the user immediately knows which boss
+    // lives here. e.g. lair "Gaping Crevasse" → boss "Duriel".
+    const lairName = p.name || cfg.label
+    const bossSuffix = p.boss_name
+      ? ` <span class="poi-info-boss">— ${escapeHtml(p.boss_name)}${p.tormented ? ' (Tormented)' : ''}</span>`
+      : ''
+    poiModalName.innerHTML = escapeHtml(lairName) + bossSuffix
     poiModalRegion.textContent = p.region || ''
     poiModalDesc.textContent = p.desc || ''
     poiModalDesc.style.display = p.desc ? 'block' : 'none'
     poiModalLoot.innerHTML = ''
     poiModal.classList.add('open')
-    if (p.type === 'dungeon' && p.name) {
+
+    // Y.34bj — render keys (summoning materials) and drops (Uber Unique
+    // pool / Mythic pool) when carried directly on the row. Boss-arena
+    // rows (boss-keys.json) carry both inline so we don't need a server
+    // round-trip. Each drop is clickable → applyItemHighlight.
+    const keysHtml = (Array.isArray(p.keys) && p.keys.length > 0)
+      ? `<div class="poi-info-loot-title">Required Keys</div>` +
+        `<div class="poi-info-loot-list">` +
+        p.keys.map(k => `<div class="poi-info-loot-item"><span>${escapeHtml(k)}</span></div>`).join('') +
+        `</div>`
+      : ''
+    const dropsInline = Array.isArray(p.drops) && p.drops.length > 0
+    if (keysHtml || dropsInline) {
+      const dropsHtml = dropsInline
+        ? `<div class="poi-info-loot-title">Drops</div>` +
+          `<div class="poi-info-loot-list">` +
+          p.drops.map(name => `<div class="poi-info-loot-item poi-info-loot-clickable" data-item-name="${escapeHtml(name)}"><span>${escapeHtml(name)}</span><span class="loot-rarity">Uber</span></div>`).join('') +
+          `</div>`
+        : ''
+      poiModalLoot.innerHTML = keysHtml + dropsHtml
+      // Click-to-highlight: clicking a drop in the popup highlights all
+      // markers that drop it (same flow as Items tab → row click).
+      poiModalLoot.querySelectorAll('.poi-info-loot-clickable').forEach(el => {
+        el.style.cursor = 'pointer'
+        el.addEventListener('click', () => {
+          const itemName = el.dataset.itemName
+          if (itemName) applyItemHighlight(itemName, { fitBounds: true })
+        })
+      })
+    } else if (p.type === 'dungeon' && p.name) {
       poiModalLoot.innerHTML =
         `<div class="poi-info-loot-title">Drops</div>` +
         `<div class="poi-info-loot-loading">loading from D4JSP database…</div>`
@@ -1384,8 +1477,15 @@ async function boot() {
         poiModalLoot.innerHTML =
           `<div class="poi-info-loot-title">Drops</div>` +
           `<div class="poi-info-loot-list">` +
-          rows.map(r => `<div class="poi-info-loot-item"><span>${escapeHtml(r.name)}</span><span class="loot-rarity">${escapeHtml(r.rarity || '')}</span></div>`).join('') +
+          rows.map(r => `<div class="poi-info-loot-item poi-info-loot-clickable" data-item-name="${escapeHtml(r.name)}"><span>${escapeHtml(r.name)}</span><span class="loot-rarity">${escapeHtml(r.rarity || '')}</span></div>`).join('') +
           `</div>`
+        poiModalLoot.querySelectorAll('.poi-info-loot-clickable').forEach(el => {
+          el.style.cursor = 'pointer'
+          el.addEventListener('click', () => {
+            const itemName = el.dataset.itemName
+            if (itemName) applyItemHighlight(itemName, { fitBounds: true })
+          })
+        })
       }).catch(err => {
         console.warn('[D4JSP Map] dungeon loot fetch failed:', err)
         poiModalLoot.innerHTML =
