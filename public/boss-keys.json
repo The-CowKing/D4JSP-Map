@@ -1,5 +1,5 @@
 {
-  "_doc": "Uber boss arenas + Uber-key farm sources. Markers are tagged type='uber' (controls icon/layer toggle) with a per-marker typeLabel override so the modal header reads BOSS for arenas and UBER FARM for material sources. Boss-arena rows include boss_name (the actual boss inside) and drops (Uber Unique pool / Mythic pool — verified May 2026). Drop pools are also exposed via postMessage to the trade-core iframe parent so the Items tab can populate.",
+  "_doc": "Uber boss arenas + Uber-key farm sources. Markers are tagged type='uber' (controls icon/layer toggle) with a per-marker typeLabel override so the modal header reads BOSS for arenas and UBER FARM for material sources. Boss-arena rows include boss_name (the actual boss inside) and drops (Uber Unique pool / Mythic pool — verified May 2026). Drop pools are also exposed via postMessage to the trade-core iframe parent so the Items tab can populate. dedupe_names lists world-pois.json dungeon names that should be hidden in favor of this entry (same physical location, richer data).",
   "markers": [
     {
       "name": "Tree of Whispers",
@@ -32,12 +32,13 @@
       "name": "Hanged Man's Hall",
       "type": "uber",
       "typeLabel": "Boss",
-      "desc": "Andariel summon arena. Use 2× Sandscorched Shackles + 2× Pincushioned Doll to summon Andariel here.",
-      "x": -148,
-      "y": 110,
-      "keys": ["Sandscorched Shackles", "Pincushioned Doll"],
+      "desc": "Andariel summon arena. Use 2× Sandscorched Shackles + 2× Pincushioned Doll (or 1× Igneous Core for Tormented) to summon Andariel here.",
+      "x": -344.041,
+      "y": 87.8971,
+      "keys": ["Sandscorched Shackles", "Pincushioned Doll", "Igneous Core"],
       "boss_name": "Andariel",
       "tormented": true,
+      "dedupe_names": ["Hanged Man's Hall"],
       "drops": [
         "Harlequin Crest",
         "Melted Heart of Selig",
@@ -46,19 +47,21 @@
         "Ring of Starless Skies",
         "Tyrael's Might",
         "The Grandfather",
-        "Doombringer"
+        "Doombringer",
+        "Heir of Perdition"
       ]
     },
     {
       "name": "Gaping Crevasse",
       "type": "uber",
       "typeLabel": "Boss",
-      "desc": "Duriel summon arena. Use 2× Mucus-Slick Egg + 2× Shard of Agony to summon Duriel here.",
-      "x": -160,
-      "y": 130,
-      "keys": ["Mucus-Slick Egg", "Shard of Agony"],
+      "desc": "Duriel summon arena. Use 2× Mucus-Slick Egg + 2× Shard of Agony (or 1× Igneous Core for Tormented) to summon Duriel here.",
+      "x": 598.999,
+      "y": -127.788,
+      "keys": ["Mucus-Slick Egg", "Shard of Agony", "Igneous Core"],
       "boss_name": "Duriel",
       "tormented": true,
+      "dedupe_names": ["Gaping Crevasse"],
       "drops": [
         "Harlequin Crest",
         "Melted Heart of Selig",
@@ -67,7 +70,8 @@
         "Ring of Starless Skies",
         "Tyrael's Might",
         "The Grandfather",
-        "Doombringer"
+        "Doombringer",
+        "Heir of Perdition"
       ]
     },
     {
@@ -75,11 +79,12 @@
       "type": "uber",
       "typeLabel": "Boss",
       "desc": "Grigoire, the Galvanic Saint summon arena. Use Living Steel to charge the altar here.",
-      "x": -100,
-      "y": 70,
+      "x": -707.998,
+      "y": -835.836,
       "keys": ["Living Steel"],
       "boss_name": "Grigoire, the Galvanic Saint",
       "tormented": true,
+      "dedupe_names": ["Hall of the Penitent"],
       "drops": [
         "Razorplate",
         "Hellhammer",
@@ -100,6 +105,7 @@
       "keys": ["Exquisite Blood"],
       "boss_name": "Lord Zir",
       "tormented": true,
+      "dedupe_names": ["The Darkened Way", "Darkened Way"],
       "drops": [
         "Banished Lord's Talisman",
         "Mortacrux",
@@ -114,11 +120,12 @@
       "type": "uber",
       "typeLabel": "Boss",
       "desc": "Beast in the Ice summon arena. Use Distilled Fear + Sigil of the Beast to charge the altar here.",
-      "x": -95,
-      "y": 47,
+      "x": -1240.2,
+      "y": 201.076,
       "keys": ["Distilled Fear", "Sigil of the Beast"],
       "boss_name": "Beast in the Ice",
       "tormented": true,
+      "dedupe_names": ["Glacial Fissure"],
       "drops": [
         "Shako",
         "Starless Skies",
@@ -126,6 +133,79 @@
         "Penitent Greaves",
         "Esadora's Overflowing Cameo",
         "Resplendent Spark"
+      ]
+    },
+    {
+      "name": "Malignant Burrow",
+      "type": "uber",
+      "typeLabel": "Boss",
+      "desc": "Echo of Varshan summon arena. Use Malignant Heart + Trembling Hand + Blackened Femur + Gurgling Head (Whisper Caches at Tree of Whispers) to summon Varshan here.",
+      "x": -1325.38,
+      "y": 776.053,
+      "keys": ["Malignant Heart", "Trembling Hand", "Blackened Femur", "Gurgling Head"],
+      "boss_name": "Echo of Varshan",
+      "tormented": true,
+      "dedupe_names": ["Malignant Burrow"],
+      "drops": [
+        "Resplendent Spark",
+        "Harlequin Crest",
+        "Melted Heart of Selig",
+        "Andariel's Visage",
+        "Ahavarion, Spear of Lycander",
+        "Ring of Starless Skies",
+        "Tyrael's Might",
+        "The Grandfather",
+        "Doombringer",
+        "Heir of Perdition"
+      ]
+    },
+    {
+      "name": "Forge of Hatred",
+      "type": "uber",
+      "typeLabel": "Boss",
+      "desc": "Astaroth (Tormented) summon arena, deep in Astaroth's Lair beneath Nahantu. Charge the forge with Pearls of Bedlam + Cinder of Hatred to summon Astaroth here.",
+      "x": 282.789,
+      "y": -659.488,
+      "keys": ["Pearls of Bedlam", "Cinder of Hatred"],
+      "boss_name": "Astaroth",
+      "tormented": true,
+      "dedupe_names": ["Astaroth's Lair"],
+      "drops": [
+        "Resplendent Spark",
+        "Harlequin Crest",
+        "Melted Heart of Selig",
+        "Andariel's Visage",
+        "Ahavarion, Spear of Lycander",
+        "Ring of Starless Skies",
+        "Tyrael's Might",
+        "The Grandfather",
+        "Doombringer",
+        "Heir of Perdition",
+        "Bloodforged Sigil"
+      ]
+    },
+    {
+      "name": "Nevesk — Echo of Lilith",
+      "type": "uber",
+      "typeLabel": "Boss",
+      "desc": "Echo of Lilith pinnacle encounter. No summoning materials required — speak with the Echo of Lilith effigy in Nevesk to challenge her. Drops Resplendent Sparks, the full Mythic pool, and a cosmetic Mother's Blessing trophy.",
+      "x": -999.739,
+      "y": 138.5,
+      "keys": [],
+      "boss_name": "Echo of Lilith",
+      "tormented": true,
+      "drops": [
+        "Resplendent Spark",
+        "Harlequin Crest",
+        "Melted Heart of Selig",
+        "Andariel's Visage",
+        "Ahavarion, Spear of Lycander",
+        "Ring of Starless Skies",
+        "Tyrael's Might",
+        "The Grandfather",
+        "Doombringer",
+        "Heir of Perdition",
+        "Mother's Blessing (Cosmetic Trophy)"
       ]
     }
   ]

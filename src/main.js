@@ -880,13 +880,43 @@ async function boot() {
       ])
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
-      const baseMarkers = Array.isArray(data.markers) ? data.markers : []
+      let baseMarkers = Array.isArray(data.markers) ? data.markers : []
       let bossKeyMarkers = []
       if (bkRes && bkRes.ok) {
         try {
           const bk = await bkRes.json()
           if (Array.isArray(bk?.markers)) bossKeyMarkers = bk.markers
         } catch (_) { /* boss-keys is optional */ }
+      }
+      // 2026-05-03 (P0-5 dedupe) — boss-keys.json arena entries are the
+      // canonical source for Tormented lairs (boss_name, keys[], drops[]).
+      // The same lair often also appears in world-pois.json as a generic
+      // dungeon (name + desc only), and that "dungeon" duplicate ends up
+      // ranked first in FIND results and renders a useless popup with
+      // "no drops recorded". Strip those world-pois duplicates here.
+      // Match by name against either the boss-keys arena name itself or
+      // the optional dedupe_names[] alias list (e.g. "Astaroth's Lair" is
+      // hidden in favor of "Forge of Hatred").
+      const _dedupeNames = new Set()
+      for (const m of bossKeyMarkers) {
+        if (m?.typeLabel === 'Boss' || m?.boss_name) {
+          if (m.name) _dedupeNames.add(m.name)
+          if (Array.isArray(m.dedupe_names)) {
+            for (const n of m.dedupe_names) if (n) _dedupeNames.add(n)
+          }
+        }
+      }
+      if (_dedupeNames.size > 0) {
+        const before = baseMarkers.length
+        baseMarkers = baseMarkers.filter(m => {
+          if (!m || !m.name) return true
+          // Only suppress dungeon-type duplicates; never hide a waypoint or
+          // quest that happens to share a name.
+          if (m.type !== 'dungeon' && m.type !== 'boss-dungeon') return true
+          return !_dedupeNames.has(m.name)
+        })
+        const dropped = before - baseMarkers.length
+        if (dropped > 0) console.log(`[D4JSP Map] P0-5 dedupe: dropped ${dropped} world-pois dungeon duplicate(s) shadowed by boss-keys arenas`)
       }
       // Y.34bi — merge in the static src/data/ JSONs (Helltide chests,
       // Living Steel, cellars, events). Each row is {x, y, name, id} —
@@ -999,6 +1029,38 @@ async function boot() {
           marker,
         });
       }
+      // 2026-05-03 (P0-3 ITEMS in FIND) — items are not POIs, so the user-
+      // facing flow "search Doombringer → see boss" was structurally broken.
+      // Index every drop from every boss-keys arena as a synthetic search
+      // entry. Clicking it in FIND fires applyItemHighlight (defined below)
+      // instead of flyTo, so the map highlights every arena that drops it
+      // and fits bounds. _isItem and _sources are consumed by search.js.
+      const _itemSources = new Map()  // itemName -> Set<arenaName>
+      for (const m of bossKeyMarkers) {
+        if (!Array.isArray(m?.drops)) continue
+        for (const drop of m.drops) {
+          if (!drop) continue
+          if (!_itemSources.has(drop)) _itemSources.set(drop, new Set())
+          _itemSources.get(drop).add(m.name || 'Unknown arena')
+        }
+      }
+      let _itemsAdded = 0
+      for (const [itemName, sources] of _itemSources.entries()) {
+        const sourceList = [...sources]
+        allPOIs.push({
+          name: itemName,
+          desc: `Mythic / Uber Unique — drops from: ${sourceList.join(', ')}`,
+          lat: null,
+          lng: null,
+          config: { id: 'item', label: 'Item', color: '#fbbf24' },
+          marker: null,
+          _isItem: true,
+          _itemSources: sourceList,
+        })
+        _itemsAdded++
+      }
+      console.log(`[D4JSP Map] P0-3 indexed ${_itemsAdded} items into FIND (sources: ${_itemSources.size > 0 ? [..._itemSources.keys()].slice(0,3).join(', ')+'…' : 'none'})`)
+
       poisLoaded = true
       console.log(`[D4JSP Map] loaded ${markers.length} POIs across ${seen.size} region+type groups; allPOIs total=${allPOIs.length}`)
       // Y.34q: re-apply any toggles that were clicked before the fetch landed.
@@ -1360,6 +1422,19 @@ async function boot() {
   // Kick off POI load (non-blocking).
   loadAndRenderPOIs()
 
+  // 2026-05-03 (P0-4) — expose openPoiInfoModal + applyItemHighlight on
+  // window so search.js (a separate module) can drive them on the
+  // standalone /map/ click path. Standalone visits previously fell
+  // through to marker.openTooltip() which silently no-opped after the
+  // flyTo, breaking the entire search-driven discovery flow. With this
+  // wiring, search.js can call window.openPoiInfoModal(poiData) for
+  // dungeon/uber clicks and window.applyItemHighlight(name) for the
+  // synthetic _isItem entries pushed by the P0-3 items-in-FIND fix.
+  if (typeof window !== 'undefined') {
+    window.openPoiInfoModal = openPoiInfoModal
+    window.applyItemHighlight = applyItemHighlight
+  }
+
   // Y.34av: POI info modal — opened when user clicks a name tooltip.
   // Shows name + type + description from maxroll data; queries our
   // Supabase d4_equipment table for any drops associated with the
@@ -1505,13 +1580,33 @@ async function boot() {
   // the endpoint isn't reachable from the iframe origin.
   async function fetchDungeonLoot(dungeonName) {
     try {
-      // Try a JSON endpoint on the trade core. If we don't have one yet
-      // this returns empty and the modal shows "no drops recorded".
-      const url = `https://trade.d4jsp.org/api/d4/dungeon-loot?name=${encodeURIComponent(dungeonName)}`
+      // 2026-05-03 (P0-6 fix) — the trade-core endpoint returns one of two
+      // shapes depending on the ?legacy flag. The flat "legacy" shape is a
+      // top-level array of drop rows, which is exactly what the modal
+      // renderer below expects. The non-legacy shape is
+      // {name, region, bosses:[{name,drops}], general_drops:[]} — the prior
+      // implementation tried `data.items || []` which never matches that
+      // shape, so all 544 dungeons rendered "no drops recorded" even though
+      // 533 of them actually had rows in d4_dungeon_drops. Fix: pass
+      // ?legacy=1 to get the flat array directly. Safe across both old and
+      // new server versions because legacy=1 is the original contract.
+      const url = `https://trade.d4jsp.org/api/d4/dungeon-loot?legacy=1&name=${encodeURIComponent(dungeonName)}`
       const r = await fetch(url, { credentials: 'omit' })
       if (!r.ok) return []
       const data = await r.json()
-      return Array.isArray(data) ? data : (data?.items || [])
+      // Belt + suspenders: also handle the non-legacy shape in case the
+      // server ignores the flag, by flattening bosses[].drops + general_drops.
+      if (Array.isArray(data)) return data
+      if (data && Array.isArray(data.general_drops)) {
+        const flat = [...data.general_drops]
+        if (Array.isArray(data.bosses)) {
+          for (const b of data.bosses) {
+            if (Array.isArray(b?.drops)) flat.push(...b.drops)
+          }
+        }
+        return flat
+      }
+      return data?.items || []
     } catch { return [] }
   }
 

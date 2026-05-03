@@ -166,6 +166,23 @@ export function initSearch(mapInstance) {
     if (idx < 0 || idx >= currentResults.length) return
     const poi = currentResults[idx].item
 
+    // 2026-05-03 (P0-3) — synthetic items entry: no map position, no marker.
+    // Forward straight to applyItemHighlight which will find every arena that
+    // drops it, light them up, and fit bounds.
+    if (poi._isItem) {
+      input.value = poi.name
+      closeResults()
+      try {
+        if (typeof window.applyItemHighlight === 'function') {
+          window.applyItemHighlight(poi.name, { fitBounds: true })
+        } else if (window.parent && window.parent !== window) {
+          // Iframe context — let parent route it the same way Items-tab does.
+          window.parent.postMessage({ type: 'd4jsp:apply-item-highlight', name: poi.name }, '*')
+        }
+      } catch (e) { console.warn('[D4JSP Search] item highlight failed:', e) }
+      return
+    }
+
     // Fly to + zoom in. Y.34bd (Adam): "selecting dungeon from search and
     // clicking it should activate its marker / and take you centered to it
     // zoomed in". Bumped from zoom 5 to a closer 4 (max native is 5; deeper
@@ -184,11 +201,13 @@ export function initSearch(mapInstance) {
       // static-data layers from layers.js with `bindPopup`), fall back
       // to the original popup open.
       const poiData = poi.marker?._poiData
-      if (poiData && poiData.type === 'dungeon') {
-        // Direct: postMessage to parent so the trade-core DungeonInfoModal
-        // opens. Same payload main.js builds from openPoiInfoModal.
-        try {
-          if (window.parent && window.parent !== window) {
+      const isIframe = window.parent && window.parent !== window
+      if (poiData) {
+        if (isIframe && poiData.type === 'dungeon') {
+          // Iframe + dungeon: postMessage to parent so the trade-core
+          // DungeonInfoModal opens. Same payload main.js builds from
+          // openPoiInfoModal.
+          try {
             window.parent.postMessage({
               type: 'd4jsp:open-poi-info',
               poi: {
@@ -198,16 +217,30 @@ export function initSearch(mapInstance) {
                 region: poiData.region || '',
                 desc: poiData.desc || '',
                 x: poiData.x, y: poiData.y,
+                keys: Array.isArray(poiData.keys) ? poiData.keys : null,
+                boss_name: poiData.boss_name || null,
+                tormented: poiData.tormented === true,
+                drops: Array.isArray(poiData.drops) ? poiData.drops : null,
               },
             }, '*')
+          } catch (_) { poi.marker.openTooltip?.() }
+        } else {
+          // 2026-05-03 (P0-4 fix) — standalone /map/ OR non-dungeon POI:
+          // open the in-iframe modal directly. Previously this branch
+          // called openTooltip() which is a silent no-op while the marker
+          // is mid-flyTo, dead-ending every search-driven discovery flow.
+          // openPoiInfoModal itself routes back to postMessage when in an
+          // iframe context, so calling it is always safe.
+          if (typeof window.openPoiInfoModal === 'function') {
+            try { window.openPoiInfoModal(poiData) }
+            catch (e) {
+              console.warn('[D4JSP Search] openPoiInfoModal failed, falling back:', e)
+              poi.marker.openTooltip?.()
+            }
           } else {
-            // Standalone /map/ visit — open the in-iframe legacy modal.
             poi.marker.openTooltip?.()
           }
-        } catch (_) { poi.marker.openTooltip?.() }
-      } else if (poiData) {
-        // Non-dungeon POI from maxroll set — show the gold name tip.
-        poi.marker.openTooltip?.()
+        }
       } else if (typeof poi.marker?.openPopup === 'function') {
         // Static-layer markers (Nahantu side data, etc.) — original popup path.
         poi.marker.openPopup()
