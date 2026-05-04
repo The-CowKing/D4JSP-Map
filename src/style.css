@@ -463,7 +463,12 @@ html, body {
    is positioned via the marker icon's anchor box, so it tracks on
    map pan/zoom because Leaflet absolute-positions the icon container. */
 .d4-poi-highlight {
-  filter: drop-shadow(0 0 10px rgba(212,175,55,1)) drop-shadow(0 0 22px rgba(212,175,55,0.7)) !important;
+  /* 2026-05-04 (Adam: "glow circles never got smaller") — the visible
+     halo IS the drop-shadow, not the ::after ring. Halved the blur
+     radii (10/22 -> 4/9) and reduced opacity so the glow hugs the
+     marker icon instead of being a 2x halo. Also tightened the
+     keyframe pulse below to match. */
+  filter: drop-shadow(0 0 4px rgba(212,175,55,0.95)) drop-shadow(0 0 9px rgba(212,175,55,0.55)) !important;
   animation: d4PoiPulse 1.4s ease-in-out infinite alternate;
   z-index: 1200 !important; /* above #scroll-menu (600) so highlights aren't hidden behind the parchment */
 }
@@ -502,8 +507,8 @@ html, body {
    pulse on its own pseudo-element, so we can leave the marker's
    transform untouched. */
 @keyframes d4PoiPulse {
-  from { filter: drop-shadow(0 0 6px rgba(212,175,55,0.85)) drop-shadow(0 0 14px rgba(212,175,55,0.55)); }
-  to   { filter: drop-shadow(0 0 14px rgba(212,175,55,1.0)) drop-shadow(0 0 28px rgba(212,175,55,0.85)); }
+  from { filter: drop-shadow(0 0 3px rgba(212,175,55,0.85)) drop-shadow(0 0 6px rgba(212,175,55,0.45)); }
+  to   { filter: drop-shadow(0 0 5px rgba(212,175,55,1.0))  drop-shadow(0 0 11px rgba(212,175,55,0.7)); }
 }
 @keyframes d4PoiRing {
   from { opacity: 0.55; transform: scale(0.92); }
