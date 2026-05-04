@@ -133,15 +133,28 @@ html, body {
 /* Re-enable pointer events ONLY on interactive children (input/buttons/items)
    so panning/zooming still works on empty scroll padding. Y.34p: added
    .scroll-waypoint-item, .scroll-waypoint-drawer, #search-results so taps on
-   waypoint rows / drawer buttons / search results dropdown actually work. */
+   waypoint rows / drawer buttons / search results dropdown actually work.
+   2026-05-04 (Adam: "clicking item in items tab still doesn't deselect" +
+   "scrolling doesn't work on that tab either"): the items + builds tab
+   rows weren't on this whitelist, so the parent's pointer-events:none
+   was eating taps AND the touch-scroll. Added the tab content container
+   itself + the row classes so taps and touch-drag both register. */
 #scroll-menu input,
 #scroll-menu textarea,
 #scroll-menu button,
 #scroll-menu .scroll-tab,
+#scroll-menu .scroll-tab-content,
 #scroll-menu .scroll-layer-item,
 #scroll-menu .scroll-waypoint-item,
 #scroll-menu .scroll-waypoint-drawer,
 #scroll-menu .scroll-search-icon,
+#scroll-menu .items-tab-row,
+#scroll-menu .items-tab-remove,
+#scroll-menu .build-row,
+#scroll-menu .build-item,
+#scroll-menu .build-remove,
+#scroll-menu #items-list,
+#scroll-menu #builds-list,
 #scroll-menu #search-results { pointer-events: auto; }
 
 /* Inner wrapper: search row on top (full width), then 2-col body below. */
