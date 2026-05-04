@@ -104,6 +104,15 @@ html, body {
    Positioned by JS in main.js — left/top/width/height set on every
    map zoom/move so the menu anchors to the scroll graphic on the
    brand frame. CSS is mostly typography + invisible containers. */
+/* 2026-05-03 (Adam: "menu is def interfering with dungeons markers"):
+   Leaflet's marker pane defaults to z-index 600 — same as the scroll-
+   menu, so DOM order would let the menu cover markers in the overlap
+   area. Push the marker pane above the menu so dungeon markers and
+   their highlight rings always visually punch through. */
+.leaflet-pane.leaflet-marker-pane { z-index: 700 !important; }
+.leaflet-pane.leaflet-tooltip-pane { z-index: 750 !important; }
+.leaflet-pane.leaflet-popup-pane { z-index: 800 !important; }
+
 #scroll-menu {
   position: absolute;
   z-index: 600;
@@ -443,14 +452,53 @@ html, body {
   filter: drop-shadow(0 1px 2px rgba(0,0,0,0.85));
 }
 /* 2026-05-01: Find→items highlight ring on matching POIs. Pulses gold
-   so the user sees exactly where the requested item drops. */
+   so the user sees exactly where the requested item drops.
+   2026-05-03: stronger glow + persistent ring overlay so the highlight
+   is obvious even when the camera flies past. The pseudo-element ring
+   is positioned via the marker icon's anchor box, so it tracks on
+   map pan/zoom because Leaflet absolute-positions the icon container. */
 .d4-poi-highlight {
-  filter: drop-shadow(0 0 8px rgba(212,175,55,0.95)) drop-shadow(0 0 14px rgba(212,175,55,0.55)) !important;
-  animation: d4PoiPulse 1.6s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 10px rgba(212,175,55,1)) drop-shadow(0 0 22px rgba(212,175,55,0.7)) !important;
+  animation: d4PoiPulse 1.4s ease-in-out infinite alternate;
+  z-index: 1200 !important; /* above #scroll-menu (600) so highlights aren't hidden behind the parchment */
 }
+/* Items list rows must stay legible regardless of the map zoom (the
+   parchment intentionally scales children with map zoom for theme).
+   Pin a min font size + cap line height. */
+.scroll-tab-content #items-list .items-tab-row span,
+.scroll-tab-content #items-list .items-tab-row {
+  min-font-size: 13px;
+}
+#items-list .items-tab-row {
+  font-size: max(13px, 1em) !important;
+  line-height: 1.35 !important;
+}
+.d4-poi-highlight::after {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  border: 2px solid rgba(212,175,55,0.9);
+  box-shadow: 0 0 14px rgba(212,175,55,0.65), inset 0 0 8px rgba(212,175,55,0.45);
+  pointer-events: none;
+  animation: d4PoiRing 1.4s ease-in-out infinite alternate;
+}
+/* CRITICAL: animate `filter` (drop-shadow brightness), NOT `transform`.
+   Leaflet sets `transform: translate3d(<x>px, <y>px, 0)` inline on every
+   marker icon to position it on the map pane. A keyframe that animates
+   `transform: scale(...)` REPLACES that translate (CSS spec: a single
+   transform property holds one value list), pinning every highlighted
+   marker to (0,0) of the map pane. That presents as "markers off-screen
+   at the top-left corner". The `::after` ring below handles the size
+   pulse on its own pseudo-element, so we can leave the marker's
+   transform untouched. */
 @keyframes d4PoiPulse {
-  from { transform: scale(1.0); }
-  to   { transform: scale(1.18); }
+  from { filter: drop-shadow(0 0 6px rgba(212,175,55,0.85)) drop-shadow(0 0 14px rgba(212,175,55,0.55)); }
+  to   { filter: drop-shadow(0 0 14px rgba(212,175,55,1.0)) drop-shadow(0 0 28px rgba(212,175,55,0.85)); }
+}
+@keyframes d4PoiRing {
+  from { opacity: 0.55; transform: scale(0.92); }
+  to   { opacity: 1.0;  transform: scale(1.10); }
 }
 .d4-poi img {
   display: block;

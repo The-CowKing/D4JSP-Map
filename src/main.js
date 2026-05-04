@@ -367,31 +367,76 @@ async function boot() {
     })
   })
 
-  // 2026-05-02 — Items tab: list rendered from localStorage `d4jsp_map_items`.
-  // No isolation. Click row → applyItemHighlight() (idempotent re-apply).
-  // Click ✕   → clearItemHighlight() (only that source's highlights drop;
-  //              other items + builds keep their highlights).
+  // 2026-05-03 — Items tab: list rendered from localStorage `d4jsp_map_items`.
+  // Each item has an `enabled` flag (default true). Click row toggles the
+  // checkmark + applies/clears the highlight (like a layer checkbox).
+  // ✕ removes the row entirely. Items persist until the user removes them.
+  function _readItemsList() {
+    try {
+      const raw = localStorage.getItem('d4jsp_map_items')
+      const list = raw ? JSON.parse(raw) : []
+      // Backfill + sanitize: any item missing `enabled` is treated as
+      // enabled=true. Missing `name` falls back to a humanized version of
+      // `slug`. Items with neither are dropped (legacy junk from the
+      // pre-toggle render path).
+      return list
+        .filter(it => it && (it.name || it.slug))
+        .map(it => {
+          const slug = it.slug || ''
+          const fallbackName = slug
+            ? slug.split('-').map(w => w ? w[0].toUpperCase() + w.slice(1) : '').join(' ')
+            : ''
+          return {
+            ...it,
+            slug: slug,
+            name: (it.name && String(it.name).trim()) ? it.name : fallbackName,
+            enabled: it.enabled !== false,
+          }
+        })
+        .filter(it => it.name)
+    } catch (_) { return [] }
+  }
+  function _writeItemsList(list) {
+    try { localStorage.setItem('d4jsp_map_items', JSON.stringify(list)) } catch (_) {}
+  }
   function renderItemsTab() {
     const itemsListEl = document.getElementById('items-list')
     if (!itemsListEl) return
     try {
-      const raw = localStorage.getItem('d4jsp_map_items')
-      const items = raw ? JSON.parse(raw) : []
+      const items = _readItemsList()
       if (items.length === 0) {
         itemsListEl.innerHTML = '<div class="scroll-empty">Add items with FIND to see them here</div>'
         return
       }
-      itemsListEl.innerHTML = items.map(item => `
-        <div class="items-tab-row" data-item-name="${escapeHtml(item.name)}" data-slug="${escapeHtml(item.slug)}" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; margin-bottom: 4px; background: rgba(212,175,55,0.04); border-left: 2px solid #D4AF37; cursor: pointer;">
-          <span style="flex: 1; font-size: 12px; color: rgba(255,255,255,0.85);">${escapeHtml(item.name)}</span>
-          <button class="items-tab-remove" data-slug="${escapeHtml(item.slug)}" style="background: none; border: none; color: #D4AF37; cursor: pointer; font-size: 14px; padding: 2px 6px;">✕</button>
+      itemsListEl.innerHTML = items.map(item => {
+        const checked = item.enabled !== false
+        const box = checked ? '✓' : ' '
+        const opacity = checked ? '1' : '0.55'
+        return `
+        <div class="items-tab-row${checked ? ' on' : ''}" data-item-name="${escapeHtml(item.name)}" data-slug="${escapeHtml(item.slug)}" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; margin-bottom: 4px; background: rgba(212,175,55,${checked ? '0.18' : '0.06'}); border-left: 2px solid #6b4f1d; cursor: pointer; opacity:${opacity};">
+          <span class="items-tab-check" aria-hidden="true" style="display:inline-flex; width:14px; height:14px; margin-right:8px; border:1px solid #6b4f1d; align-items:center; justify-content:center; font-size:11px; color:#1a1208; background:#f3e6c8; line-height:1;">${box}</span>
+          <span style="flex: 1; font-size: 13px; color: #1a1208; font-weight: 600;">${escapeHtml(item.name)}</span>
+          <button class="items-tab-remove" data-slug="${escapeHtml(item.slug)}" style="background: none; border: none; color: #6b4f1d; cursor: pointer; font-size: 16px; padding: 2px 6px; font-weight: 700;">✕</button>
         </div>
-      `).join('')
+        `
+      }).join('')
       itemsListEl.querySelectorAll('.items-tab-row').forEach((row) => {
         row.addEventListener('click', (e) => {
           if (e.target.classList && e.target.classList.contains('items-tab-remove')) return
+          const slug = row.dataset.slug
           const itemName = row.dataset.itemName
-          if (itemName) applyItemHighlight(itemName, { fitBounds: true })
+          if (!slug || !itemName) return
+          const list = _readItemsList()
+          const idx = list.findIndex(x => x.slug === slug)
+          if (idx < 0) return
+          list[idx].enabled = !(list[idx].enabled !== false)  // toggle
+          _writeItemsList(list)
+          if (list[idx].enabled) {
+            applyItemHighlight(itemName, { fitBounds: true })
+          } else {
+            clearItemHighlight(slug)
+          }
+          renderItemsTab()
         })
       })
       itemsListEl.querySelectorAll('.items-tab-remove').forEach(btn => {
@@ -399,10 +444,8 @@ async function boot() {
           e.stopPropagation()
           const slug = btn.dataset.slug
           try {
-            const raw = localStorage.getItem('d4jsp_map_items')
-            const list = raw ? JSON.parse(raw) : []
-            const filtered = list.filter(x => x.slug !== slug)
-            localStorage.setItem('d4jsp_map_items', JSON.stringify(filtered))
+            const list = _readItemsList().filter(x => x.slug !== slug)
+            _writeItemsList(list)
             clearItemHighlight(slug)
             renderItemsTab()
           } catch (e) {
@@ -416,35 +459,79 @@ async function boot() {
     }
   }
 
-  // 2026-05-02 — Builds tab: list rendered from localStorage `d4jsp_map_builds`.
-  // Each entry persists as { slug, name, items: [<item names>] } so the
-  // map can re-apply the build's highlights on reload without re-fetching.
-  // Click row → applyBuildHighlight (highlights every drop POI for every
-  // item in the build). Click ✕ → clearBuildHighlight + drop from list.
-  // Layer checkboxes are NEVER touched here — same rule as the Items tab.
+  // 2026-05-03 — Builds tab: list rendered from localStorage `d4jsp_map_builds`.
+  // Each entry persists as { slug, name, items: [<item names>], enabled: bool }.
+  // Build row toggles the whole build's highlight on/off (checkmark like a
+  // layer). Items in the build are listed underneath as sub-rows with their
+  // own toggles — when an item is on, its drop POIs highlight; when off,
+  // they clear (independent of the parent build toggle). ✕ removes.
+  function _readBuildsList() {
+    try {
+      const raw = localStorage.getItem('d4jsp_map_builds')
+      const list = raw ? JSON.parse(raw) : []
+      return list.map(b => ({ ...b, enabled: b.enabled !== false }))
+    } catch (_) { return [] }
+  }
+  function _writeBuildsList(list) {
+    try { localStorage.setItem('d4jsp_map_builds', JSON.stringify(list)) } catch (_) {}
+  }
   function renderBuildsTab() {
     const buildsListEl = document.getElementById('builds-list')
     if (!buildsListEl) return
     try {
-      const raw = localStorage.getItem('d4jsp_map_builds')
-      const builds = raw ? JSON.parse(raw) : []
+      const builds = _readBuildsList()
       if (builds.length === 0) {
         buildsListEl.innerHTML = '<div class="scroll-empty">Add a build with FIND from the Builder<br/>to see it here</div>'
         return
       }
-      buildsListEl.innerHTML = builds.map(b => `
-        <div class="builds-tab-row" data-slug="${escapeHtml(b.slug)}" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; margin-bottom: 4px; background: rgba(212,175,55,0.04); border-left: 2px solid #D4AF37; cursor: pointer;">
-          <span style="flex: 1; font-size: 12px; color: rgba(255,255,255,0.85); font-weight: 600;">${escapeHtml(b.name)}</span>
-          <button class="builds-tab-remove" data-slug="${escapeHtml(b.slug)}" style="background: none; border: none; color: #D4AF37; cursor: pointer; font-size: 14px; padding: 2px 6px;">✕</button>
+      buildsListEl.innerHTML = builds.map(b => {
+        const checked = b.enabled !== false
+        const box = checked ? '✓' : ' '
+        const opacity = checked ? '1' : '0.55'
+        const items = Array.isArray(b.items) ? b.items.filter(Boolean) : []
+        const itemsHtml = items.length === 0 ? '' : items.map(itemName => `
+          <div class="builds-tab-item" data-build-slug="${escapeHtml(b.slug)}" data-item-name="${escapeHtml(itemName)}" style="display: flex; align-items: center; padding: 4px 8px 4px 22px; cursor: pointer; font-size: 11px; color: rgba(255,255,255,0.78);">
+            <span class="builds-tab-item-dot" style="display:inline-block; width:5px; height:5px; background:#D4AF37; border-radius:50%; margin-right:8px; opacity:0.8;"></span>
+            <span>${escapeHtml(itemName)}</span>
+          </div>
+        `).join('')
+        return `
+        <div class="builds-tab-block" style="margin-bottom: 6px;">
+          <div class="builds-tab-row${checked ? ' on' : ''}" data-slug="${escapeHtml(b.slug)}" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; background: rgba(212,175,55,${checked ? '0.10' : '0.04'}); border-left: 2px solid #D4AF37; cursor: pointer; opacity:${opacity};">
+            <span class="builds-tab-check" aria-hidden="true" style="display:inline-flex; width:14px; height:14px; margin-right:8px; border:1px solid #D4AF37; align-items:center; justify-content:center; font-size:11px; color:#D4AF37; line-height:1;">${box}</span>
+            <span style="flex: 1; font-size: 12px; color: rgba(255,255,255,0.92); font-weight: 600;">${escapeHtml(b.name)}</span>
+            <button class="builds-tab-remove" data-slug="${escapeHtml(b.slug)}" style="background: none; border: none; color: #D4AF37; cursor: pointer; font-size: 14px; padding: 2px 6px;">✕</button>
+          </div>
+          ${itemsHtml}
         </div>
-      `).join('')
+        `
+      }).join('')
       buildsListEl.querySelectorAll('.builds-tab-row').forEach((row) => {
         row.addEventListener('click', (e) => {
           if (e.target.classList && e.target.classList.contains('builds-tab-remove')) return
           const slug = row.dataset.slug
-          const entry = builds.find(b => b.slug === slug)
-          if (!entry) return
-          applyBuildHighlight(slug, entry.items || [], { fitBounds: true })
+          const list = _readBuildsList()
+          const idx = list.findIndex(b => b.slug === slug)
+          if (idx < 0) return
+          list[idx].enabled = !(list[idx].enabled !== false)
+          _writeBuildsList(list)
+          if (list[idx].enabled) {
+            applyBuildHighlight(slug, list[idx].items || [], { fitBounds: true })
+          } else {
+            clearBuildHighlight(slug)
+          }
+          renderBuildsTab()
+        })
+      })
+      buildsListEl.querySelectorAll('.builds-tab-item').forEach((row) => {
+        row.addEventListener('click', (e) => {
+          e.stopPropagation()
+          const itemName = row.dataset.itemName
+          if (!itemName) return
+          // Tap a build's child item → apply that single item's highlight
+          // (independent of build state; parent build highlight stays
+          // whatever it already was).
+          applyItemHighlight(itemName, { fitBounds: true })
         })
       })
       buildsListEl.querySelectorAll('.builds-tab-remove').forEach(btn => {
@@ -452,10 +539,8 @@ async function boot() {
           e.stopPropagation()
           const slug = btn.dataset.slug
           try {
-            const raw = localStorage.getItem('d4jsp_map_builds')
-            const list = raw ? JSON.parse(raw) : []
-            const filtered = list.filter(x => x.slug !== slug)
-            localStorage.setItem('d4jsp_map_builds', JSON.stringify(filtered))
+            const list = _readBuildsList().filter(x => x.slug !== slug)
+            _writeBuildsList(list)
             clearBuildHighlight(slug)
             renderBuildsTab()
           } catch (e) {
@@ -717,44 +802,60 @@ async function boot() {
     }
     if (lls.length === 0) return
     const bounds = L.latLngBounds(lls)
-    try { map.fitBounds(bounds, { padding: [80, 80], maxZoom: 4, animate: true }) } catch (_) {}
+    // 2026-05-03 — symmetric 60px padding so the matches fit comfortably
+    // without the camera over-correcting for the parchment menu (the
+    // earlier asymmetric pad dilated bounds so much that 6 world-spanning
+    // arenas couldn't be fit and fitBounds was a no-op). The marker pane
+    // is now z-index 700 (above the menu), so highlights pulse THROUGH
+    // the parchment instead of needing to be panned around it.
+    try {
+      map.fitBounds(bounds, {
+        padding: [60, 60],
+        maxZoom: 4,
+        animate: true,
+      })
+    } catch (_) {}
   }
 
-  // Item lookup → matched POIs. Three-tier matching:
-  //   1. Direct: scan p.drops + p.keys + p.boss_name on every POI for an
-  //      EXACT (case-insensitive) match against the item name. boss-keys.json
-  //      is the source of truth for arena drop pools, and this catches every
-  //      arena that drops an item — including the ones whose POI name doesn't
-  //      contain a curated drop-source token (Malignant Burrow, Forge of
-  //      Hatred, Nevesk - Echo of Lilith, etc. drop Mythic Uniques but their
-  //      name has no overlap with the API's curated source list).
-  //   2. API substring: fetch /api/widget/item/<slug> dropSources, lowercase,
-  //      and substring-match against POI names. Catches d4_item_drops curated
-  //      sources whose `source_name` happens to equal a POI name.
-  //   3. Token: tokenize the item name (filter STOP words) and substring-match.
-  //      Last-resort fallback for items where neither of the above hits.
-  // The Set return type dedupes across the three tiers.
+  // Item lookup → matched POIs. Strict-but-complete matching:
+  //   Tier 1: exact (case-insensitive) match against p.drops or p.keys.
+  //           boss-keys.json arena drop pools — the source of truth for
+  //           Mythic Uniques and uber summon mats.
+  //   Tier 2: API curated dropSources. For each source name, match a POI if
+  //           ANY of these is the same string (lowercased, trimmed):
+  //             - p.name
+  //             - p.boss_name              (e.g. API source "Beast in the
+  //                                         Ice" → arena "Glacial Fissure"
+  //                                         whose boss_name = Beast in the
+  //                                         Ice)
+  //             - any p.dedupe_names entry (covers aliases like
+  //                                         "Astaroth's Lair" → "Forge of
+  //                                         Hatred")
+  // No item-name token matching, no substring fuzz. Either an explicit
+  // drop pool, an explicit arena alias, or no match.
   async function findMatchesForItem(itemName) {
     if (!itemName) return []
     const matchSet = new Set()
     const itemLc = String(itemName).toLowerCase().trim()
+    if (!itemLc) return []
 
-    // Tier 1 — direct drops/keys/boss_name match
-    if (itemLc) {
-      for (const p of allPOIs) {
-        if (!p) continue
-        const drops = Array.isArray(p.drops) ? p.drops : null
-        const keys = Array.isArray(p.keys) ? p.keys : null
-        const bossName = p.boss_name ? String(p.boss_name).toLowerCase().trim() : null
-        let hit = false
-        if (drops && drops.some(d => String(d || '').toLowerCase().trim() === itemLc)) hit = true
-        if (!hit && keys && keys.some(k => String(k || '').toLowerCase().trim() === itemLc)) hit = true
-        if (!hit && bossName && (bossName === itemLc || bossName.includes(itemLc) || itemLc.includes(bossName))) hit = true
-        if (hit) matchSet.add(p)
-      }
+    // Tier 1 — direct drops/keys exact match
+    for (const p of allPOIs) {
+      if (!p || p._isItem) continue
+      const drops = Array.isArray(p.drops) ? p.drops : null
+      const keys = Array.isArray(p.keys) ? p.keys : null
+      let hit = false
+      if (drops && drops.some(d => String(d || '').toLowerCase().trim() === itemLc)) hit = true
+      if (!hit && keys && keys.some(k => String(k || '').toLowerCase().trim() === itemLc)) hit = true
+      if (hit) matchSet.add(p)
     }
 
-    // Tier 2 — API curated source names
+    // Tier 2 — API curated source names; match POI name OR boss_name OR alias.
+    // Allow either exact match, source-contains-candidate, or candidate-
+    // contains-source when both are ≥4 chars. Catches:
+    //   - "Grigoire" (API) vs "Grigoire, the Galvanic Saint" (boss_name)
+    //   - "Astaroth" (API) vs "Astaroth's Lair" (alias) vs "Forge of Hatred"
+    //   - "Andariel" (API, tormented) vs "Hanged Man's Hall" (POI, boss=Andariel)
     let sources = []
     try {
       const slug = slugifyItem(itemName)
@@ -766,32 +867,94 @@ async function boot() {
     } catch (e) {
       console.warn('[D4JSP Map] item lookup failed:', e?.message || e)
     }
-    const STOP = new Set([
-      'the','of','a','an','and','at','in','on','by','to','from','with',
-      'sanctuary','dungeon','dungeons','boss','bosses','altar','altars',
-      'stronghold','strongholds','region','tier','tormented','uber',
-      'wake','visage','will','crest','might','grandfather','talisman',
-      'ring','skies','starless','crown','blade','shield','plate','helm',
-    ])
-    const target = sources
+    const sourceList = sources
       .map(s => String(s || '').toLowerCase().trim())
-      .filter(s => s.length >= 4)
-    // Tier 3 — item-name tokens
-    const itemTokens = String(itemName)
-      .toLowerCase()
-      .split(/[\s'']+/)
-      .map(t => t.replace(/[^a-z]/g, ''))
-      .filter(t => t.length >= 5 && !STOP.has(t))
-    const allTargets = [...target, ...itemTokens].filter(t => t.length >= 4)
-    if (allTargets.length > 0) {
+      .filter(s => s.length >= 3)
+    if (sourceList.length > 0) {
       for (const p of allPOIs) {
+        if (!p || p._isItem) continue
         if (matchSet.has(p)) continue
-        const pname = String(p.name || '').toLowerCase().trim()
-        if (pname.length < 3) continue
-        if (allTargets.some(t => pname.includes(t))) matchSet.add(p)
+        const candidates = []
+        if (p.name) candidates.push(String(p.name).toLowerCase().trim())
+        if (p.boss_name) candidates.push(String(p.boss_name).toLowerCase().trim())
+        if (Array.isArray(p.dedupe_names)) {
+          for (const a of p.dedupe_names) {
+            if (a) candidates.push(String(a).toLowerCase().trim())
+          }
+        }
+        let hit = false
+        for (const cand of candidates) {
+          if (cand.length < 3) continue
+          for (const src of sourceList) {
+            if (cand === src) { hit = true; break }
+            if (cand.length >= 4 && src.length >= 4) {
+              if (cand.includes(src) || src.includes(cand)) { hit = true; break }
+            }
+          }
+          if (hit) break
+        }
+        if (hit) matchSet.add(p)
       }
     }
+    // 2026-05-03 — dedupe matches by lowercased name. world-pois.json,
+    // boss-keys.json, and the data/*.json files can each carry the same
+    // location under slightly different names (e.g. "Tree of Whispers"
+    // and "The Tree of Whispers"), and our prior loop had each pushing
+    // its own POI into allPOIs. Without this dedupe Find lit up 3
+    // markers for the same physical place. Prefer the entry that carries
+    // boss-keys metadata (drops/keys/boss_name) — those are the source-
+    // of-truth arena rows.
+    {
+      const byKey = new Map()
+      for (const p of matchSet) {
+        const rawName = String(p?.name || '').toLowerCase().trim()
+        if (!rawName) continue
+        const key = rawName.replace(/^the\s+/i, '').replace(/'/g, '').replace(/\s+/g, ' ')
+        const existing = byKey.get(key)
+        const score = (
+          (Array.isArray(p.drops) && p.drops.length ? 4 : 0) +
+          (Array.isArray(p.keys)  && p.keys.length  ? 2 : 0) +
+          (p.boss_name ? 1 : 0)
+        )
+        if (!existing || score > existing.score) {
+          byKey.set(key, { p, score })
+        }
+      }
+      matchSet.clear()
+      for (const v of byKey.values()) matchSet.add(v.p)
+    }
+    if (typeof console !== 'undefined' && console.log) {
+      console.log(`[D4JSP Map Find] "${itemName}" → ${matchSet.size} POI matches (tier1 + tier2, deduped). Sources from API: ${sourceList.length}`)
+    }
+    // 2026-05-03 — visible-on-screen diagnostic so users without console
+    // access can see what the matcher returned. Toast bottom-right of
+    // the map shell, auto-dismisses after 8s.
+    try {
+      const matchedNames = [...matchSet].map(p => p?.name).filter(Boolean)
+      const tag = `[Find] "${itemName}" — ${matchSet.size} match(es)` +
+        (matchedNames.length ? ': ' + matchedNames.slice(0, 5).join(', ') : '. Sources from API: ' + sourceList.length)
+      let dbg = document.getElementById('d4jsp-find-debug')
+      if (!dbg) {
+        dbg = document.createElement('div')
+        dbg.id = 'd4jsp-find-debug'
+        dbg.style.cssText = 'position:fixed;left:8px;bottom:8px;max-width:80vw;background:rgba(8,6,8,0.92);color:#D4AF37;border:1px solid rgba(212,175,55,0.55);border-radius:4px;padding:6px 10px;font:12px/1.4 "Barlow Condensed",sans-serif;z-index:99999;pointer-events:none;'
+        document.body.appendChild(dbg)
+      }
+      dbg.textContent = tag
+      clearTimeout(dbg._t)
+      dbg._t = setTimeout(() => { try { dbg.remove() } catch (_) {} }, 8000)
+    } catch (_) {}
     return [...matchSet]
+  }
+  // Expose for cross-iframe console debug (Adam: "use chrome and debug it")
+  if (typeof window !== 'undefined') {
+    window.__d4Find = async (name) => {
+      const m = await findMatchesForItem(name)
+      console.log(`[__d4Find] "${name}" →`, m.length, 'matches')
+      console.log(m.map(p => ({ name: p.name, boss_name: p.boss_name, lat: p.lat, lng: p.lng, hasMarker: !!p.marker })))
+      return m
+    }
+    window.__d4AllPOIs = () => allPOIs
   }
 
   async function applyItemHighlight(itemName, opts = {}) {
@@ -831,18 +994,24 @@ async function boot() {
   // Rehydrate Items + Builds highlight state from localStorage. Called
   // once after POIs finish loading.
   async function rehydrateHighlightsFromStorage() {
+    // 2026-05-03 (Adam: "clicking items on item tab in map doesn't un
+    // select them"): the prior version applied EVERY item in
+    // localStorage on boot regardless of the user's enabled flag, so
+    // toggling an item off and reloading silently re-enabled it. Honor
+    // the persisted enabled flag — false means user explicitly turned
+    // it off.
     try {
       const itemsRaw = localStorage.getItem('d4jsp_map_items')
       const items = itemsRaw ? JSON.parse(itemsRaw) : []
       for (const it of items) {
-        if (it?.name) await applyItemHighlight(it.name, { fitBounds: false })
+        if (it?.name && it?.enabled !== false) await applyItemHighlight(it.name, { fitBounds: false })
       }
     } catch (e) { console.warn('[D4JSP Map] items rehydrate error:', e?.message || e) }
     try {
       const buildsRaw = localStorage.getItem('d4jsp_map_builds')
       const builds = buildsRaw ? JSON.parse(buildsRaw) : []
       for (const b of builds) {
-        if (b?.slug) await applyBuildHighlight(b.slug, b.items || [], { fitBounds: false })
+        if (b?.slug && b?.enabled !== false) await applyBuildHighlight(b.slug, b.items || [], { fitBounds: false })
       }
     } catch (e) { console.warn('[D4JSP Map] builds rehydrate error:', e?.message || e) }
     if (highlightSources.size > 0) fitBoundsToHighlights()
@@ -1069,6 +1238,7 @@ async function boot() {
           drops: Array.isArray(m.drops) ? m.drops : null,
           keys: Array.isArray(m.keys) ? m.keys : null,
           boss_name: m.boss_name || null,
+          dedupe_names: Array.isArray(m.dedupe_names) ? m.dedupe_names : null,
         });
       }
       // 2026-05-03 (P0-3 ITEMS in FIND) — items are not POIs, so the user-
@@ -1141,7 +1311,17 @@ async function boot() {
 
   // Read ?items=<name> from the iframe URL (initial deep-link load), or
   // accept a passed item name (current re-apply path is via Items tab
-  // click → applyItemHighlight directly). Highlight-only — no isolation.
+  // click → applyItemHighlight directly).
+  //
+  // 2026-05-03 — ALWAYS persist the searched item to the Items tab list,
+  // even if no POI matches were found. Reasons:
+  //   1. Cross-origin Find clicks (e.g. from diablo4guides.com) write to
+  //      that origin's localStorage, NOT trade.d4jsp.org's. /map/ is on
+  //      trade.d4jsp.org so its Items tab was always empty until this
+  //      function persisted the URL-derived item name itself.
+  //   2. Even when no arena POI matches, Adam wants the user to SEE
+  //      what they searched (so they know the click registered) and
+  //      retry-toggle from the Items tab.
   async function tryItemsHighlight(passedItemName) {
     let itemName = passedItemName
     if (!itemName) {
@@ -1152,6 +1332,45 @@ async function boot() {
     }
     if (!itemName) return
     console.log(`[D4JSP Map] items=${itemName} — looking up drop sources`)
+
+    // Persist FIRST so the user always sees the searched item in the tab.
+    let userDisabled = false
+    try {
+      const slug = slugifyItem(itemName)
+      const raw = localStorage.getItem('d4jsp_map_items')
+      const list = raw ? JSON.parse(raw) : []
+      const existing = list.find(x => x.slug === slug)
+      if (!existing) {
+        list.push({ name: itemName, slug, enabled: true })
+        localStorage.setItem('d4jsp_map_items', JSON.stringify(list))
+      } else if (existing.enabled === false) {
+        // 2026-05-03 (Adam): user previously toggled this item off in
+        // the Items tab. URL ?items= should not silently re-enable it
+        // on the next page load — that's the "doesn't un select them"
+        // bug. Skip the highlight; renderItemsTab still surfaces the
+        // row so the user can re-enable manually.
+        userDisabled = true
+      }
+      if (typeof renderItemsTab === 'function') renderItemsTab()
+      try { window.parent?.postMessage({ type: 'd4jsp:items-list-changed' }, '*') } catch (_) {}
+      // Auto-open the Items tab so the user immediately sees the entry
+      // they just clicked Find on. Avoids the "I clicked Find but my item
+      // isn't visible anywhere" confusion when arriving via a deep link.
+      try {
+        const itemsTabBtn = document.querySelector('.scroll-tab[data-tab="items"]')
+        if (itemsTabBtn && !itemsTabBtn.classList.contains('active')) {
+          itemsTabBtn.click()
+        }
+      } catch (_) {}
+    } catch (e) {
+      console.error('[D4JSP Map] Items tab persist error:', e)
+    }
+
+    if (userDisabled) {
+      console.log('[D4JSP Map] items=' + itemName + ' is user-disabled, skipping highlight')
+      return
+    }
+
     const ok = await applyItemHighlight(itemName, { fitBounds: true })
     if (!ok) {
       console.log('[D4JSP Map] no matches for', itemName)
@@ -1161,23 +1380,6 @@ async function boot() {
           '*'
         )
       } catch (_) {}
-      return
-    }
-    // Persist the searched item to the Items tab list (localStorage). The
-    // Items tab list is the user-visible source of truth; X-remove there
-    // calls clearItemHighlight to drop just that source's highlights.
-    try {
-      const slug = slugifyItem(itemName)
-      const raw = localStorage.getItem('d4jsp_map_items')
-      const list = raw ? JSON.parse(raw) : []
-      if (!list.some(x => x.slug === slug)) {
-        list.push({ name: itemName, slug })
-        localStorage.setItem('d4jsp_map_items', JSON.stringify(list))
-      }
-      if (typeof renderItemsTab === 'function') renderItemsTab()
-      try { window.parent?.postMessage({ type: 'd4jsp:items-list-changed' }, '*') } catch (_) {}
-    } catch (e) {
-      console.error('[D4JSP Map] Items tab persist error:', e)
     }
   }
   // ── 2026-05-02 — focus_dungeon mode ─────────────────────────────────────
