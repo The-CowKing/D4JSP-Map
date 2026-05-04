@@ -81,11 +81,16 @@ html, body {
 #planner-modal { display: none !important; }
 
 /* Y.34am: coords readout strip — fixed to viewport bottom-left so it sits
-   inside the map shell regardless of where in the DOM it lives. */
+   inside the map shell regardless of where in the DOM it lives.
+   2026-05-04 (Adam: "coord box glitches and stretches out") — the second
+   #coords-display rule below (line ~1292) sets `bottom: 30px` while this
+   one sets `top: calc(...)`. Both apply, which stretches the element to
+   span from top to bottom. Switched this one to bottom-anchor so the
+   two rules agree and the box stays compact. */
 #coords-display {
   position: fixed;
   left: 8px;
-  top: calc(min(100vw, 100vh) - 28px); /* sit at the bottom of the square shell */
+  bottom: 16px;
   z-index: 700;
   font-family: 'Cinzel', serif;
   font-size: 11px;
